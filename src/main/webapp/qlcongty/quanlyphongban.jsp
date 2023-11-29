@@ -97,6 +97,7 @@
 									<th>Mã Trưởng Phòng</th>
 									<th>Ngày Tạo</th>
 									<th>Mã Phòng Ban</th>
+									<th></th>
 								</tr>
 								</thead>
 								<tbody>
@@ -108,6 +109,9 @@
 										<td>${x.matrphong}</td>
 										<td>${x.ngaytao}</td>
 										<td>${x.mapbtr}</td>
+										<td><a href="edit?mapb=<c:out value='${x.mapb}' />">Edit</a>
+											&nbsp;&nbsp;&nbsp;&nbsp; <a
+													href="delete?mapb=<c:out value='${x.mapb}' />">Delete</a></td>
 									</tr>
 								</c:forEach>
 								</tbody>
