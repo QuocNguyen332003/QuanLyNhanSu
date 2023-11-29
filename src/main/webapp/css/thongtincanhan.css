@@ -1,0 +1,55 @@
+.container_css{
+	width: 101.5rem;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	background-color: var(--maincolor);
+	padding: 0;
+}
+
+.box_info{
+	height: auto;
+    background-color: #fff;
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-around;
+    align-items: center;
+    margin: 1rem;
+    padding: 0;
+}
+.box_info label{
+	height: 2.5rem;
+    width: 10rem;
+    display: flex; flex-direction: row;
+    justify-content: start;
+}
+.control{
+    height: 2.5rem;
+    width: 15rem;
+    display: flex;
+    justify-content: center;
+}
+.control_more{
+    height: 2.5rem;
+    width: 13rem;
+    display: flex;
+    justify-content: center;
+}
+.button_icon_small{
+	width: 2rem;
+	height:1rem;
+	background: #fff;
+}
+.button_icon_small i{
+	color: var(--maincolor);
+}
+.btn_mk{
+    width: 15rem;
+  	height: 3rem;
+  	background: var(--maincolor);
+  	cursor: pointer;
+  	color: #FFFFFF;
+  	font-size:20px;
+  	display: flex;
+  	justify-content: center;
+  	margin-bottom: 2rem;
+}

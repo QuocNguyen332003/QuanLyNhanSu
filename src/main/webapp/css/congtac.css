@@ -1,0 +1,11 @@
+.navbar_item_css{
+	width: 101.5rem;
+	display: flex; flex-direction: row; justify-content: space-between;
+}
+.box_button_add{
+	width: 101.5rem; height: 5rem; 
+	margin-top: 1rem;
+	display: flex; flex-direction: row; justify-content: center; 
+	background-color: var(--maincolor);
+}
+
