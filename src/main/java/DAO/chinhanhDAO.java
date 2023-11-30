@@ -1,19 +1,17 @@
 package DAO;
 
 import JDBCUtils.JDBCUtils;
-import Model.phongban;
+import Model.chinhanh;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+public class chinhanhDAO {
+    private static final String SELECT_ALL = "select * from chinhanh";
+    private static final String DELETE_CN_BY_MACN = "delete from chinhanh where macn = ?;";
+    public static List<chinhanh> selectAllchinhanh() {
 
-public class phongbanDAO {
-
-    private static final String SELECT_ALL = "select * from phongban";
-    private static final String DELETE_PB_BY_MAPB = "delete from phongban where mapb = ?;";
-    public static List< phongban > selectAllphongban() {
-
-        List < phongban > listphongban = new ArrayList< >();
+        List < chinhanh > listchinhanh = new ArrayList< >();
 
         // Step 1: Establishing a Connection
         try (Connection connection = JDBCUtils.getConnection();
@@ -26,25 +24,25 @@ public class phongbanDAO {
 
             // Step 4: Process the ResultSet object.
             while (rs.next()) {
-                String mapb = rs.getString("mapb");
-                String tenpb = rs.getString("tenpb");
                 String macn = rs.getString("macn");
-                String matrphong = rs.getString("matrphong");
+                String tencn = rs.getString("tencn");
+                String diachi = rs.getString("diachi");
+                String magiamdoc = rs.getString("magiamdoc");
+                String tinhtrang = rs.getString("tinhtrang");
                 Date ngaytao = rs.getDate("ngaytao");  // Use java.util.Date
-                String mapbtr = rs.getString("mapbtr");
 
-                listphongban.add(new phongban(mapb, tenpb, macn, matrphong, ngaytao, mapbtr));
+                listchinhanh.add(new chinhanh(macn, tencn, diachi, magiamdoc, tinhtrang, ngaytao));
 
             }
         } catch (SQLException exception) {
             JDBCUtils.printSQLException(exception);
         }
-        return listphongban;
+        return listchinhanh;
     }
-    public boolean deletePhongBan(String mapb) throws SQLException {
+    public boolean deleteChiNhanh(String macn) throws SQLException {
         boolean rowDeleted;
-        try (Connection connection = JDBCUtils.getConnection(); PreparedStatement statement = connection.prepareStatement(DELETE_PB_BY_MAPB);) {
-            statement.setString(1, mapb);
+        try (Connection connection = JDBCUtils.getConnection(); PreparedStatement statement = connection.prepareStatement(DELETE_CN_BY_MACN);) {
+            statement.setString(1, macn);
             rowDeleted = statement.executeUpdate() > 0;
         }
         return rowDeleted;

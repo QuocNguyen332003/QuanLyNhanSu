@@ -87,16 +87,36 @@
 							</form>
 						</div>
 						<br>
-						<table class="table table-bordered">
-							<thead>
+						<div class="table-container">
+							<table class="table table-bordered">
+								<thead>
 								<tr>
 									<th>Mã Chi Nhánh</th>
 									<th>Tên Chi Nhánh</th>
+									<th>Địa Chỉ</th>
 									<th>Mã Giám Đốc</th>
+									<th>Tình Trạng</th>
 									<th>Ngày Tạo</th>
+									<th></th>
 								</tr>
-							</thead>
-						</table>
+								</thead>
+								<tbody>
+								<c:forEach var="x" items="${listchinhanh}">
+									<tr>
+										<td>${x.macn}</td>
+										<td>${x.tencn}</td>
+										<td>${x.diachi}</td>
+										<td>${x.magiamdoc}</td>
+										<td>${x.tinhtrang}</td>
+										<td>${x.ngaytao}</td>
+										<td><a href="edit?macn=<c:out value='${x.macn}' />">Edit</a>
+											&nbsp;&nbsp;&nbsp;&nbsp; <a
+													href="delete?macn=<c:out value='${x.macn}' />">Delete</a></td>
+									</tr>
+								</c:forEach>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>

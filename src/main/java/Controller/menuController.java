@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import DAO.chinhanhDAO;
 import DAO.congtacDAO;
 import DAO.phongbanDAO;
 import Model.congtac;
@@ -97,14 +98,13 @@ public class menuController extends HttpServlet {
             throws SQLException, IOException, ServletException {
         List <phongban> listphongban = phongbanDAO.selectAllphongban();
         request.setAttribute("listphongban", listphongban);
-        for (phongban o: listphongban){
-            System.out.println(o);
-        }
         RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/quanlyphongban.jsp");
         dispatcher.forward(request, response);
     }
     private void Formquanlychinhanh(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
+        List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh();
+        request.setAttribute("listchinhanh", listchinhanh);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/quanlychinhanh.jsp");
         dispatcher.forward(request, response);
     }
