@@ -13,7 +13,19 @@
         crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/login.css" />
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/base.css" />
-    
+    <style>
+		input { text-transform: none; }
+		.error_mess{
+			width: 100%; height: 3rem;
+			text-align: center;
+		}
+		.box_form_a{
+			margin-top: 1rem;
+		}
+		.input-box input{
+			padding-left: 3rem;
+		}
+	</style>
 </head>
 <body>
 	<div class="container">
@@ -21,17 +33,22 @@
 			<img src="https://www.evn.com.vn/userfile/VH/User/huyent_tcdl/images/2021/6/hrmscuatapdoan24621(1).jpeg" style="width:700px;height:460px;">
 		</div>
 		<div class="form">
-        	<form action="/submit-login" method="post">
+		<form action="<%=request.getContextPath()%>/login" method="post">
             <h1>ĐĂNG NHẬP</h1>
             <div class="input-box">
 				<div class = "box_icon_login"><i class="fa-solid fa-user fa-2xl"></i></div>
-            	<input type="text" name="username" placeholder="Tài khoản" required>
+            	<input type="text" name="username" placeholder="Tài khoản" autocomplete=“off” required>
             </div>
             <div class="input-box">
 				<div class = "box_icon_login"><i class="fa-solid fa-lock fa-2xl"></i></div>
-            	<input type="password" name="password" placeholder="Mật khẩu" required>
+            	<input type="password" name="password" placeholder="Mật khẩu" autocomplete=“off” required>
             </div>
-            
+			<div class="error_mess" style="color:red;">
+				<%String errorMsg = (String) request.getAttribute("error"); %>
+				<%if (errorMsg != null) { %>
+				<p><%=errorMsg %></p>
+				<%} %>
+			</div>
             <div class="box_show">
             	<input type="checkbox" name="showpass" id = "showpass">
             	<label for="showpass"><i>Show pass</i></label>

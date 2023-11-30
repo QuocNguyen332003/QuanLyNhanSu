@@ -36,4 +36,5 @@ public class taikhoan implements Serializable {
     	this.pass=pass;
     	this.matk=matk;
     }
+    public taikhoan() {}
 }
