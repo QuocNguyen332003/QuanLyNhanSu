@@ -13,6 +13,42 @@
         crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/congtac.css" />
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/base.css" />
+	<style>
+		.form-group input{
+			font-size: 1.2rem;
+		}
+		.form_title{
+			width: 100%; height: 3rem;
+			background-color: #4F4F4F;
+			text-align: center;
+			color: white;
+			margin-bottom: 1rem;
+		}
+		.form_button{
+			margin: 1rem;
+			display: flex; flex-direction: row; justify-content: space-around;
+		}
+		.form_add {
+			width: 100rem;
+			height: 30rem;
+			display: none;
+			position: fixed;
+			top: 20rem;
+			left:30rem;
+			background-color: #F4F5F7;
+			border: 3px solid var(--maincolor);
+			box-shadow: 0 0 1rem 0.3rem var(--maincolor);
+			z-index: 9;
+		}
+		.form_button button{
+			width: 10rem; height: 3rem;
+			background-color: var(--maincolor);
+			color: white;
+		}
+		.box_form{
+			border: 1px solid white;
+		}
+	</style>
 </head>
 
 <body>
@@ -28,7 +64,7 @@
                     <div class = "navbar_item_css">
                        <h2> Quản lý công tác </h2>
                        <div class="nav-item" >
-                           <button class="button_icon">
+                           <button class="button_icon" >
                                <i class="fa-solid fa-eye fa-2xl"></i>
                            </button>
                        </div>
@@ -37,49 +73,117 @@
                 <br>
                 <div class="row">
                     <div class="container body">
+					<c:set var="count" value="0" />
 					<c:forEach var="item_ct" items="${listcongtac}">
-						<form class = "box_form">
+						<div class = "box_form">
 							<div class = "col-md-11 box_content">
 								<div class="form-group form-inline">
-									<label for="ngaybatdau" class = "label_form_control">Ngày bắt đầu:</label>
-									<input type="date" value="<c:out value="${item_ct.ngaybatdau}" />" class="form-control box_form_control" id="ngaybatdau" placeholder="Ngày bắt đầu" name="ngaybatdau" required>
+									<label for="ngaybatdau${count}" class = "label_form_control">Ngày bắt đầu:</label>
+									<input type="date" value="<c:out value="${item_ct.ngaybatdau}" />" class="form-control box_form_control" id="ngaybatdau${count}" placeholder="Ngày bắt đầu" name="ngaybatdau" readonly required>
 								</div>
 								<div class="form-group form-inline">
-									<label for="tentochuc" class = "label_form_control">Tên tổ chức:</label>
-									<input type="text" value="<c:out value="${item_ct.tentochuc}" />" class="form-control box_form_control" id="tentochuc" placeholder="Tên tổ chức" name="tentochuc" required>
+									<label for="tentochuc${count}" class = "label_form_control">Tên tổ chức:</label>
+									<input type="text" value="<c:out value="${item_ct.tentochuc}" />" class="form-control box_form_control" id="tentochuc${count}" placeholder="Tên tổ chức" name="tentochuc" readonly required>
 								</div>
 								<div class="form-group form-inline">
-									<label for="diachi" class = "label_form_control">Địa chỉ:</label>
-									<input type="text" value="<c:out value="${item_ct.diachi}" />" class="form-control box_form_control" id="diachi" placeholder="Địa chỉ" name="diachi" required>
+									<label for="diachi${count}" class = "label_form_control">Địa chỉ:</label>
+									<input type="text" value="<c:out value="${item_ct.diachi}" />" class="form-control box_form_control" id="diachi${count}" placeholder="Địa chỉ" name="diachi" readonly required>
 								</div>
 								<div class="form-group form-inline">
-									<label for="chucvu" class = "label_form_control">Chức vụ:</label>
-									<input type="text" value="<c:out value="${item_ct.chucvu}" />" class="form-control box_form_control" id="chucvu" placeholder="Chức vụ" name="chucvu" required>
+									<label for="chucvu${count}" class = "label_form_control">Chức vụ:</label>
+									<input type="text" value="<c:out value="${item_ct.chucvu}" />" class="form-control box_form_control" id="chucvu${count}" placeholder="Chức vụ" name="chucvu" readonly required>
 								</div>
 								<div class="form-group form-inline">
-									<label for="lydo" class = "label_form_control">Lý do:</label>
-									<input type="text" value="<c:out value="${item_ct.lydo}" />" class="form-control box_form_control"id="lydo" placeholder="Lý do nghỉ" name="lydo" required>
+									<label for="lydo${count}" class = "label_form_control">Lý do:</label>
+									<input type="text" value="<c:out value="${item_ct.lydo}" />" class="form-control box_form_control"id="lydo${count}" placeholder="Lý do nghỉ" name="lydo" readonly required>
 								</div>
 							</div>
 							<div class = "col-md-1 box_button">
 								<button class = "button_icon">
 									<i class="fa-solid fa-trash fa-2xl"></i>
 								</button>
-								<button class = "button_icon">
+								<button class = "button_icon" id = "btn_edit${count}">
 									<i class="fa-solid fa-pen-to-square fa-2xl"></i>
 								</button>
-								<button class = "button_icon">
+								<button class = "button_icon" id = "btn_save${count}">
 									<i class="fa-solid fa-floppy-disk fa-2xl"></i>
 								</button>
 							</div>
-						</form>
+						</div>
+						<script>
+							let ngaybatdau${count} = document.getElementById("ngaybatdau${count}");
+							let tentochuc${count} = document.getElementById("tentochuc${count}");
+							let diachi${count} = document.getElementById("diachi${count}");
+							let chucvu${count} = document.getElementById("chucvu${count}");
+							let lydo${count} = document.getElementById("lydo${count}");
+
+							let btnedit${count} = document.getElementById("btn_edit${count}");
+							let btnsave${count} = document.getElementById("btn_save${count}");
+
+							btnedit${count}.addEventListener("click", function() {
+								ngaybatdau${count}.removeAttribute("readonly");
+								tentochuc${count}.removeAttribute("readonly");
+								diachi${count}.removeAttribute("readonly");
+								chucvu${count}.removeAttribute("readonly");
+								lydo${count}.removeAttribute("readonly");
+								ngaybatdau${count}.focus();
+							});
+
+							// Thêm sự kiện click cho button 2
+							btnsave${count}.addEventListener("click", function() {
+								ngaybatdau${count}.setAttribute("readonly", true);
+								tentochuc${count}.setAttribute("readonly", true);
+								diachi${count}.setAttribute("readonly", true);
+								chucvu${count}.setAttribute("readonly", true);
+								lydo${count}.setAttribute("readonly", true);
+							});
+						</script>
+						<c:set var="count" value="${count + 1}" />
 					</c:forEach>
 						<div class = "col-md-12 box_button_add">
-							<button class = "button_icon">
+							<button class = "button_icon" onclick="openFormAdd()">
 								<i class="fa-solid fa-plus fa-2xl"></i>
 							</button>
 						</div>
                     </div>
+					<div class="form_add" id="add">
+						<form action="/themcongtac" class="form-container">
+							<h3 class = "form_title">Thêm quá trình công tác </h3>
+							<div class="form-group form-inline">
+								<label for="add_ngaybatdau" class = "label_form_control">Ngày bắt đầu:</label>
+								<input type="date" class="form-control box_form_control" id="add_ngaybatdau" placeholder="Ngày bắt đầu" name="ngaybatdau" required>
+							</div>
+							<div class="form-group form-inline">
+								<label for="add_tentochuc" class = "label_form_control">Tên tổ chức:</label>
+								<input type="text" class="form-control box_form_control" id="add_tentochuc" placeholder="Tên tổ chức" name="tentochuc" required>
+							</div>
+							<div class="form-group form-inline">
+								<label for="add_diachi" class = "label_form_control">Địa chỉ:</label>
+								<input type="text" class="form-control box_form_control" id="add_diachi" placeholder="Địa chỉ" name="diachi" required>
+							</div>
+							<div class="form-group form-inline">
+								<label for="add_chucvu" class = "label_form_control">Chức vụ:</label>
+								<input type="text" class="form-control box_form_control" id="add_chucvu" placeholder="Chức vụ" name="chucvu" required>
+							</div>
+							<div class="form-group form-inline">
+								<label for="add_lydo" class = "label_form_control">Lý do:</label>
+								<input type="text" class="form-control box_form_control"id="add_lydo" placeholder="Lý do nghỉ" name="lydo" required>
+							</div>
+							<div class="form_button">
+								<button type="submit">Xác nhận</button>
+								<button type="button" onclick="closeFormAdd()">Hủy</button>
+							</div>
+						</form>
+					</div>
+					<script>
+						function openFormAdd() {
+							document.getElementById("add").style.display = "block";
+						}
+
+						function closeFormAdd() {
+							document.getElementById("add").style.display = "none";
+						}
+					</script>
                 </div>
             </div>
         </div>
