@@ -19,6 +19,7 @@ import DAO.phongbanDAO;
 import Model.congtac;
 import Model.chinhanh;
 import Model.phongban;
+import Model.taikhoan;
 @WebServlet(name = "menu", urlPatterns = { "/trangchu", "/thongtincanhan", "/congtac", "/khenthuongkyluat", "/quanlynhanvien", "/quanlyphongban","/quanlychinhanh"})
 public class menuController extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -79,10 +80,17 @@ public class menuController extends HttpServlet {
     }
     private void Formcongtac(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        List < congtac > listcongtac = congtacDAO.selectAllcongtac();
-        request.setAttribute("listcongtac", listcongtac);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/congtac/congtac.jsp");
-        dispatcher.forward(request, response);
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            taikhoan username = (taikhoan) session.getAttribute("user");
+            List < congtac > listcongtac = congtacDAO.DanhSachCongTac(username.getMatk());
+            request.setAttribute("listcongtac", listcongtac);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/congtac/congtac.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
+            dispatcher.forward(request, response);
+        }
     }
     private void Formkhenthuongkyluat(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {

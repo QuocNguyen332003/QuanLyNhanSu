@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+	response.setCharacterEncoding("UTF-8");
+%>
+
+<%@ page import="Model.taikhoan" %>
 <html>
 
 <head>
@@ -11,6 +17,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
+
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/congtac.css" />
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/base.css" />
 	<style>
@@ -48,6 +57,10 @@
 		.box_form{
 			border: 1px solid white;
 		}
+		.text_btn{
+			background-color: white;
+			color: var(--maincolor);
+		}
 	</style>
 </head>
 
@@ -64,9 +77,9 @@
                     <div class = "navbar_item_css">
                        <h2> Quản lý công tác </h2>
                        <div class="nav-item" >
-                           <button class="button_icon" >
+                           <a href="<%=request.getContextPath()%>/xemcongtac" class="button_icon" style="display:${sessionScope.capbac == 0 ? 'none' : 'inline'}">
                                <i class="fa-solid fa-eye fa-2xl"></i>
-                           </button>
+                           </a>
                        </div>
                     </div> 
                 </nav>
@@ -74,9 +87,10 @@
                 <div class="row">
                     <div class="container body">
 					<c:set var="count" value="0" />
+					<c:set var="edit" value="0" />
 					<c:forEach var="item_ct" items="${listcongtac}">
-						<div class = "box_form">
-							<div class = "col-md-11 box_content">
+						<form class = "box_form">
+							<div class = "col-md-10 box_content">
 								<div class="form-group form-inline">
 									<label for="ngaybatdau${count}" class = "label_form_control">Ngày bắt đầu:</label>
 									<input type="date" value="<c:out value="${item_ct.ngaybatdau}" />" class="form-control box_form_control" id="ngaybatdau${count}" placeholder="Ngày bắt đầu" name="ngaybatdau" readonly required>
@@ -95,21 +109,24 @@
 								</div>
 								<div class="form-group form-inline">
 									<label for="lydo${count}" class = "label_form_control">Lý do:</label>
-									<input type="text" value="<c:out value="${item_ct.lydo}" />" class="form-control box_form_control"id="lydo${count}" placeholder="Lý do nghỉ" name="lydo" readonly required>
+									<input type="text" value="<c:out value="${item_ct.lydo}" />" class="form-control box_form_control" id="lydo${count}" placeholder="Lý do nghỉ" name="lydo" readonly required>
 								</div>
 							</div>
+							<div class = "col-md-1" style=" background-color: white">
+								<button type="button" class = "text_btn" id = "btn_huy${count}" style="display:none;">Hủy</button>
+							</div>
 							<div class = "col-md-1 box_button">
-								<button class = "button_icon">
+								<button formaction="<%=request.getContextPath()%>/xoacongtac" class = "button_icon">
 									<i class="fa-solid fa-trash fa-2xl"></i>
 								</button>
-								<button class = "button_icon" id = "btn_edit${count}">
+								<button type="button" class = "button_icon" id = "btn_edit${count}">
 									<i class="fa-solid fa-pen-to-square fa-2xl"></i>
 								</button>
-								<button class = "button_icon" id = "btn_save${count}">
+								<button formaction="<%=request.getContextPath()%>/thaydoicongtac" class = "button_icon" id = "btn_save${count}">
 									<i class="fa-solid fa-floppy-disk fa-2xl"></i>
 								</button>
 							</div>
-						</div>
+						</form>
 						<script>
 							let ngaybatdau${count} = document.getElementById("ngaybatdau${count}");
 							let tentochuc${count} = document.getElementById("tentochuc${count}");
@@ -119,23 +136,24 @@
 
 							let btnedit${count} = document.getElementById("btn_edit${count}");
 							let btnsave${count} = document.getElementById("btn_save${count}");
+							let btnhuy${count} = document.getElementById("btn_huy${count}");
 
 							btnedit${count}.addEventListener("click", function() {
-								ngaybatdau${count}.removeAttribute("readonly");
-								tentochuc${count}.removeAttribute("readonly");
 								diachi${count}.removeAttribute("readonly");
 								chucvu${count}.removeAttribute("readonly");
 								lydo${count}.removeAttribute("readonly");
+								btnhuy${count}.style.display = "inline";
 								ngaybatdau${count}.focus();
 							});
-
-							// Thêm sự kiện click cho button 2
+							btnhuy${count}.addEventListener("click", function() {
+								window.location.reload ();
+								btnhuy${count}.style.display = "none";
+							});
 							btnsave${count}.addEventListener("click", function() {
-								ngaybatdau${count}.setAttribute("readonly", true);
-								tentochuc${count}.setAttribute("readonly", true);
 								diachi${count}.setAttribute("readonly", true);
 								chucvu${count}.setAttribute("readonly", true);
 								lydo${count}.setAttribute("readonly", true);
+								btnhuy${count}.style.display = "none";
 							});
 						</script>
 						<c:set var="count" value="${count + 1}" />
@@ -147,7 +165,7 @@
 						</div>
                     </div>
 					<div class="form_add" id="add">
-						<form action="/themcongtac" class="form-container">
+						<form action="<%=request.getContextPath()%>/themcongtac" class="form-container">
 							<h3 class = "form_title">Thêm quá trình công tác </h3>
 							<div class="form-group form-inline">
 								<label for="add_ngaybatdau" class = "label_form_control">Ngày bắt đầu:</label>
