@@ -21,7 +21,7 @@
 			<img src="https://www.evn.com.vn/userfile/VH/User/huyent_tcdl/images/2021/6/hrmscuatapdoan24621(1).jpeg" style="width:700px;height:460px;">
 		</div>
 		<div class="form">
-        	<form action="/submit-login" method="post">
+			<form action="<%=request.getContextPath()%>/forgot" method="post">
             <h1>QUÊN MẬT KHẨU</h1>
             
             <div class="input-box">

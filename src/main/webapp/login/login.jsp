@@ -55,8 +55,8 @@
             </div>
             <div class = "box_button_login"> <button type="submit" class="btn"><b>Đăng nhập</b></button> </div>
             <div class = "box_form_a">
-				<a href="#" class = "col" >Quên mật khẩu</a>
-				<a href="#" class = "col" style="text-align: right;" >Đổi mật khẩu</a>
+				<a href="<%=request.getContextPath()%>/forgot" class = "col" >Quên mật khẩu</a>
+				<a href="<%=request.getContextPath()%>/change" class = "col" style="text-align: right;" >Đổi mật khẩu</a>
 			</div>
 
         </form>
