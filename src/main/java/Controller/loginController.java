@@ -40,9 +40,9 @@ public class loginController extends HttpServlet {
         loginModel.setMatk(password);
 
         try {
-            HttpSession session = request.getSession();
             taikhoan tk = loginDao.validate(loginModel);
             if (tk != null) {
+                HttpSession session = request.getSession(true);
                 session.setAttribute("user", tk);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/trangchu");
                 dispatcher.forward(request, response);

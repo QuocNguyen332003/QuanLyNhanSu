@@ -13,8 +13,11 @@ import java.util.List;
 
 public class congtacDAO {
 
-    private static final String SELECT_ALL = "select * from congtac where matk = 'N0101'";
-    public static List< congtac > selectAllcongtac() {
+    private static final String SELECT_ALL = "select * from congtac where matk = ?";
+    private  static  final String INSERT_CONGTAC_SQL =  "INSERT INTO congtac" + "  (matk, ngaybatdau, tentochuc, diachi,  chucvu, lydo) VALUES " + " (?, ?, ?, ?, ?, ?);";
+    private static final String UPDATE_CONGTAC = "update congtac set diachi =?, chucvu =?, lydo = ? where matk = ? and ngaybatdau = ? and tentochuc= ?;";
+    private static final String DELETE_CONGTAC = "Delete from congtac where matk = ? and ngaybatdau = ? and tentochuc= ?;";
+    public static List< congtac > DanhSachCongTac(String matk) {
 
         List < congtac > listcongtac = new ArrayList< >();
 
@@ -23,13 +26,12 @@ public class congtacDAO {
 
              // Step 2:Create a statement using connection object
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL);) {
-            System.out.println(preparedStatement);
+            preparedStatement.setString(1, matk);
             // Step 3: Execute the query or update query
             ResultSet rs = preparedStatement.executeQuery();
 
             // Step 4: Process the ResultSet object.
             while (rs.next()) {
-                String matk = rs.getString("matk");
                 LocalDate ngaybatdau = rs.getDate("ngaybatdau").toLocalDate();
                 String tentochuc = rs.getString("tentochuc");
                 String diachi = rs.getString("diachi");
@@ -41,5 +43,42 @@ public class congtacDAO {
             JDBCUtils.printSQLException(exception);
         }
         return listcongtac;
+    }
+    public static void ThemCongTac(congtac congtac) {
+        try (Connection connection = JDBCUtils.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CONGTAC_SQL)) {
+            preparedStatement.setString(1, congtac.getMatk());
+            preparedStatement.setDate(2, JDBCUtils.getSQLDate(congtac.getNgaybatdau()));
+            preparedStatement.setString(3, congtac.getTentochuc());
+            preparedStatement.setString(4, congtac.getDiachi());
+            preparedStatement.setString(5, congtac.getChucvu());
+            preparedStatement.setString(6, congtac.getLydo());
+            preparedStatement.executeUpdate();
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+    }
+    public static void ThayDoiCongTac(congtac congtac) {
+        try (Connection connection = JDBCUtils.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CONGTAC)) {
+            preparedStatement.setString(1, congtac.getDiachi());
+            preparedStatement.setString(2, congtac.getChucvu());
+            preparedStatement.setString(3, congtac.getLydo());
+            preparedStatement.setString(4, congtac.getMatk());
+            preparedStatement.setDate(5, JDBCUtils.getSQLDate(congtac.getNgaybatdau()));
+            preparedStatement.setString(6, congtac.getTentochuc());
+            preparedStatement.executeUpdate();
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+    }
+    public  static void XoaCongTac(congtac congtac){
+        try (Connection connection = JDBCUtils.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CONGTAC)) {
+            preparedStatement.setString(1, congtac.getMatk());
+            preparedStatement.setDate(2, JDBCUtils.getSQLDate(congtac.getNgaybatdau()));
+            preparedStatement.setString(3, congtac.getTentochuc());
+            System.out.println(preparedStatement);
+            preparedStatement.executeUpdate();
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
     }
 }
