@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import DAO.loginDAO;
 import Model.taikhoan;
-
+import DAO.chucvuDAO;
 @WebServlet("/login")
 public class loginController extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -41,9 +41,11 @@ public class loginController extends HttpServlet {
 
         try {
             taikhoan tk = loginDao.validate(loginModel);
+            int capbac = chucvuDAO.CapBacQuyenHan(tk.getMatk());
             if (tk != null) {
                 HttpSession session = request.getSession(true);
                 session.setAttribute("user", tk);
+                session.setAttribute("capbac",capbac);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/trangchu");
                 dispatcher.forward(request, response);
             } else {

@@ -27,10 +27,10 @@
       <nav class="navbar navbar-expand-md navbar-dark navbar_css">
         <div class = "navbar_item_css">
           <h2> Quản lý công tác </h2>
-          <div class="nav-item" >
-            <button class="button_icon">
+          <div class="nav-item">
+            <a class="button_icon" href="<%=request.getContextPath()%>/congtac">
               <i class="fa-solid fa-angles-left fa-2xl"></i>
-            </button>
+            </a>
           </div>
         </div>
       </nav>
@@ -60,30 +60,33 @@
             </form>
           </div>
           <br>
+          <c:set var="count" value="0" />
+          <c:forEach var="item_ct" items="${listcongtac_nv}">
           <form class = "box_form">
             <div class = "col-md-12 box_content">
               <div class="form-group form-inline">
-                <label for="ngaybatdau" class = "label_form_control">Ngày bắt đầu:</label>
-                <input type="date" class="form-control box_form_control" id="ngaybatdau" placeholder="Ngày bắt đầu" name="ngaybatdau" readonly required>
+                <label for="ngaybatdau${count}" class = "label_form_control">Ngày bắt đầu:</label>
+                <input type="date" class="form-control box_form_control" id="ngaybatdau${count}" placeholder="Ngày bắt đầu" name="ngaybatdau" value="<c:out value="${item_ct.ngaybatdau}" />" readonly required>
               </div>
               <div class="form-group form-inline">
-                <label for="tentochuc" class = "label_form_control">Tên tổ chức:</label>
-                <input type="text" class="form-control box_form_control" id="tentochuc" placeholder="Tên tổ chức" name="tentochuc" readonly required>
+                <label for="tentochuc${count}" class = "label_form_control">Tên tổ chức:</label>
+                <input type="text" class="form-control box_form_control" id="tentochuc${count}" placeholder="Tên tổ chức" name="tentochuc" value="<c:out value="${item_ct.tentochuc}" />" readonly required>
               </div>
               <div class="form-group form-inline">
-                <label for="diachi" class = "label_form_control">Địa chỉ:</label>
-                <input type="text" class="form-control box_form_control" id="diachi" placeholder="Địa chỉ" name="diachi" readonly required>
+                <label for="diachi${count}" class = "label_form_control">Địa chỉ:</label>
+                <input type="text" class="form-control box_form_control" id="diachi${count}" placeholder="Địa chỉ" name="diachi" value="<c:out value="${item_ct.diachi}" />" readonly required>
               </div>
               <div class="form-group form-inline">
-                <label for="chucvu" class = "label_form_control">Chức vụ:</label>
-                <input type="text" class="form-control box_form_control" id="chucvu" placeholder="Chức vụ" name="chucvu" readonly required>
+                <label for="chucvu${count}" class = "label_form_control">Chức vụ:</label>
+                <input type="text" class="form-control box_form_control" id="chucvu${count}" placeholder="Chức vụ" name="chucvu" value="<c:out value="${item_ct.chucvu}" />" readonly required>
               </div>
               <div class="form-group form-inline">
-                <label for="lydo" class = "label_form_control">Lý do:</label>
-                <input type="text" class="form-control box_form_control" id="lydo" placeholder="Lý do nghỉ" name="lydo" readonly required>
+                <label for="lydo${count}" class = "label_form_control">Lý do:</label>
+                <input type="text" class="form-control box_form_control" id="lydo${count}" placeholder="Lý do nghỉ" name="lydo" value="<c:out value="${item_ct.lydo}" />" readonly required>
               </div>
             </div>
           </form>
+          </c:forEach>
         </div>
       </div>
     </div>

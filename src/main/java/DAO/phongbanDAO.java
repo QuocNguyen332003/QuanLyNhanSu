@@ -11,6 +11,7 @@ public class phongbanDAO {
 
     private static final String SELECT_ALL = "select * from phongban";
     private static final String DELETE_PB_BY_MAPB = "delete from phongban where mapb = ?;";
+    private static final String SELECT_TRUONGPHONG = "select mapb from phongban where matrphong = ?;";
     public static List< phongban > selectAllphongban() {
 
         List < phongban > listphongban = new ArrayList< >();
@@ -48,5 +49,19 @@ public class phongbanDAO {
             rowDeleted = statement.executeUpdate() > 0;
         }
         return rowDeleted;
+    }
+    public static String LayMaPB(String matrphong) throws SQLException {
+        String result = null;
+        boolean rowDeleted;
+        try (Connection connection = JDBCUtils.getConnection(); PreparedStatement statement = connection.prepareStatement(SELECT_TRUONGPHONG);) {
+            statement.setString(1, matrphong);
+            ResultSet rs = statement.executeQuery();
+            System.out.println(statement);
+            // Step 4: Process the ResultSet object.
+            while (rs.next()) {
+                result = rs.getString("mapb");
+            }
+        }
+        return result;
     }
 }
