@@ -2,6 +2,8 @@ package Controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Properties;
+import java.util.Random;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,16 +13,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
+
 import DAO.loginDAO;
 import DAO.changeDAO;
+import DAO.forgotDAO;
 import Model.taikhoan;
+import Model.thongtincanhan;
 import DAO.chucvuDAO;
 @WebServlet(name = "login", urlPatterns = { "/login", "/forgot", "/change"})
 public class loginController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private loginDAO loginDao;
     private changeDAO changeDao = new changeDAO();
-
+    private forgotDAO forgotDao = new forgotDAO();
     public void init() {
         loginDao = new loginDAO();
     }
@@ -78,8 +87,8 @@ public class loginController extends HttpServlet {
                 dispatcher.forward(request, response);
             } else {
                 request.setAttribute("error", "Thông tin đăng nhập không hợp lệ");
-                // session.setAttribute("user", username);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
+                //session.setAttribute("user", username);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/login");
                 dispatcher.forward(request, response);
             }
 
@@ -90,6 +99,61 @@ public class loginController extends HttpServlet {
 
     private void Forgotpass(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException{
+        String username = request.getParameter("username");
+        String email = request.getParameter("email");
+        String otp = request.getParameter("otp");
+        String newpassword = request.getParameter("newpassword");
+
+        taikhoan usernameModel = new taikhoan();
+        usernameModel.setUsername(username);
+        thongtincanhan emailModel = new thongtincanhan();
+        emailModel.setEmail(email);
+
+        try {
+
+            boolean kt = forgotDao.kiemtratk(usernameModel,emailModel);
+            if(kt){
+                String namemail = "nckh211103@gmail.com";
+                String passmail = "owgr culp dizl hvwa";
+                String recipientEmail = "hun@example.com"; // Thay thế bằng email người nhận thực tế
+
+                Properties props = new Properties();
+                props.put("mail.smtp.auth", "true");
+                props.put("mail.smtp.starttls.enable", "true");
+                props.put("mail.smtp.host", "smtp.gmail.com");
+                props.put("mail.smtp.port", "587");
+
+                Session session = Session.getInstance(props,
+                        new javax.mail.Authenticator() {
+                            protected PasswordAuthentication getPasswordAuthentication() {
+                                return new PasswordAuthentication(username, password);
+                            }
+                        });
+
+                try {
+                    Message message = new MimeMessage(session);
+                    message.setFrom(new InternetAddress(username));
+                    message.setRecipients(Message.RecipientType.TO,
+                            InternetAddress.parse(recipientEmail));
+                    message.setSubject("Mail lấy lại mật khẩu");
+
+                    // Tạo một số ngẫu nhiên gồm 6 chữ số
+                    Random rand = new Random();
+                    int randomNum = rand.nextInt((999999 - 100000) + 1) + 100000;
+                    message.setText("Mã xác thực của bạn là: " + randomNum);
+
+                    Transport.send(message);
+
+                    System.out.println("Gửi thành công.");
+
+                } catch (MessagingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
@@ -101,8 +165,8 @@ public class loginController extends HttpServlet {
         String confirmnewpass = request.getParameter("confirmnewpass");
 
         if (!newpassword.equals(confirmnewpass)) {
-            request.setAttribute("error", "Mật khẩu mới và xác nhận mật khẩu không khớp");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/changePassword/changePassword.jsp");
+            request.setAttribute("error", "Mật khẩu mới không trùng khớp!");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login/change.jsp");
             dispatcher.forward(request, response);
             return;
         }

@@ -1,5 +1,4 @@
 package DAO;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,29 +6,27 @@ import java.sql.SQLException;
 
 import JDBCUtils.JDBCUtils;
 import Model.taikhoan;
-
-public class loginDAO {
-
-    public taikhoan validate(taikhoan tk) throws ClassNotFoundException {
-        taikhoan result = null;
+import Model.thongtincanhan;
+public class forgotDAO {
+    public boolean kiemtratk(taikhoan tk, thongtincanhan tt) throws ClassNotFoundException {
+        boolean result = false;
 
         Class.forName("com.mysql.jdbc.Driver");
 
         try (Connection connection = JDBCUtils.getConnection();
              PreparedStatement preparedStatement = connection
-                     .prepareStatement("select * from taikhoan where username = ? and pass = ? ")) {
+                     .prepareStatement("SELECT * " +
+                             "FROM thongtincanhan " +
+                             "JOIN taikhoan " +
+                             "ON thongtincanhan.matk = taikhoan.matk " +
+                             "WHERE username = ? AND email = ? ")) {
             preparedStatement.setString(1, tk.getUsername());
-            preparedStatement.setString(2, tk.getMatk());
+            preparedStatement.setString(2, tt.getEmail());
 
             System.out.println(preparedStatement);
             ResultSet rs = preparedStatement.executeQuery();
 
-            while (rs.next()) {
-                String username = rs.getString("username");
-                String password = rs.getString("pass");
-                String matk = rs.getString("matk");
-                result = new taikhoan(username, password, matk);
-            }
+            result = rs.next();
 
         } catch (SQLException e) {
             JDBCUtils.printSQLException(e);

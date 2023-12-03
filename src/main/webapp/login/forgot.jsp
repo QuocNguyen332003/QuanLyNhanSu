@@ -13,7 +13,16 @@
         crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/login.css" />
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/base.css" />
-    
+	<style>
+		input { text-transform: none; }
+		.error_mess{
+			width: 100%; height: 3rem;
+			text-align: center;
+		}
+		.input-box input{
+			padding-left: 3rem;
+		}
+	</style>
 </head>
 <body>
 	<div class="container">
@@ -33,7 +42,12 @@
 				<div class = "box_icon_login"> <i class="fa-solid fa-envelope fa-2xl"></i></div>
             	<input type="email" name="email" placeholder="Gmail" required>
             </div>
-
+				<div class="error_mess" style="color:red;">
+					<%String errorMsg = (String) request.getAttribute("error"); %>
+					<%if (errorMsg != null) { %>
+					<p><%=errorMsg %></p>
+					<%} %>
+				</div>
 			<div class = "box_button_login"> <button type="submit" class="btn btn_gui"><b>Gửi mã</b></button> </div>
 
             <div class="input-box">
@@ -43,7 +57,7 @@
             	
             <div class="input-box">
 				<div class = "box_icon_login"> <i class="fa-solid fa-lock-open fa-2xl"></i></div>
-            	<input type="password" name="newpassword" placeholder="Nhập lại mật khẩu" required>
+            	<input type="password" name="newpassword" placeholder="Nhập lại mật khẩu mới" required>
             </div>
 
 			<div class = "box_button_login"> <button type="submit" class="btn"><b>Xác nhận</b></button> </div>

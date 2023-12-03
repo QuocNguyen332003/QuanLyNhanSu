@@ -41,7 +41,7 @@
             </div>
             <div class="input-box">
 				<div class = "box_icon_login"><i class="fa-solid fa-lock fa-2xl"></i></div>
-            	<input type="password" name="password" placeholder="Mật khẩu" autocomplete=“off” required>
+            	<input type="password" name="password" id="password" placeholder="Mật khẩu" autocomplete=“off” required>
             </div>
 			<div class="error_mess" style="color:red;">
 				<%String errorMsg = (String) request.getAttribute("error"); %>
@@ -50,8 +50,7 @@
 				<%} %>
 			</div>
             <div class="box_show">
-            	<input type="checkbox" name="showpass" id = "showpass">
-            	<label for="showpass"><i>Show pass</i></label>
+				<input type="checkbox" onclick="showpass()"><i>Show pass</i>
             </div>
             <div class = "box_button_login"> <button type="submit" class="btn"><b>Đăng nhập</b></button> </div>
             <div class = "box_form_a">
@@ -62,5 +61,15 @@
         </form>
     	</div>
 	</div>
+	<script>
+		function showpass() {
+			var x = document.getElementById("password");
+			if (x.type === "password") {
+				x.type = "text";
+			} else {
+				x.type = "password";
+			}
+		}
+	</script>
 </body>
 </html>
