@@ -19,7 +19,7 @@ import DAO.phongbanDAO;
 import Model.congtac;
 import Model.chinhanh;
 import Model.phongban;
-@WebServlet(name = "phongban", urlPatterns = { "/delete"})
+@WebServlet(name = "chinhnhanh", urlPatterns = { "/deleteChiNhanh", "/addChiNhanh"})
 public class chinhanhController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -37,8 +37,11 @@ public class chinhanhController extends HttpServlet {
 
         try {
             switch (action) {
-                case "/delete":
+                case "/deleteChiNhanh":
                     deleteChiNhanh(request, response);
+                    break;
+                case "/addChiNhanh":
+                    FormThemChiNhanh(request, response);
                     break;
                 default:
                     RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
@@ -55,5 +58,10 @@ public class chinhanhController extends HttpServlet {
         chinhanhDAO dao = new chinhanhDAO();
         dao.deleteChiNhanh(macn);
         response.sendRedirect("quanlychinhanh");
+    }
+    private void FormThemChiNhanh(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("qlcongty/themchinhanh.jsp");
+        dispatcher.forward(request, response);
     }
 }

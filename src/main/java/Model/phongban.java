@@ -1,13 +1,14 @@
 package Model;
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDate;
 public class phongban implements Serializable{
     private static final long serialVersionUID = 1L;
     private String mapb;
     private String tenpb;
     private String macn;
     private String matrphong;
-    private Date ngaytao;
+    private LocalDate ngaytao;
     private String mapbtr;
     public String getMapb() { return mapb; }
     public void setMapb(String mapb) { this.mapb=mapb; }
@@ -18,10 +19,10 @@ public class phongban implements Serializable{
     public String getMatrphong() { return matrphong; }
     public void setMatrphong(String matrphong) { this.matrphong=matrphong; }
 
-    public Date getNgaytao () { return ngaytao; }
-    public void setNgaytao(Date ngaytao) { this.ngaytao=ngaytao; }
+    public LocalDate getNgaytao () { return ngaytao; }
+    public void setNgaytao(LocalDate ngaytao) { this.ngaytao=ngaytao; }
     public  String getMapbtr() { return mapbtr; }
-    public phongban(String mapb, String tenpb, String macn, String matrphong, Date ngaytao, String mapbtr){
+    public phongban(String mapb, String tenpb, String macn, String matrphong, LocalDate ngaytao, String mapbtr){
         this.mapb=mapb;
         this.tenpb=tenpb;
         this.macn=macn;

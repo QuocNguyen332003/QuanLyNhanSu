@@ -39,19 +39,11 @@
 							</button>
 						</li>
 						<li class="nav-item">
-							<button class="button_icon">
-								<i class="fa-sharp fa-solid fa-plus fa-2x"></i>
-							</button>
-						</li>
-						<li class="nav-item">
-							<button class="button_icon">
-								<i class="fa-solid fa-pen-to-square fa-2x"></i>
-							</button>
-						</li>
-						<li class="nav-item">
-							<button class="button_icon">
-								<i class="fa-solid fa-trash fa-2x"></i>
-							</button>
+							<a href="<%=request.getContextPath()%>/addChiNhanh">
+								<button class="button_icon">
+									<i class="fa-sharp fa-solid fa-plus fa-2x"></i>
+								</button>
+							</a>
 						</li>
 					</ul>
 				</nav>
@@ -109,9 +101,9 @@
 										<td>${x.magiamdoc}</td>
 										<td>${x.tinhtrang}</td>
 										<td>${x.ngaytao}</td>
-										<td><a href="edit?macn=<c:out value='${x.macn}' />">Edit</a>
+										<td><a href="editChiNhanh?macn=<c:out value='${x.macn}' />">Edit</a>
 											&nbsp;&nbsp;&nbsp;&nbsp; <a
-													href="delete?macn=<c:out value='${x.macn}' />">Delete</a></td>
+													href="deleteChiNhanh?macn=<c:out value='${x.macn}' />">Delete</a></td>
 									</tr>
 								</c:forEach>
 								</tbody>
