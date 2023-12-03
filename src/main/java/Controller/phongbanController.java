@@ -15,14 +15,18 @@ import javax.servlet.http.HttpSession;
 
 import DAO.congtacDAO;
 import DAO.phongbanDAO;
+import JDBCUtils.JDBCUtils;
 import Model.congtac;
 import Model.chinhanh;
 import Model.phongban;
-@WebServlet(name = "phongban", urlPatterns = { "/delete"})
+
+@WebServlet(name = "phongban", urlPatterns = { "/deletePhongBan", "/addPhongBan","/insertPhongBan","/editPhongBan","/updatePhongBan"})
 public class phongbanController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    private phongbanDAO pbDAO ;
     public void init() {
+        pbDAO = new phongbanDAO();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -36,8 +40,20 @@ public class phongbanController extends HttpServlet {
 
         try {
             switch (action) {
-                case "/delete":
+                case "/deletePhongBan":
                     deletePhongBan(request, response);
+                    break;
+                case "/addPhongBan":
+                    FormThemPhongBan(request, response);
+                    break;
+                case "/editPhongBan":
+                    FormEditPhongBan(request, response);
+                    break;
+                case "/insertPhongBan":
+                    insertPhongBan(request, response);
+                    break;
+                case "/updatePhongBan":
+                    updatePhongBan(request, response);
                     break;
                 default:
                     RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
@@ -53,6 +69,54 @@ public class phongbanController extends HttpServlet {
         String mapb = request.getParameter("mapb");
         phongbanDAO dao = new phongbanDAO();
         dao.deletePhongBan(mapb);
+        response.sendRedirect("quanlyphongban");
+    }
+    private void FormThemPhongBan(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("qlcongty/themphongban.jsp");
+        dispatcher.forward(request, response);
+    }
+    private void FormEditPhongBan(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        String mapb = request.getParameter("mapb");
+        phongban existingPhongBan = pbDAO.selectPhongBan(mapb);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("qlcongty/themphongban.jsp");
+        request.setAttribute("phongban", existingPhongBan);
+        dispatcher.forward(request, response);
+    }
+    private void insertPhongBan(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+
+        String mapb = request.getParameter("mapb");
+        String tenpb = request.getParameter("tenpb");
+        String macn = request.getParameter("macn");
+        String matrphong = request.getParameter("matrphong");
+        String mapbtr = request.getParameter("mapbtr");
+
+        // Tạo đối tượng phongban từ thông tin lấy được
+        phongban newphongban = new phongban(mapb, tenpb, macn, matrphong, LocalDate.now(), mapbtr);
+
+        // Gọi phương thức insertPhongBan của DAO để thêm vào cơ sở dữ liệu
+        phongbanDAO pbDAO = new phongbanDAO();
+        try {
+            pbDAO.insertPhongBan(newphongban);
+            response.sendRedirect("quanlyphongban"); // Chuyển hướng sau khi thêm thành công
+        } catch (SQLException e) {
+            // Xử lý lỗi SQL (hiển thị hoặc log lỗi)
+            e.printStackTrace();// Chuyển hướng đến trang lỗi nếu có lỗi
+        }
+    }
+    private void updatePhongBan(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+
+        String mapb = request.getParameter("mapb");
+        String tenpb = request.getParameter("tenpb");
+        String macn = request.getParameter("macn");
+        String matrphong = request.getParameter("matrphong");
+        String mapbtr = request.getParameter("mapbtr");
+
+        phongban updatephongban = new phongban(mapb, tenpb, macn, matrphong, null, mapbtr);
+        // Gọi phương thức insertPhongBan của DAO để thêm vào cơ sở dữ liệu
+        phongbanDAO pbDAO = new phongbanDAO();
+        pbDAO.updatePhongBan(updatephongban);
         response.sendRedirect("quanlyphongban");
     }
 }

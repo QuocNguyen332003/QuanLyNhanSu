@@ -38,24 +38,16 @@
 							</button>
 						</li>
 						<li class="nav-item">
-							<button class="button_icon">
-								<i class="fa-sharp fa-solid fa-plus fa-2x"></i>
-							</button>
-						</li>
-						<li class="nav-item">
-							<button class="button_icon">
-								<i class="fa-solid fa-pen-to-square fa-2x"></i>
-							</button>
-						</li>
-						<li class="nav-item">
-							<button class="button_icon"
-								style="background-color: transparent; border: none;">
-								<i class="fa-solid fa-trash fa-2x"></i>
-							</button>
+							<a href="<%=request.getContextPath()%>/addPhongBan">
+								<button class="button_icon">
+									<i class="fa-sharp fa-solid fa-plus fa-2x"></i>
+								</button>
+							</a>
 						</li>
 					</ul>
 				</nav>
 				<br>
+				<div id="menuContainer" style="display: none;"></div>
 				<div class="row">
 					<div class="container body">
 						<div class="container text-left">
@@ -109,9 +101,9 @@
 										<td>${x.matrphong}</td>
 										<td>${x.ngaytao}</td>
 										<td>${x.mapbtr}</td>
-										<td><a href="edit?mapb=<c:out value='${x.mapb}' />">Edit</a>
+										<td><a href="editPhongBan?mapb=<c:out value='${x.mapb}' />">Edit</a>
 											&nbsp;&nbsp;&nbsp;&nbsp; <a
-													href="delete?mapb=<c:out value='${x.mapb}' />">Delete</a></td>
+													href="deletePhongBan?mapb=<c:out value='${x.mapb}' />">Delete</a></td>
 									</tr>
 								</c:forEach>
 								</tbody>
@@ -123,5 +115,4 @@
 		</div>
 	</div>
 </body>
-
 </html>
