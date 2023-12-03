@@ -16,6 +16,8 @@ public class phongbanDAO {
 
     private static final String SELECT_PB_BY_MAPB = "select * from phongban where mapb = ?";
 
+    private static final String SELECT_TRUONGPHONG = "select mapb from phongban where matrphong = ?;";
+
     private static final String UPDATE_PB = "update phongban set tenpb = ?, macn = ?, matrphong =?, mapbtr = ? where mapb = ?;";
     private static final String INSERT_PB_BY_MAPB = "INSERT INTO phongban (mapb, tenpb, macn, matrphong, ngaytao, mapbtr) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -85,6 +87,7 @@ public class phongbanDAO {
         }
         return rowUpdated;
     }
+
     public phongban selectPhongBan(String Mapb) {
         phongban pb = null;
         // Step 1: Establishing a Connection
@@ -113,5 +116,18 @@ public class phongbanDAO {
         }
         return pb;
     }
-
+    public static String LayMaPB(String matrphong) throws SQLException {
+        String result = null;
+        boolean rowDeleted;
+        try (Connection connection = JDBCUtils.getConnection(); PreparedStatement statement = connection.prepareStatement(SELECT_TRUONGPHONG);) {
+            statement.setString(1, matrphong);
+            ResultSet rs = statement.executeQuery();
+            System.out.println(statement);
+            // Step 4: Process the ResultSet object.
+            while (rs.next()) {
+                result = rs.getString("mapb");
+            }
+        }
+        return result;
+    }
 }
