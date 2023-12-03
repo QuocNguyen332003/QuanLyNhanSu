@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import DAO.congtacDAO;
 import Model.congtac;
 import Model.taikhoan;
+import DAO.phongbanDAO;
 
 @WebServlet(name = "congtac", urlPatterns = { "/themcongtac","/thaydoicongtac","/xoacongtac","/xemcongtac"})
 public class congtacController extends HttpServlet {
@@ -118,6 +119,13 @@ public class congtacController extends HttpServlet {
     }
     private void Xemcongtac(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
+        HttpSession session = request.getSession(false);
+        int capbac = (int) session.getAttribute("capbac");
+        if (capbac == 1){
+            String mapb = phongbanDAO.LayMaPB(getMatk(request,response));
+            List < congtac > listcongtac = congtacDAO.DanhSachCongTac_NV_PB(mapb);
+            request.setAttribute("listcongtac_nv", listcongtac);
+        }
         RequestDispatcher dispatcher = request.getRequestDispatcher("/congtac/xem_congtac.jsp");
         dispatcher.forward(request, response);
     }

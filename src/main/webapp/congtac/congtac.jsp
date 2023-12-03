@@ -57,6 +57,10 @@
 		.box_form{
 			border: 1px solid white;
 		}
+		.text_btn{
+			background-color: white;
+			color: var(--maincolor);
+		}
 	</style>
 </head>
 
@@ -73,9 +77,9 @@
                     <div class = "navbar_item_css">
                        <h2> Quản lý công tác </h2>
                        <div class="nav-item" >
-                           <button class="button_icon" >
+                           <a href="<%=request.getContextPath()%>/xemcongtac" class="button_icon" style="display:${sessionScope.capbac == 0 ? 'none' : 'inline'}">
                                <i class="fa-solid fa-eye fa-2xl"></i>
-                           </button>
+                           </a>
                        </div>
                     </div> 
                 </nav>
@@ -83,9 +87,10 @@
                 <div class="row">
                     <div class="container body">
 					<c:set var="count" value="0" />
+					<c:set var="edit" value="0" />
 					<c:forEach var="item_ct" items="${listcongtac}">
 						<form class = "box_form">
-							<div class = "col-md-11 box_content">
+							<div class = "col-md-10 box_content">
 								<div class="form-group form-inline">
 									<label for="ngaybatdau${count}" class = "label_form_control">Ngày bắt đầu:</label>
 									<input type="date" value="<c:out value="${item_ct.ngaybatdau}" />" class="form-control box_form_control" id="ngaybatdau${count}" placeholder="Ngày bắt đầu" name="ngaybatdau" readonly required>
@@ -106,6 +111,9 @@
 									<label for="lydo${count}" class = "label_form_control">Lý do:</label>
 									<input type="text" value="<c:out value="${item_ct.lydo}" />" class="form-control box_form_control" id="lydo${count}" placeholder="Lý do nghỉ" name="lydo" readonly required>
 								</div>
+							</div>
+							<div class = "col-md-1" style=" background-color: white">
+								<button type="button" class = "text_btn" id = "btn_huy${count}" style="display:none;">Hủy</button>
 							</div>
 							<div class = "col-md-1 box_button">
 								<button formaction="<%=request.getContextPath()%>/xoacongtac" class = "button_icon">
@@ -128,19 +136,24 @@
 
 							let btnedit${count} = document.getElementById("btn_edit${count}");
 							let btnsave${count} = document.getElementById("btn_save${count}");
+							let btnhuy${count} = document.getElementById("btn_huy${count}");
 
 							btnedit${count}.addEventListener("click", function() {
 								diachi${count}.removeAttribute("readonly");
 								chucvu${count}.removeAttribute("readonly");
 								lydo${count}.removeAttribute("readonly");
+								btnhuy${count}.style.display = "inline";
 								ngaybatdau${count}.focus();
 							});
-
+							btnhuy${count}.addEventListener("click", function() {
+								window.location.reload ();
+								btnhuy${count}.style.display = "none";
+							});
 							btnsave${count}.addEventListener("click", function() {
 								diachi${count}.setAttribute("readonly", true);
 								chucvu${count}.setAttribute("readonly", true);
 								lydo${count}.setAttribute("readonly", true);
-
+								btnhuy${count}.style.display = "none";
 							});
 						</script>
 						<c:set var="count" value="${count + 1}" />

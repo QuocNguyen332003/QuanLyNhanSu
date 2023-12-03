@@ -2,6 +2,8 @@ package DAO;
 
 import JDBCUtils.JDBCUtils;
 import Model.congtac;
+import DAO.phongbanDAO;
+import Model.nhanvien;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,7 +27,7 @@ public class congtacDAO {
         try (Connection connection = JDBCUtils.getConnection();
 
              // Step 2:Create a statement using connection object
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL);) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL);) {
             preparedStatement.setString(1, matk);
             // Step 3: Execute the query or update query
             ResultSet rs = preparedStatement.executeQuery();
@@ -80,5 +82,32 @@ public class congtacDAO {
         } catch (SQLException exception) {
             JDBCUtils.printSQLException(exception);
         }
+    }
+    public static List< congtac > DanhSachCongTac_NV_PB(String mapb) {
+
+        List < congtac > listcongtac = new ArrayList< >();
+        List <nhanvien> listnhanvien = qlnhanvienDAO.LayNhanVienPB(mapb);
+
+        for (nhanvien nv: listnhanvien) {
+            try (Connection connection = JDBCUtils.getConnection();
+                 PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL);) {
+                preparedStatement.setString(1, nv.getMatk());
+                // Step 3: Execute the query or update query
+                ResultSet rs = preparedStatement.executeQuery();
+                System.out.println(preparedStatement);
+                // Step 4: Process the ResultSet object.
+                while (rs.next()) {
+                    LocalDate ngaybatdau = rs.getDate("ngaybatdau").toLocalDate();
+                    String tentochuc = rs.getString("tentochuc");
+                    String diachi = rs.getString("diachi");
+                    String chucvu = rs.getString("chucvu");
+                    String lydo = rs.getString("lydo");
+                    listcongtac.add(new congtac(nv.getMatk(),ngaybatdau,tentochuc,diachi,chucvu,lydo));
+                }
+            } catch (SQLException exception) {
+                JDBCUtils.printSQLException(exception);
+            }
+        }
+        return listcongtac;
     }
 }
