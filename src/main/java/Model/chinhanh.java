@@ -2,6 +2,7 @@ package Model;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDate;
 
 public class chinhanh implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -10,7 +11,7 @@ public class chinhanh implements Serializable{
 	private String diachi;
 	private String magiamdoc;
 	private String tinhtrang;
-	private Date ngaytao;
+	private LocalDate ngaytao;
 	
 	public String getMacn() {
 		return macn;
@@ -52,15 +53,15 @@ public class chinhanh implements Serializable{
 		this.tinhtrang=tinhtrang;
 	}
 	
-	public Date getNgaytao() {
+	public LocalDate getNgaytao() {
 		return ngaytao;
 	}
 	
-	public void setNgaydtao(Date ngaytao) {
+	public void setNgaydtao(LocalDate ngaytao) {
 		this.ngaytao=ngaytao;
 	}
 	
-	public chinhanh(String macn, String tencn, String diachi, String magiamdoc, String tinhtrang, Date ngaytao) {
+	public chinhanh(String macn, String tencn, String diachi, String magiamdoc, String tinhtrang, LocalDate ngaytao) {
 		this.macn=macn;
 		this.tencn=tencn;
 		this.diachi=diachi;
