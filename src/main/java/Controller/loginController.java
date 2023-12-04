@@ -82,19 +82,16 @@ public class loginController extends HttpServlet {
         loginModel.setPass(password);
 
         try {
-            HttpSession session = request.getSession(true);
+            HttpSession session = request.getSession();
             taikhoan tk = loginDao.validate(loginModel);
             if (tk != null) {
                 int capbac = chucvuDAO.CapBacQuyenHan(tk.getMatk()); // 0 nhanvien 1 truong phong 2 giam doc 3 admin
-                nhanvien thongtincanhan = qlnhanvienDAO.LayThongTinNhanVien(tk.getMatk());
                 session.setAttribute("user", tk);
                 session.setAttribute("capbac",capbac);
-                session.setAttribute("thongtincanhan", thongtincanhan);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/trangchu");
                 dispatcher.forward(request, response);
             } else {
                 request.setAttribute("error", "Thông tin đăng nhập không hợp lệ");
-                //session.setAttribute("user", username);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/login");
                 dispatcher.forward(request, response);
             }
@@ -127,13 +124,12 @@ public class loginController extends HttpServlet {
         thongtincanhan emailModel = new thongtincanhan();
         emailModel.setEmail(email);
 
-        HttpSession session = request.getSession(true);
-        session.setAttribute("username", usernameModel);
-        session.setAttribute("email", emailModel);
         try {
             boolean kt = forgotDao.kiemtratk(usernameModel,emailModel);
             if(kt){
                 forgotDao.sendEmail(host, port, user, pass, email, subject, maOtp);
+                request.setAttribute("inputUsername", username);
+                request.setAttribute("inputEmail", email);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/login/forgot.jsp");
                 dispatcher.forward(request, response);
             }
@@ -155,28 +151,27 @@ public class loginController extends HttpServlet {
         String otp = request.getParameter("otp");
         String newpassword = request.getParameter("newpassword");
 
-        HttpSession session = request.getSession(false);
-        taikhoan usernameModel = (taikhoan) session.getAttribute("username");
-        thongtincanhan emailModel = (thongtincanhan) session.getAttribute("email");
+        taikhoan usernameModel = new taikhoan();
+        usernameModel.setUsername(username);
+        thongtincanhan emailModel = new thongtincanhan();
+        emailModel.setEmail(email);
 
         if(!otp.equals(maOtp))
         {
-            request.setAttribute("error", "Mã OTP không trùng khớp!");
             maOtp = null;
-            session.invalidate();
+            request.setAttribute("error", "Mã OTP không trùng khớp!");
             RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
             dispatcher.forward(request, response);
             return;
         }
+
         try {
             boolean ischanged = forgotDao.changePass(usernameModel, emailModel, newpassword);
             if(ischanged){
-                session.invalidate();
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
                 dispatcher.forward(request, response);
             }
             else{
-                session.invalidate();
                 request.setAttribute("error", "Không thể thay đổi mật khẩu!");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/login/forgot.jsp");
                 dispatcher.forward(request, response);
@@ -207,7 +202,6 @@ public class loginController extends HttpServlet {
         loginModel.setPass(oldpassword);
 
         try {
-            HttpSession session = request.getSession();
             taikhoan tk = loginDao.validate(loginModel);
             if (tk != null) {
                 boolean isChanged = changeDao.changePassword(tk, newpassword);
