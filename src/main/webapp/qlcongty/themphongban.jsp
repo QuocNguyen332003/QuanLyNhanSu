@@ -34,7 +34,14 @@
     <input type="text" id="tenpb" name="tenpb" value="${phongban.tenpb}" required>
 
     <label for="macn">Mã Chi Nhánh:</label>
-    <input type="text" id="macn" name="macn" value="${phongban.macn}" required>
+    <select class="form-control form-control-sm box_search" id="macn"
+            onchange="searchTable()">
+        <!-- Add an empty option -->
+        <option value="">- Select -</option>
+        <c:forEach items="${listchinhanh}" var="x">
+            <option>${x.macn}</option>
+        </c:forEach>
+    </select>
 
     <label for="matrphong">Mã Trưởng Phòng:</label>
     <input type="text" id="matrphong" name="matrphong" value="${phongban.matrphong}" required>
