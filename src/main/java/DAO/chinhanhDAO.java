@@ -9,6 +9,7 @@ import java.util.List;
 public class chinhanhDAO {
     private static final String SELECT_ALL = "select * from chinhanh";
     private static final String DELETE_CN_BY_MACN = "delete from chinhanh where macn = ?;";
+    private static final String SELECT_GIAMDOC = "select macn from chinhanh where magiamdoc = ?;";
     public static List<chinhanh> selectAllchinhanh() {
 
         List < chinhanh > listchinhanh = new ArrayList< >();
@@ -46,5 +47,18 @@ public class chinhanhDAO {
             rowDeleted = statement.executeUpdate() > 0;
         }
         return rowDeleted;
+    }
+    public static String LayMaCN(String magiamdoc) throws SQLException {
+        String result = null;
+        boolean rowDeleted;
+        try (Connection connection = JDBCUtils.getConnection(); PreparedStatement statement = connection.prepareStatement(SELECT_GIAMDOC);) {
+            statement.setString(1, magiamdoc);
+            ResultSet rs = statement.executeQuery();
+            System.out.println(statement);
+            while (rs.next()) {
+                result = rs.getString("macn");
+            }
+        }
+        return result;
     }
 }

@@ -18,7 +18,7 @@ import DAO.congtacDAO;
 import Model.congtac;
 import Model.taikhoan;
 import DAO.phongbanDAO;
-
+import DAO.chinhanhDAO;
 @WebServlet(name = "congtac", urlPatterns = { "/themcongtac","/thaydoicongtac","/xoacongtac","/xemcongtac"})
 public class congtacController extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -124,6 +124,10 @@ public class congtacController extends HttpServlet {
         if (capbac == 1){
             String mapb = phongbanDAO.LayMaPB(getMatk(request,response));
             List < congtac > listcongtac = congtacDAO.DanhSachCongTac_NV_PB(mapb);
+            request.setAttribute("listcongtac_nv", listcongtac);
+        } else if (capbac == 2){
+            String macn = chinhanhDAO.LayMaCN(getMatk(request,response));
+            List < congtac > listcongtac = congtacDAO.DanhSachCongTac_NV_CN(macn);
             request.setAttribute("listcongtac_nv", listcongtac);
         }
         RequestDispatcher dispatcher = request.getRequestDispatcher("/congtac/xem_congtac.jsp");

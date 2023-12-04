@@ -10,6 +10,7 @@ import java.util.List;
 public class phongbanDAO {
 
     private static final String SELECT_ALL = "select * from phongban";
+    private static final String SELECT_ALL_CN = "select * from phongban where macn = ?";
     private static final String DELETE_PB_BY_MAPB = "delete from phongban where mapb = ?;";
     private static final String SELECT_TRUONGPHONG = "select mapb from phongban where matrphong = ?;";
     public static List< phongban > selectAllphongban() {
@@ -63,5 +64,25 @@ public class phongbanDAO {
             }
         }
         return result;
+    }
+    public static List< phongban > selectAllphongban_CN(String machinhanh) {
+
+        List < phongban > listphongban = new ArrayList< >();
+
+        try (Connection connection = JDBCUtils.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_CN);) {
+            preparedStatement.setString(1,machinhanh);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            // Step 4: Process the ResultSet object.
+            while (rs.next()) {
+                String mapb = rs.getString("mapb");
+                listphongban.add(new phongban(mapb, null, null, null, null, null));
+
+            }
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+        return listphongban;
     }
 }
