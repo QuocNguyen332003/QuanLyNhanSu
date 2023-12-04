@@ -53,27 +53,21 @@
 						<div class="container text-left">
 							<form class="form-inline">
 								<div class="form-group mx-2">
-									<label for="yearSelect" class="mr-2"> Năm:</label> <select
+									<label for="maPBSelect" class="mr-2"> Mã phòng ban:</label>
+									<select
+											class="form-control form-control-sm box_search">
+									<c:forEach items="${listphongban}" var="x">
+										<option>${x.mapb}</option>
+									</c:forEach>
+									</select>
+								</div>
+								<div class="form-group mx-2">
+									<label for="tenPBSelect" class="mr-2">Ttenpbn phòng ban:</label>
+									<select
 										class="form-control form-control-sm box_search">
-										<!-- Option 1 -->
-									</select>
-								</div>
-								<div class="form-group mx-2">
-									<label for="monthSelect" class="mr-2">Tháng:</label> <select
-										class="form-control form-control-sm box_search">
-										<!-- Option 2 -->
-									</select>
-								</div>
-								<div class="form-group mx-2">
-									<label for="daySelect" class="mr-2">Ngày:</label> <select
-										class="form-control form-congàytrol-sm box_search">
-										<!-- Option 3 -->
-									</select>
-								</div>
-								<div class="form-group mx-2">
-									<label for="creDaySelect" class="mr-2">Ngày tạo phòng:</label>
-									<select class="form-control form-control-sm box_search">
-										<!-- Option 4 -->
+										<c:forEach items="${listphongban}" var="x">
+											<option>${x.tenpb}</option>
+										</c:forEach>
 									</select>
 								</div>
 							</form>
