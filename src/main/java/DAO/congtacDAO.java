@@ -114,4 +114,8 @@ public class congtacDAO {
         List <nhanvien> listnhanvien = qlnhanvienDAO.LayNhanVienCN(macn);
         return getCongTacs(listnhanvien);
     }
+    public static List< congtac > DanhSachCongTac_ALL_NV() {
+        List <nhanvien> listnhanvien = qlnhanvienDAO.LayNhanVien();
+        return getCongTacs(listnhanvien);
+    }
 }

@@ -86,8 +86,10 @@ public class loginController extends HttpServlet {
             taikhoan tk = loginDao.validate(loginModel);
             if (tk != null) {
                 int capbac = chucvuDAO.CapBacQuyenHan(tk.getMatk()); // 0 nhanvien 1 truong phong 2 giam doc 3 admin
+                nhanvien thongtincanhan = qlnhanvienDAO.LayThongTinNhanVien(tk.getMatk());
                 session.setAttribute("user", tk);
                 session.setAttribute("capbac",capbac);
+                session.setAttribute("thongtincanhan", thongtincanhan);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/trangchu");
                 dispatcher.forward(request, response);
             } else {

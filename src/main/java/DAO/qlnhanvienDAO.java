@@ -8,19 +8,46 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class qlnhanvienDAO {
+    private static final String SELECT_ALL_THONGTIN = "select * from nhanvien where matk = ?;";
+    private static final String SELECT_ALL_NV = "select matk from nhanvien;";
     private static final String SELECT_NHANVIEN_PB = "select matk from nhanvien where mapb = ?;";
-    public static List<nhanvien> LayNhanVienPB(String mapb) {
+    private static final String SELECT_NHANVIEN_CN = "select matk from nhanvien where macn = ?;";
+    public static nhanvien LayThongTinNhanVien(String matk){
+        nhanvien nv = new nhanvien();
+        try (Connection connection = JDBCUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_THONGTIN);) {
+             preparedStatement.setString(1, matk);
+            // Step 3: Execute the query or update query
+            ResultSet rs = preparedStatement.executeQuery();
 
+            // Step 4: Process the ResultSet object.
+            while (rs.next()) {
+                String macn = rs.getString("macn");
+                String mapb = rs.getString("mapb");
+                LocalDate ngaybatdau = rs.getDate("ngaybatdau").toLocalDate();
+                String tinhtrang = rs.getString("tinhtrang");
+                String congviec = rs.getString("congviec");
+                nv = new nhanvien(matk,macn,mapb,ngaybatdau,tinhtrang,congviec);
+            }
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+        return nv;
+    }
+    public static List<nhanvien> LayDanhSachNhanVien(String SQL, String dk){
         List < nhanvien > listNhanvien = new ArrayList< >();
 
         // Step 1: Establishing a Connection
         try (Connection connection = JDBCUtils.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_NHANVIEN_PB);) {
-            preparedStatement.setString(1, mapb);
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL);) {
+            if (dk != null){
+                preparedStatement.setString(1, dk);
+            }
             // Step 3: Execute the query or update query
             ResultSet rs = preparedStatement.executeQuery();
 
@@ -34,25 +61,13 @@ public class qlnhanvienDAO {
         }
         return listNhanvien;
     }
+    public static List<nhanvien> LayNhanVien(){
+        return LayDanhSachNhanVien(SELECT_ALL_NV, null);
+    }
+    public static List<nhanvien> LayNhanVienPB(String mapb) {
+        return LayDanhSachNhanVien(SELECT_NHANVIEN_PB, mapb);
+    }
     public static List<nhanvien> LayNhanVienCN(String macn) {
-
-        List <phongban> listphongban = phongbanDAO.selectAllphongban_CN(macn);
-        List < nhanvien > listNhanvien = new ArrayList< >();
-
-        for (phongban pb: listphongban) {
-            try (Connection connection = JDBCUtils.getConnection();
-                 PreparedStatement preparedStatement = connection.prepareStatement(SELECT_NHANVIEN_PB);) {
-                preparedStatement.setString(1, pb.getMapb());
-                ResultSet rs = preparedStatement.executeQuery();
-
-                while (rs.next()) {
-                    String matk = rs.getString("matk");
-                    listNhanvien.add(new nhanvien(matk,null,null,null,null,null));
-                }
-            } catch (SQLException exception) {
-                JDBCUtils.printSQLException(exception);
-            }
-        }
-        return listNhanvien;
+        return LayDanhSachNhanVien(SELECT_NHANVIEN_CN, macn);
     }
 }

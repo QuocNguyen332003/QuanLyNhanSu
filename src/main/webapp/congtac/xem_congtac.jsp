@@ -1,8 +1,3 @@
-<%@ page import="Model.congtac" %>
-<%@ page import="java.util.HashSet" %>
-<%@ page import="java.util.Set" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
@@ -51,33 +46,24 @@
         <div class="container body">
           <div class="container text-left">
             <div class="form-inline">
-              <div class="form-group mx-2">
-                <label for="search" class="mr-3"> Tìm kiếm:</label>
+              <div class="form-group mx-5">
+                <label for="search" class="mr-2"> Tìm kiếm:</label>
                 <input class = "form-control box_search" id = "search" onkeyup="Search_textbox()" placeholder="Search">
-              </div>
-              <div class="form-group mx-2">
-                <label for="chinhanh" class="mr-2"> Mã chi nhánh:</label>
-                <select id = "chinhanh" class="form-control box_search">
-
-                </select>
-              </div>
-              <div class="form-group mx-2">
-                <label for="phongban" class="mr-2"> Mã phòng ban:</label>
-                <select id = "phongban" class="form-control box_search">
-                </select>
               </div>
               <div class="form-group mx-2">
                 <label for="select_nhanvien" class="mr-2"> Mã nhân viên:</label>
                 <select id = "select_nhanvien" class="form-control box_search" onchange="search_Matk()">
                   <option value="ALL">Tất Cả</option>
-                  <% List<congtac> listct_nv = (List<congtac>) request.getAttribute("listcongtac_nv");
-                    List<String> listmatk = new ArrayList<>();
-                    for (congtac ct: listct_nv) {
-                      listmatk.add(ct.getMatk());
-                    }
-                    Set<String> setmatk_nv = new HashSet<String>(listmatk);
-                  request.setAttribute("setcongtac_nv", setmatk_nv); %>
-                  <c:forEach var="item_ct" items="${setcongtac_nv}">
+                  <c:forEach var="item_ct" items="${setcongtac_matk}">
+                    <option value="<c:out value="${item_ct}" />">${item_ct}</option>
+                  </c:forEach>
+                </select>
+              </div>
+              <div class="form-group mx-2">
+                <label for="select_ngay" class="mr-2"> Ngày bắt đầu:</label>
+                <select id = "select_ngay" class="form-control box_search" onchange="search_Ngay()">
+                  <option value="ALL">Tất Cả</option>
+                  <c:forEach var="item_ct" items="${setcongtac_ngay}">
                     <option value="<c:out value="${item_ct}" />">${item_ct}</option>
                   </c:forEach>
                 </select>
@@ -151,6 +137,22 @@
         for (i = 0; i < box_content.length; i++) {
           let input_content = box_content[i].getElementsByTagName("input");
           txtValue = input_content[0].value;
+          if (txtValue.toUpperCase().indexOf(filter) > -1 || filter.toUpperCase().indexOf("ALL") > -1) {
+            box_content[i].style.display = "flex";
+          } else {
+            box_content[i].style.display = "none";
+          }
+        }
+      }
+      function search_Ngay(){
+        var input, filter, table, box_content, i, txtValue;
+        input = document.getElementById("select_ngay");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("box_content");
+        box_content = table.getElementsByTagName("form");
+        for (i = 0; i < box_content.length; i++) {
+          let input_content = box_content[i].getElementsByTagName("input");
+          txtValue = input_content[1].value;
           if (txtValue.toUpperCase().indexOf(filter) > -1 || filter.toUpperCase().indexOf("ALL") > -1) {
             box_content[i].style.display = "flex";
           } else {
