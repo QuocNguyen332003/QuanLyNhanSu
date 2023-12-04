@@ -2,6 +2,7 @@ package DAO;
 
 import JDBCUtils.JDBCUtils;
 import Model.nhanvien;
+import Model.phongban;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,6 +31,27 @@ public class qlnhanvienDAO {
             }
         } catch (SQLException exception) {
             JDBCUtils.printSQLException(exception);
+        }
+        return listNhanvien;
+    }
+    public static List<nhanvien> LayNhanVienCN(String macn) {
+
+        List <phongban> listphongban = phongbanDAO.selectAllphongban_CN(macn);
+        List < nhanvien > listNhanvien = new ArrayList< >();
+
+        for (phongban pb: listphongban) {
+            try (Connection connection = JDBCUtils.getConnection();
+                 PreparedStatement preparedStatement = connection.prepareStatement(SELECT_NHANVIEN_PB);) {
+                preparedStatement.setString(1, pb.getMapb());
+                ResultSet rs = preparedStatement.executeQuery();
+
+                while (rs.next()) {
+                    String matk = rs.getString("matk");
+                    listNhanvien.add(new nhanvien(matk,null,null,null,null,null));
+                }
+            } catch (SQLException exception) {
+                JDBCUtils.printSQLException(exception);
+            }
         }
         return listNhanvien;
     }

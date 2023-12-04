@@ -53,27 +53,19 @@
 						<div class="container text-left">
 							<form class="form-inline">
 								<div class="form-group mx-2">
-									<label for="yearSelect" class="mr-2"> Năm:</label> <select
+									<label for="maCNSelect" class="mr-2"> Mã Chi Nhánh:</label> <select
 										class="form-control form-control-sm box_search">
-										<!-- Option 1 -->
+										<c:forEach items="${listchinhanh}" var="x">
+											<option>${x.macn}</option>
+										</c:forEach>
 									</select>
 								</div>
 								<div class="form-group mx-2">
-									<label for="monthSelect" class="mr-2">Tháng:</label> <select
+									<label for="tenCNSelect" class="mr-2">Tên Chi Nhánh:</label> <select
 										class="form-control form-control-sm box_search">
-										<!-- Option 2 -->
-									</select>
-								</div>
-								<div class="form-group mx-2">
-									<label for="daySelect" class="mr-2">Ngày:</label> <select
-										class="form-control form-congàytrol-sm box_search">
-										<!-- Option 3 -->
-									</select>
-								</div>
-								<div class="form-group mx-2">
-									<label for="creDaySelect" class="mr-2">Ngày tạo phòng:</label>
-									<select class="form-control form-control-sm box_search">
-										<!-- Option 4 -->
+										<c:forEach items="${listchinhanh}" var="x">
+											<option>${x.tencn}</option>
+										</c:forEach>
 									</select>
 								</div>
 							</form>

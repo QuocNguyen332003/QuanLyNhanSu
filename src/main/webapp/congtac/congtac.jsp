@@ -6,6 +6,7 @@
 %>
 
 <%@ page import="Model.taikhoan" %>
+<%@ page import="Model.congtac" %>
 <html>
 
 <head>
@@ -134,6 +135,7 @@
 							let chucvu${count} = document.getElementById("chucvu${count}");
 							let lydo${count} = document.getElementById("lydo${count}");
 
+							let btnxoa${count} = document.getElementById("btn_xoa${count}");
 							let btnedit${count} = document.getElementById("btn_edit${count}");
 							let btnsave${count} = document.getElementById("btn_save${count}");
 							let btnhuy${count} = document.getElementById("btn_huy${count}");
@@ -153,6 +155,7 @@
 								diachi${count}.setAttribute("readonly", true);
 								chucvu${count}.setAttribute("readonly", true);
 								lydo${count}.setAttribute("readonly", true);
+
 								btnhuy${count}.style.display = "none";
 							});
 						</script>

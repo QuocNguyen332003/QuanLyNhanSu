@@ -11,6 +11,7 @@ import java.util.List;
 public class chinhanhDAO {
     private static final String SELECT_ALL = "select * from chinhanh";
     private static final String DELETE_CN_BY_MACN = "delete from chinhanh where macn = ?;";
+    private static final String SELECT_GIAMDOC = "select macn from chinhanh where magiamdoc = ?;";
 
     private static final String SELECT_CN_BY_MACN = "select * from chinhanh where macn = ?";
 
@@ -54,6 +55,19 @@ public class chinhanhDAO {
             rowDeleted = statement.executeUpdate() > 0;
         }
         return rowDeleted;
+    }
+    public static String LayMaCN(String magiamdoc) throws SQLException {
+        String result = null;
+        boolean rowDeleted;
+        try (Connection connection = JDBCUtils.getConnection(); PreparedStatement statement = connection.prepareStatement(SELECT_GIAMDOC);) {
+            statement.setString(1, magiamdoc);
+            ResultSet rs = statement.executeQuery();
+            System.out.println(statement);
+            while (rs.next()) {
+                result = rs.getString("macn");
+            }
+        }
+        return result;
     }
     public void insertChiNhanh(chinhanh cn) throws SQLException {
         try (Connection connection = JDBCUtils.getConnection();
