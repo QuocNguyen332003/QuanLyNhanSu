@@ -30,7 +30,7 @@
 			<img src="https://www.evn.com.vn/userfile/VH/User/huyent_tcdl/images/2021/6/hrmscuatapdoan24621(1).jpeg" style="width:700px;height:460px;">
 		</div>
 		<div class="form">
-			<form action="<%=request.getContextPath()%>/forgot" method="post">
+			<form action="<%=request.getContextPath()%>/sendmail" method="post">
             <h1>QUÊN MẬT KHẨU</h1>
             
             <div class="input-box">
@@ -48,8 +48,12 @@
 					<p><%=errorMsg %></p>
 					<%} %>
 				</div>
-			<div class = "box_button_login"> <button type="submit" class="btn btn_gui"><b>Gửi mã</b></button> </div>
+			<div class = "box_button_login">
+				<button type="submit" class="btn btn_gui"><b>Gửi mã</b></button>
+			</div>
+			</form>
 
+			<form action="<%=request.getContextPath()%>/forgot" method="post">
             <div class="input-box">
 				<div class = "box_icon_login"> <i class="fa-solid fa-pen-to-square fa-2xl"></i> </div>
             	<input type="text" name="otp" placeholder="Mã OTP" required>
@@ -61,8 +65,7 @@
             </div>
 
 			<div class = "box_button_login"> <button type="submit" class="btn"><b>Xác nhận</b></button> </div>
-            
-        </form>
+			</form>
     	</div>
 	</div>
 </body>

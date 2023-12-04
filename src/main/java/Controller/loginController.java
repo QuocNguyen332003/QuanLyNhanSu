@@ -2,10 +2,11 @@ package Controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Properties;
 import java.util.Random;
 
+import javax.mail.internet.AddressException;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,9 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
 
 import DAO.loginDAO;
 import DAO.changeDAO;
@@ -24,7 +22,7 @@ import DAO.forgotDAO;
 import Model.taikhoan;
 import Model.thongtincanhan;
 import DAO.chucvuDAO;
-@WebServlet(name = "login", urlPatterns = { "/login", "/forgot", "/change"})
+@WebServlet(name = "login", urlPatterns = { "/login", "/forgot", "/change","/sendmail"})
 public class loginController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private loginDAO loginDao;
@@ -33,6 +31,10 @@ public class loginController extends HttpServlet {
     public void init() {
         loginDao = new loginDAO();
     }
+    // Tạo một số ngẫu nhiên gồm 6 chữ số
+    Random rand = new Random();
+    private int random = rand.nextInt((999999 - 100000) + 1) + 100000;
+    private String maOtp = Integer.toString(random);
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getServletPath();
@@ -60,10 +62,13 @@ public class loginController extends HttpServlet {
                 authenticate(request, response);
                 break;
             case "/forgot":
-                Forgotpass(request, response);
+                NewPass(request, response);
                 break;
             case "/change":
                 ChangePass(request, response);
+                break;
+            case "/sendmail":
+                Forgotpass(request, response);
                 break;
         }
     }
@@ -74,10 +79,10 @@ public class loginController extends HttpServlet {
 
         taikhoan loginModel = new taikhoan();
         loginModel.setUsername(username);
-        loginModel.setMatk(password);
+        loginModel.setPass(password);
 
         try {
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(true);
             taikhoan tk = loginDao.validate(loginModel);
             int capbac = chucvuDAO.CapBacQuyenHan(tk.getMatk()); // 0 nhanvien 1 truong phong 2 giam doc 3 admin
             if (tk != null) {
@@ -99,56 +104,80 @@ public class loginController extends HttpServlet {
 
     private void Forgotpass(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException{
+
+        String host;
+        String port;
+        String user;
+        String pass;
+
+        ServletContext context = getServletContext();
+        host = context.getInitParameter("host");
+        port = context.getInitParameter("port");
+        user = context.getInitParameter("user");
+        pass = context.getInitParameter("pass");
+
         String username = request.getParameter("username");
         String email = request.getParameter("email");
-        String otp = request.getParameter("otp");
-        String newpassword = request.getParameter("newpassword");
+        String subject = "Mã OTP xác nhận của bạn là:";
 
         taikhoan usernameModel = new taikhoan();
         usernameModel.setUsername(username);
         thongtincanhan emailModel = new thongtincanhan();
         emailModel.setEmail(email);
 
+        HttpSession session = request.getSession(true);
+        session.setAttribute("username", usernameModel);
+        session.setAttribute("email", emailModel);
         try {
-
             boolean kt = forgotDao.kiemtratk(usernameModel,emailModel);
             if(kt){
-                String namemail = "nckh211103@gmail.com";
-                String passmail = "owgr culp dizl hvwa";
-                String recipientEmail = "hun@example.com"; // Thay thế bằng email người nhận thực tế
+                forgotDao.sendEmail(host, port, user, pass, email, subject, maOtp);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/login/forgot.jsp");
+                dispatcher.forward(request, response);
+            }
+            else{
+                request.setAttribute("error", "Tài khoản hoặc email không đúng!");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/login/forgot.jsp");
+                dispatcher.forward(request, response);
+            }
 
-                Properties props = new Properties();
-                props.put("mail.smtp.auth", "true");
-                props.put("mail.smtp.starttls.enable", "true");
-                props.put("mail.smtp.host", "smtp.gmail.com");
-                props.put("mail.smtp.port", "587");
+        } catch (ClassNotFoundException | MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-                Session session = Session.getInstance(props,
-                        new javax.mail.Authenticator() {
-                            protected PasswordAuthentication getPasswordAuthentication() {
-                                return new PasswordAuthentication(username, password);
-                            }
-                        });
+    private void NewPass(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException{
+        String username = request.getParameter("username");
+        String email = request.getParameter("email");
+        String otp = request.getParameter("otp");
+        String newpassword = request.getParameter("newpassword");
 
-                try {
-                    Message message = new MimeMessage(session);
-                    message.setFrom(new InternetAddress(username));
-                    message.setRecipients(Message.RecipientType.TO,
-                            InternetAddress.parse(recipientEmail));
-                    message.setSubject("Mail lấy lại mật khẩu");
+        HttpSession session = request.getSession(false);
+        taikhoan usernameModel = (taikhoan) session.getAttribute("username");
+        thongtincanhan emailModel = (thongtincanhan) session.getAttribute("email");
 
-                    // Tạo một số ngẫu nhiên gồm 6 chữ số
-                    Random rand = new Random();
-                    int randomNum = rand.nextInt((999999 - 100000) + 1) + 100000;
-                    message.setText("Mã xác thực của bạn là: " + randomNum);
-
-                    Transport.send(message);
-
-                    System.out.println("Gửi thành công.");
-
-                } catch (MessagingException e) {
-                    throw new RuntimeException(e);
-                }
+        if(!otp.equals(maOtp))
+        {
+            request.setAttribute("error", "Mã OTP không trùng khớp!");
+            maOtp = null;
+            session.invalidate();
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
+            dispatcher.forward(request, response);
+            return;
+        }
+        try {
+            boolean ischanged = forgotDao.changePass(usernameModel, emailModel, newpassword);
+            if(ischanged){
+                session.invalidate();
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
+                dispatcher.forward(request, response);
+            }
+            else{
+                session.invalidate();
+                request.setAttribute("error", "Không thể thay đổi mật khẩu!");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/login/forgot.jsp");
+                dispatcher.forward(request, response);
             }
 
         } catch (ClassNotFoundException e) {
@@ -173,7 +202,7 @@ public class loginController extends HttpServlet {
 
         taikhoan loginModel = new taikhoan();
         loginModel.setUsername(username);
-        loginModel.setMatk(oldpassword);
+        loginModel.setPass(oldpassword);
 
         try {
             HttpSession session = request.getSession();

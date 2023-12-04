@@ -19,7 +19,7 @@ public class loginDAO {
              PreparedStatement preparedStatement = connection
                      .prepareStatement("select * from taikhoan where username = ? and pass = ? ")) {
             preparedStatement.setString(1, tk.getUsername());
-            preparedStatement.setString(2, tk.getMatk());
+            preparedStatement.setString(2, tk.getPass());
 
             System.out.println(preparedStatement);
             ResultSet rs = preparedStatement.executeQuery();
