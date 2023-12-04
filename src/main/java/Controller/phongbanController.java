@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import DAO.chinhanhDAO;
 import DAO.congtacDAO;
 import DAO.phongbanDAO;
 import JDBCUtils.JDBCUtils;
@@ -73,7 +74,9 @@ public class phongbanController extends HttpServlet {
     }
     private void FormThemPhongBan(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("qlcongty/themphongban.jsp");
+        List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh();
+        request.setAttribute("listchinhanh", listchinhanh);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/themphongban.jsp");
         dispatcher.forward(request, response);
     }
     private void FormEditPhongBan(HttpServletRequest request, HttpServletResponse response)
