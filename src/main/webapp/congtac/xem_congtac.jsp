@@ -1,3 +1,8 @@
+<%@ page import="Model.congtac" %>
+<%@ page import="java.util.HashSet" %>
+<%@ page import="java.util.Set" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
@@ -13,6 +18,13 @@
         crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/congtac.css" />
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/base.css" />
+  <style>
+    div#box_content {
+      overflow-y: auto; /* Hiển thị thanh cuộn theo chiều dọc khi cần */
+      max-height: 400px; /* Giới hạn chiều cao tối đa của thẻ div */
+    }
+
+  </style>
 </head>
 
 <body>
@@ -38,58 +50,115 @@
       <div class="row">
         <div class="container body">
           <div class="container text-left">
-            <form class="form-inline">
+            <div class="form-inline">
+              <div class="form-group mx-2">
+                <label for="search" class="mr-3"> Tìm kiếm:</label>
+                <input class = "form-control box_search" id = "search" onkeyup="Search_textbox()" placeholder="Search">
+              </div>
               <div class="form-group mx-2">
                 <label for="chinhanh" class="mr-2"> Mã chi nhánh:</label>
-                <select id = "chinhanh" class="form-control form-control-sm box_search">
-                  <!-- Option 1 -->
+                <select id = "chinhanh" class="form-control box_search">
+
                 </select>
               </div>
               <div class="form-group mx-2">
                 <label for="phongban" class="mr-2"> Mã phòng ban:</label>
-                <select id = "phongban" class="form-control form-control-sm box_search">
-                  <!-- Option 1 -->
+                <select id = "phongban" class="form-control box_search">
                 </select>
               </div>
               <div class="form-group mx-2">
-                <label for="nhanvien" class="mr-2"> Mã nhân viên:</label>
-                <select id = "nhanvien" class="form-control form-control-sm box_search">
-                  <!-- Option 1 -->
+                <label for="select_nhanvien" class="mr-2"> Mã nhân viên:</label>
+                <select id = "select_nhanvien" class="form-control box_search" onchange="search_Matk()">
+                  <option value="ALL">Tất Cả</option>
+                  <% List<congtac> listct_nv = (List<congtac>) request.getAttribute("listcongtac_nv");
+                    List<String> listmatk = new ArrayList<>();
+                    for (congtac ct: listct_nv) {
+                      listmatk.add(ct.getMatk());
+                    }
+                    Set<String> setmatk_nv = new HashSet<String>(listmatk);
+                  request.setAttribute("setcongtac_nv", setmatk_nv); %>
+                  <c:forEach var="item_ct" items="${setcongtac_nv}">
+                    <option value="<c:out value="${item_ct}" />">${item_ct}</option>
+                  </c:forEach>
                 </select>
               </div>
-            </form>
+            </div>
           </div>
           <br>
-          <c:set var="count" value="0" />
-          <c:forEach var="item_ct" items="${listcongtac_nv}">
-          <form class = "box_form">
-            <div class = "col-md-12 box_content">
-              <div class="form-group form-inline">
-                <label for="ngaybatdau${count}" class = "label_form_control">Ngày bắt đầu:</label>
-                <input type="date" class="form-control box_form_control" id="ngaybatdau${count}" placeholder="Ngày bắt đầu" name="ngaybatdau" value="<c:out value="${item_ct.ngaybatdau}" />" readonly required>
-              </div>
-              <div class="form-group form-inline">
-                <label for="tentochuc${count}" class = "label_form_control">Tên tổ chức:</label>
-                <input type="text" class="form-control box_form_control" id="tentochuc${count}" placeholder="Tên tổ chức" name="tentochuc" value="<c:out value="${item_ct.tentochuc}" />" readonly required>
-              </div>
-              <div class="form-group form-inline">
-                <label for="diachi${count}" class = "label_form_control">Địa chỉ:</label>
-                <input type="text" class="form-control box_form_control" id="diachi${count}" placeholder="Địa chỉ" name="diachi" value="<c:out value="${item_ct.diachi}" />" readonly required>
-              </div>
-              <div class="form-group form-inline">
-                <label for="chucvu${count}" class = "label_form_control">Chức vụ:</label>
-                <input type="text" class="form-control box_form_control" id="chucvu${count}" placeholder="Chức vụ" name="chucvu" value="<c:out value="${item_ct.chucvu}" />" readonly required>
-              </div>
-              <div class="form-group form-inline">
-                <label for="lydo${count}" class = "label_form_control">Lý do:</label>
-                <input type="text" class="form-control box_form_control" id="lydo${count}" placeholder="Lý do nghỉ" name="lydo" value="<c:out value="${item_ct.lydo}" />" readonly required>
-              </div>
-            </div>
-          </form>
-          </c:forEach>
+          <div id = "box_content" >
+            <c:set var="count" value="0" />
+            <c:forEach var="item_ct" items="${listcongtac_nv}">
+              <form class = "box_form">
+                <div class = "col-md-12 box_content">
+                  <div class="form-group form-inline">
+                    <label for="manv${count}" class = "label_form_control">Mã nhân viên:</label>
+                    <input type="text" class="form-control box_form_control" id="manv${count}" name="manv" value="<c:out value="${item_ct.matk}" />" readonly required>
+                  </div>
+                  <div class="form-group form-inline">
+                    <label for="ngaybatdau${count}" class = "label_form_control">Ngày bắt đầu:</label>
+                    <input type="date" class="form-control box_form_control" id="ngaybatdau${count}" placeholder="Ngày bắt đầu" name="ngaybatdau" value="<c:out value="${item_ct.ngaybatdau}" />" readonly required>
+                  </div>
+                  <div class="form-group form-inline">
+                    <label for="tentochuc${count}" class = "label_form_control">Tên tổ chức:</label>
+                    <input type="text" class="form-control box_form_control" id="tentochuc${count}" placeholder="Tên tổ chức" name="tentochuc" value="<c:out value="${item_ct.tentochuc}" />" readonly required>
+                  </div>
+                  <div class="form-group form-inline">
+                    <label for="diachi${count}" class = "label_form_control">Địa chỉ:</label>
+                    <input type="text" class="form-control box_form_control" id="diachi${count}" placeholder="Địa chỉ" name="diachi" value="<c:out value="${item_ct.diachi}" />" readonly required>
+                  </div>
+                  <div class="form-group form-inline">
+                    <label for="chucvu${count}" class = "label_form_control">Chức vụ:</label>
+                    <input type="text" class="form-control box_form_control" id="chucvu${count}" placeholder="Chức vụ" name="chucvu" value="<c:out value="${item_ct.chucvu}" />" readonly required>
+                  </div>
+                  <div class="form-group form-inline">
+                    <label for="lydo${count}" class = "label_form_control">Lý do:</label>
+                    <input type="text" class="form-control box_form_control" id="lydo${count}" placeholder="Lý do nghỉ" name="lydo" value="<c:out value="${item_ct.lydo}" />" readonly required>
+                  </div>
+                </div>
+              </form>
+            </c:forEach>
+          </div>
         </div>
       </div>
     </div>
+    <script>
+      function Search_textbox() {
+        var input, filter, table, box_content, i, txtValue;
+        input = document.getElementById("search");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("box_content");
+        box_content = table.getElementsByTagName("form");
+        for (i = 0; i < box_content.length; i++) {
+          let input_content = box_content[i].getElementsByTagName("input");
+          let j = 0;
+          for (j = 0; j < input_content.length; j++){
+              txtValue = input_content[j].value;
+              if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                box_content[i].style.display = "flex";
+                break;
+              } else {
+                box_content[i].style.display = "none";
+              }
+          }
+        }
+      }
+      function search_Matk(){
+        var input, filter, table, box_content, i, txtValue;
+        input = document.getElementById("select_nhanvien");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("box_content");
+        box_content = table.getElementsByTagName("form");
+        for (i = 0; i < box_content.length; i++) {
+          let input_content = box_content[i].getElementsByTagName("input");
+          txtValue = input_content[0].value;
+          if (txtValue.toUpperCase().indexOf(filter) > -1 || filter.toUpperCase().indexOf("ALL") > -1) {
+            box_content[i].style.display = "flex";
+          } else {
+            box_content[i].style.display = "none";
+          }
+        }
+      }
+    </script>
   </div>
 </div>
 </body>
