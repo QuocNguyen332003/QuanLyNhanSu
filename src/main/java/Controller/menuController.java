@@ -13,13 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import DAO.chinhanhDAO;
-import DAO.congtacDAO;
-import DAO.phongbanDAO;
-import Model.congtac;
-import Model.chinhanh;
-import Model.phongban;
-import Model.taikhoan;
+import DAO.*;
+import Model.*;
+
 @WebServlet(name = "menu", urlPatterns = { "/trangchu", "/thongtincanhan", "/congtac", "/khenthuongkyluat", "/quanlynhanvien", "/quanlyphongban","/quanlychinhanh"})
 public class menuController extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -94,8 +90,17 @@ public class menuController extends HttpServlet {
     }
     private void Formkhenthuongkyluat(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/khenthuongkyluat/khenthuongkyluat.jsp");
-        dispatcher.forward(request, response);
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            taikhoan username = (taikhoan) session.getAttribute("user");
+            List <thanhtichkyluat> listKTKL = khenthuongkyluatDAO.DanhSachKTKL(username.getMatk());
+            request.setAttribute("listKTKL", listKTKL);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/khenthuongkyluat/khenthuongkyluat.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
+            dispatcher.forward(request, response);
+        }
     }
     private void Formquanlynhanvien(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {

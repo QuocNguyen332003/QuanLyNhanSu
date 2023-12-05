@@ -159,7 +159,6 @@
 							let chucvu${count} = document.getElementById("chucvu${count}");
 							let lydo${count} = document.getElementById("lydo${count}");
 
-							let btnxoa${count} = document.getElementById("btn_xoa${count}");
 							let btnedit${count} = document.getElementById("btn_edit${count}");
 							let btnsave${count} = document.getElementById("btn_save${count}");
 							let btnhuy${count} = document.getElementById("btn_huy${count}");
