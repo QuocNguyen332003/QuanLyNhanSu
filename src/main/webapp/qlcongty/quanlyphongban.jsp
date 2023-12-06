@@ -32,13 +32,13 @@
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
 						<button class="button_icon">
-							<i class="fa-solid fa-file-excel fa-2x"></i>
+							<i class="fa-solid fa-file-excel fa-2x" style="display:${sessionScope.capbac == 0 || sessionScope.capbac == 1 ? 'none' : 'inline'}" ></i>
 						</button>
 					</li>
 					<li class="nav-item">
 						<a href="<%=request.getContextPath()%>/addPhongBan">
 							<button class="button_icon">
-								<i class="fa-sharp fa-solid fa-plus fa-2x"></i>
+								<i class="fa-sharp fa-solid fa-plus fa-2x" style="display:${sessionScope.capbac == 0 || sessionScope.capbac == 1 ? 'none' : 'inline'}"></i>
 							</button>
 						</a>
 					</li>
@@ -97,9 +97,9 @@
 									<td>${x.matrphong}</td>
 									<td>${x.ngaytao}</td>
 									<td>${x.mapbtr}</td>
-									<td><a href="editPhongBan?mapb=<c:out value='${x.mapb}' />">Edit</a>
+									<td><a href="editPhongBan?mapb=<c:out value='${x.mapb}' />" style="display:${sessionScope.capbac == 0 || sessionScope.capbac == 1 ? 'none' : 'inline'}" >Edit</a>
 										&nbsp;&nbsp;&nbsp;&nbsp; <a
-												href="deletePhongBan?mapb=<c:out value='${x.mapb}' />">Delete</a></td>
+												href="deletePhongBan?mapb=<c:out value='${x.mapb}' />" style="display:${sessionScope.capbac == 0 || sessionScope.capbac == 1 ? 'none' : 'inline'}" >Delete</a></td>
 								</tr>
 							</c:forEach>
 							</tbody>

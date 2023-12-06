@@ -189,6 +189,10 @@ public class menuController extends HttpServlet {
     private void Formquanlychinhanh(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         HttpSession session = request.getSession(false);
+        int capbac = (int) session.getAttribute("capbac");
+        nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
+        String mapb = nv.getMapb();
+        String macn = nv.getMacn();
         if (session != null) {
             taikhoan username = (taikhoan) session.getAttribute("user");
             List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh();

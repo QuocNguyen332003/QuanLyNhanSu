@@ -74,8 +74,10 @@
             <artifactId>mail</artifactId>
             <version>1.4.6</version>
         </dependency>
-    </dependencies>
 
+        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+
+    </dependencies>
     <build>
         <plugins>
             <plugin>

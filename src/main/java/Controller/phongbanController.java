@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.PrintWriter;
 
 import DAO.chinhanhDAO;
 import DAO.congtacDAO;
@@ -40,7 +41,6 @@ public class phongbanController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getServletPath();
-
         try {
             switch (action) {
                 case "/deletePhongBan":
@@ -76,35 +76,89 @@ public class phongbanController extends HttpServlet {
     }
     private void FormThemPhongBan(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh();
-        request.setAttribute("listchinhanh", listchinhanh);
+        HttpSession session = request.getSession(false);
+        int capbac = (int) session.getAttribute("capbac");
+        nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
+        String mapb = nv.getMapb();
+        String macn = nv.getMacn();
 
-        String macn = "CN001";
-        List<nhanvien> listnhanvien  = qlnhanvienDAO.selectAllnhanvien(macn);
-        request.setAttribute("listnhanvien", listnhanvien);
-        System.out.println(listnhanvien);
+        String mainComboValue = request.getParameter("mainComboValue");
+        System.out.println(mainComboValue);
 
+        if (session != null) {
+            if(capbac == 2){ // giamdoc
+                List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh_MaCN(macn);
+                request.setAttribute("listchinhanh", listchinhanh);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/themphongban.jsp");
-        dispatcher.forward(request, response);
+                List<nhanvien> listnhanvien  = qlnhanvienDAO.selectAllnhanvien(macn);
+                request.setAttribute("listnhanvien", listnhanvien);
+            }
+            if(capbac == 3){ // admin
+                List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh();
+                request.setAttribute("listchinhanh", listchinhanh);
+
+                List<nhanvien> listnhanvien  = qlnhanvienDAO.LayNhanVien();
+                request.setAttribute("listnhanvien", listnhanvien);
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/themphongban.jsp");
+            dispatcher.forward(request, response);
+        }
+        else
+        {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
+            dispatcher.forward(request, response);
+        };
+
     }
     private void FormEditPhongBan(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh();
-        request.setAttribute("listchinhanh", listchinhanh);
 
-        String macn = "CN001";
-        List<nhanvien> listnhanvien  = qlnhanvienDAO.selectAllnhanvien(macn);
-        request.setAttribute("listnhanvien", listnhanvien);
+        HttpSession session = request.getSession(false);
+        int capbac = (int) session.getAttribute("capbac");
+        nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
+        String mapb = nv.getMapb();
+        String macn = nv.getMacn();
+        String mainComboValue = request.getParameter("mainComboValue");
+        System.out.println(mainComboValue);
 
-        String mapb = request.getParameter("mapb");
-        phongban existingPhongBan = pbDAO.selectPhongBan(mapb);
 
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("qlcongty/themphongban.jsp");
-        request.setAttribute("phongban", existingPhongBan);
+        if (session != null) {
+            if(capbac == 2){ // giamdoc
+                String maPB = request.getParameter("mapb");
+                phongban existingPhongBan = pbDAO.selectPhongBan(maPB);
 
-        dispatcher.forward(request, response);
+                request.setAttribute("phongban", existingPhongBan);
+
+                List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh_MaCN(macn);
+                request.setAttribute("listchinhanh", listchinhanh);
+
+
+                List<nhanvien> listnhanvien  = qlnhanvienDAO.selectAllnhanvien(macn);
+                request.setAttribute("listnhanvien", listnhanvien);
+
+            }
+            if(capbac == 3){ // admin
+                String maPB = request.getParameter("mapb");
+                phongban existingPhongBan = pbDAO.selectPhongBan(maPB);
+                request.setAttribute("phongban", existingPhongBan);
+
+                List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh();
+                request.setAttribute("listchinhanh", listchinhanh);
+
+                List<nhanvien> listnhanvien  = qlnhanvienDAO.selectAllnhanvien(mainComboValue);
+                request.setAttribute("listnhanvien", listnhanvien);
+                System.out.println(listnhanvien);
+
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/themphongban.jsp");
+            dispatcher.forward(request, response);
+        }
+        else
+        {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
+            dispatcher.forward(request, response);
+        };
     }
     private void insertPhongBan(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
 
