@@ -13,12 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import DAO.congtacDAO;
-import DAO.chinhanhDAO;
-import DAO.phongbanDAO;
-import Model.congtac;
-import Model.chinhanh;
-import Model.phongban;
+import DAO.*;
+import Model.*;
 
 @WebServlet(name = "chinhanh", urlPatterns = { "/deleteChiNhanh", "/addChiNhanh","/insertChiNhanh","/editChiNhanh","/updateChiNhanh"})
 public class chinhanhController extends HttpServlet {
@@ -74,6 +70,10 @@ public class chinhanhController extends HttpServlet {
     private void FormThemChiNhanh(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("qlcongty/themchinhanh.jsp");
+        List <diachi> listdiachi = diachiDAO.DanhSachDiaChi();
+        request.setAttribute("listdiachi", listdiachi);
+        List <nhanvien> listnhanvien = qlnhanvienDAO.LayNhanVien();
+        request.setAttribute("listnhanvien", listnhanvien);
         dispatcher.forward(request, response);
     }
     private void FormEditChiNhanh(HttpServletRequest request, HttpServletResponse response)
@@ -82,6 +82,16 @@ public class chinhanhController extends HttpServlet {
         chinhanh existingChiNhanh = cnDAO.selectChiNhanh(macn);
         RequestDispatcher dispatcher = request.getRequestDispatcher("qlcongty/themchinhanh.jsp");
         request.setAttribute("chinhanh", existingChiNhanh);
+
+        List <diachi> listdiachi = diachiDAO.DanhSachDiaChi();
+        request.setAttribute("listdiachi", listdiachi);
+
+        List <nhanvien> listnhanvien = qlnhanvienDAO.selectAllnhanvien(macn);
+        request.setAttribute("listnhanvien", listnhanvien);
+
+        System.out.println();
+
+
         dispatcher.forward(request, response);
     }
     private void insertChiNhanh(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
@@ -95,7 +105,7 @@ public class chinhanhController extends HttpServlet {
 
         // Tạo đối tượng phongban từ thông tin lấy được
         chinhanh newchinhanh = new chinhanh(macn, tencn, diachi, magiamdoc, tinhtrang, LocalDate.now());
-
+        System.out.println(newchinhanh);
         chinhanhDAO cnDAO = new chinhanhDAO();
         try {
             cnDAO.insertChiNhanh(newchinhanh);
