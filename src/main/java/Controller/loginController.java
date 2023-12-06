@@ -18,7 +18,14 @@ import javax.mail.*;
 
 import DAO.loginDAO;
 import DAO.changeDAO;
+import DAO.chucvuDAO;
 import DAO.forgotDAO;
+import DAO.qlnhanvienDAO;
+import DAO.chinhanhDAO;
+
+import Model.chucvu;
+import Model.nhanvien;
+import Model.chinhanh;
 import Model.taikhoan;
 import Model.thongtincanhan;
 import DAO.chucvuDAO;
@@ -88,6 +95,16 @@ public class loginController extends HttpServlet {
                 int capbac = chucvuDAO.CapBacQuyenHan(tk.getMatk()); // 0 nhanvien 1 truong phong 2 giam doc 3 admin
                 session.setAttribute("user", tk);
                 session.setAttribute("capbac",capbac);
+
+                nhanvien thongtinnv = qlnhanvienDAO.LayThongTinNhanVien(tk.getMatk());
+                session.setAttribute("thongtinnv", thongtinnv);
+
+                String tenchucvu = chucvuDAO.TenCapBac(tk.getMatk());
+                session.setAttribute("tencapbac_menu", tenchucvu);
+
+                chinhanh inf_chinhanh = chinhanhDAO.selectChiNhanh(thongtinnv.getMacn());
+                session.setAttribute("chinhanh_header", inf_chinhanh);
+
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/trangchu");
                 dispatcher.forward(request, response);
             } else {
