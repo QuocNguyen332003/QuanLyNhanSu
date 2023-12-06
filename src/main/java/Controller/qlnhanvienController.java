@@ -51,6 +51,9 @@ public class qlnhanvienController extends HttpServlet {
     public void XemThongTinCaNhan(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         String matk = request.getParameter("matk");
-
+        thongtincanhan ttcn = thongtincanhanDAO.layThongTinCaNhan(matk);
+        request.setAttribute("thongtincanhanh", ttcn);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/qlnhanvien/chitietnhanvien.jsp");
+        dispatcher.forward(request, response);
     }
 }

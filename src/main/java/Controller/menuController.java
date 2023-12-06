@@ -16,10 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import DAO.chinhanhDAO;
-import DAO.congtacDAO;
-import DAO.phongbanDAO;
-import DAO.thongtincanhanDAO;
+import DAO.*;
 import Model.*;
 
 @WebServlet(name = "menu", urlPatterns = { "/trangchu", "/thongtincanhan", "/congtac", "/khenthuongkyluat", "/quanlynhanvien", "/quanlyphongban","/quanlychinhanh"})
