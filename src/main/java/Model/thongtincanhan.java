@@ -1,6 +1,5 @@
 package Model;
 import java.io.Serializable;
-import java.sql.Date;
 import java.time.LocalDate;
 
 public class thongtincanhan implements Serializable{
@@ -39,6 +38,15 @@ public class thongtincanhan implements Serializable{
         this.sdt=sdt;
         this.email=email;
         this.bangcap=bangcap;
+    }
+    public thongtincanhan(String matk, String hoten, LocalDate ngaysinh, String gioitinh, String diachi, String sdt, String email) {
+        this.matk=matk;
+        this.hoten=hoten;
+        this.ngaysinh=ngaysinh;
+        this.gioitinh=gioitinh;
+        this.diachi=diachi;
+        this.sdt=sdt;
+        this.email=email;
     }
     public thongtincanhan(){}
 }

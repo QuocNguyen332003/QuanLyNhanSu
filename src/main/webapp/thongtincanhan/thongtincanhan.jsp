@@ -38,7 +38,7 @@
                             </button>
                         </li>
                         <li class="nav-item" >
-                            <button formaction="<%=request.getContextPath()%>/thaydoicongtac" class="button_icon" id="btn_save">
+                            <button formaction="<%=request.getContextPath()%>/thaydoithongtin" class="button_icon" id="btn_save">
                                <i class="fa-solid fa-floppy-disk fa-2xl"></i>
                             </button>
                         </li>
@@ -156,6 +156,59 @@
 				passwordInput.type = 'password';
 			}
 		}
+		let hoten = document.getElementById("hoten");
+		let ngaysinh = document.getElementById("ngaysinh");
+		let gioitinh = document.getElementById("gioitinh");
+		let cccd = document.getElementById("cccd");
+		let diachi = document.getElementById("diachi");
+		let sdt = document.getElementById("sdt");
+		let email = document.getElementById("email");
+		let pass = document.getElementById("pass");
+
+		let btn_suathongtin = document.getElementById("btn_suathongtin");
+		let btn_doimk = document.getElementById("btn_doimk");
+		let btn_save = document.getElementById("btn_save");
+
+		let isEditing = false;
+
+		btn_suathongtin.addEventListener("click", function() {
+			if (!isEditing) {
+				hoten.removeAttribute("readonly");
+				ngaysinh.removeAttribute("readonly");
+				gioitinh.removeAttribute("readonly");
+				cccd.removeAttribute("readonly");
+				diachi.removeAttribute("readonly");
+				sdt.removeAttribute("readonly");
+				email.removeAttribute("readonly");
+				isEditing = true;
+			} else {
+				hoten.setAttribute("readonly", true);
+				ngaysinh.setAttribute("readonly", true);
+				gioitinh.setAttribute("readonly", true);
+				cccd.setAttribute("readonly", true);
+				diachi.setAttribute("readonly", true);
+				sdt.setAttribute("readonly", true);
+				email.setAttribute("readonly", true);
+				isEditing = false;
+			}
+		});
+		btn_doimk.addEventListener("click", function() {
+			if (pass.hasAttribute("readonly")) {
+				pass.removeAttribute("readonly");
+			} else {
+				pass.setAttribute("readonly", true);
+			}
+		});
+		btn_save.addEventListener("click", function() {
+			hoten.setAttribute("readonly", true);
+			ngaysinh.setAttribute("readonly", true);
+			gioitinh.setAttribute("readonly", true);
+			cccd.setAttribute("readonly", true);
+			diachi.setAttribute("readonly", true);
+			sdt.setAttribute("readonly", true);
+			email.setAttribute("readonly", true);
+			pass.setAttribute("readonly", true);
+		});
 	</script>
 </body>
 </html>

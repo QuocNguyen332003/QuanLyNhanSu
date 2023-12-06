@@ -1,6 +1,6 @@
 package Controller;
 
-import DAO.qlnhanvienDAO;
+import Model.cancuoccongdan;
 import Model.taikhoan;
 import Model.thongtincanhan;
 
@@ -15,8 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
-@WebServlet(name = "thongtincanhan", urlPatterns = { "/thaydoithongtin","/thaydoitaikhoan","/luuthongtin"})
+@WebServlet(name = "thongtincanhan", urlPatterns = { "/thaydoithongtin"})
 public class thongtincanhanController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public void init() {
@@ -28,18 +29,20 @@ public class thongtincanhanController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getServletPath();
-
-        switch (action) {
-            case "/thaydoithongtin":
-                break;
-            case "/thaydoitaikhoan":
-                break;
-            case "/luuthongtin":
-                break;
-            default:
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
-                dispatcher.forward(request, response);
-                break;
+        try {
+            switch (action) {
+                case "/thaydoithongtin":
+                    capNhatThongTin(request, response);
+                    capNhatCCCD(request, response);
+                    capNhatMatKhau(request, response);
+                    break;
+                default:
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
+                    dispatcher.forward(request, response);
+                    break;
+            }
+        } catch (SQLException ex) {
+            throw new ServletException(ex);
         }
     }
     private String getMatk(HttpServletRequest request, HttpServletResponse response)
@@ -51,6 +54,51 @@ public class thongtincanhanController extends HttpServlet {
         }
         else {
             return null;
+        }
+    }
+    private void capNhatThongTin(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        String matk = getMatk(request, response);
+        if (matk != null) {
+            String hoten = request.getParameter("hoten");
+            LocalDate ngaysinh = LocalDate.parse(request.getParameter("ngaysinh"));
+            String gioitinh = request.getParameter("gioitinh");
+            String diachi = request.getParameter("diachi");
+            String sdt = request.getParameter("sdt");
+            String email = request.getParameter("email");
+            thongtincanhan tt = new thongtincanhan(matk, hoten, ngaysinh, gioitinh, diachi, sdt, email);
+            thongtincanhanDAO.capNhatThongTinCaNhan(tt);
+            response.sendRedirect("thongtincanhan");
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
+            dispatcher.forward(request, response);
+        }
+    }
+    private void capNhatCCCD(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        String matk = getMatk(request, response);
+        if (matk != null) {
+            String cccd = request.getParameter("cccd");
+            cancuoccongdan cancuoc = new cancuoccongdan(matk, cccd);
+            thongtincanhanDAO.capNhatCCCD(cancuoc);
+            response.sendRedirect("thongtincanhan");
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
+            dispatcher.forward(request, response);
+        }
+    }
+    private void capNhatMatKhau(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        String matk = getMatk(request, response);
+        String user = "";
+        if (matk != null) {
+            String pass = request.getParameter("pass");
+            taikhoan tk = new taikhoan(user,pass,matk);
+            thongtincanhanDAO.capNhatMatKhau(tk);
+            response.sendRedirect("thongtincanhan");
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
+            dispatcher.forward(request, response);
         }
     }
 }
