@@ -30,79 +30,39 @@
                     </div>
                     <ul class="navbar-nav ml-auto col-1">
                         <li class="nav-item" >
-                            <button class="button_icon">
+                            <a class="button_icon" href="<%=request.getContextPath()%>/xemthanhtichkyluat" style="display:${sessionScope.capbac == 0 ? 'none' : 'inline'}">
                                <i class="fa-solid fa-address-book fa-xl"></i>
-                            </button>
+                            </a>
                         </li>
                     </ul>
                 </nav>
                 <br>
                 <div class="row">
                     <div class="container body">
+						<c:set var="count" value="0" />
+						<c:forEach var="item" items="${listKTKL}">
 						<form class = "box_form">
 							<div class = "col box_content">
 								<div class="form-group form-inline">
-                    				<label for="ngaybatdau" class = "label_form_control">Ngày:</label> 
-                    				<input type="date" class="form-control box_form_control" id="ngaybatdau" placeholder="Ngày" name="ngaybatdau" required>
+                    				<label for="ngaybatdau${count}" class = "label_form_control">Ngày:</label>
+                    				<input type="date" class="form-control box_form_control" id="ngaybatdau${count}" name="ngaybatdau" value="<c:out value="${item.ngay}" />" readonly>
                 				</div>
                 				<div class="form-group form-inline">
-                    				<label for="soqd" class = "label_form_control">Số quyết định:</label> 
-                    				<input type="text" class="form-control box_form_control" id="soqd" placeholder="Số quyết định" name="soqd" required>
+                    				<label for="soqd${count}" class = "label_form_control">Số quyết định:</label>
+                    				<input type="text" class="form-control box_form_control" id="soqd${count}" name="soqd" value="<c:out value="${item.soqd}" />" readonly>
                 				</div>
-                				<div class="form-group form-inline">
-                    				<label for="noidung" class = "label_form_control">Nội dung:</label> 
-                    				<textarea class="form-control box_form_control" id="noidung" placeholder="Nội dung" name="noidung" required></textarea>
-                				</div>
-							</div>
-						</form>
-						<form class = "box_form">
-							<div class = "col box_content">
 								<div class="form-group form-inline">
-                    				<label for="ngaybatdau" class = "label_form_control">Ngày:</label> 
-                    				<input type="date" class="form-control box_form_control" id="ngaybatdau" placeholder="Ngày" name="ngaybatdau" required>
-                				</div>
+									<label for="loai${count}" class = "label_form_control">Loaị:</label>
+									<input type="text" class="form-control box_form_control" id="loai${count}" name="loai" value="<c:out value="${item.loai}" />" readonly>
+								</div>
                 				<div class="form-group form-inline">
-                    				<label for="soqd" class = "label_form_control">Số quyết định:</label> 
-                    				<input type="text" class="form-control box_form_control" id="soqd" placeholder="Số quyết định" name="soqd" required>
-                				</div>
-                				<div class="form-group form-inline">
-                    				<label for="noidung" class = "label_form_control">Nội dung:</label> 
-                    				<textarea class="form-control box_form_control" id="noidung" placeholder="Nội dung" name="noidung" required></textarea>
+                    				<label for="noidung${count}" class = "label_form_control">Nội dung:</label>
+                    				<textarea class="form-control box_form_control" id="noidung${count}" name="noidung" readonly><c:out value="${item.noidung}" /></textarea>
                 				</div>
 							</div>
 						</form>
-						<form class = "box_form">
-							<div class = "col box_content">
-								<div class="form-group form-inline">
-                    				<label for="ngaybatdau" class = "label_form_control">Ngày:</label> 
-                    				<input type="date" class="form-control box_form_control" id="ngaybatdau" placeholder="Ngày" name="ngaybatdau" required>
-                				</div>
-                				<div class="form-group form-inline">
-                    				<label for="soqd" class = "label_form_control">Số quyết định:</label> 
-                    				<input type="text" class="form-control box_form_control" id="soqd" placeholder="Số quyết định" name="soqd" required>
-                				</div>
-                				<div class="form-group form-inline">
-                    				<label for="noidung" class = "label_form_control">Nội dung:</label> 
-                    				<textarea class="form-control box_form_control" id="noidung" placeholder="Nội dung" name="noidung" required></textarea>
-                				</div>
-							</div>
-						</form>
-						<form class = "box_form">
-							<div class = "col box_content">
-								<div class="form-group form-inline">
-                    				<label for="ngaybatdau" class = "label_form_control">Ngày:</label> 
-                    				<input type="date" class="form-control box_form_control" id="ngaybatdau" placeholder="Ngày" name="ngaybatdau" required>
-                				</div>
-                				<div class="form-group form-inline">
-                    				<label for="soqd" class = "label_form_control">Số quyết định:</label> 
-                    				<input type="text" class="form-control box_form_control" id="soqd" placeholder="Số quyết định" name="soqd" required>
-                				</div>
-                				<div class="form-group form-inline">
-                    				<label for="noidung" class = "label_form_control">Nội dung:</label> 
-                    				<textarea class="form-control box_form_control" id="noidung" placeholder="Nội dung" name="noidung" required></textarea>
-                				</div>
-							</div>
-						</form>
+						<c:set var="count" value="${count + 1}" />
+						</c:forEach>
                     </div>
                 </div>
             </div>

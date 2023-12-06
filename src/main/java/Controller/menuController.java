@@ -142,8 +142,17 @@ public class menuController extends HttpServlet {
     }
     private void Formkhenthuongkyluat(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/khenthuongkyluat/khenthuongkyluat.jsp");
-        dispatcher.forward(request, response);
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            taikhoan username = (taikhoan) session.getAttribute("user");
+            List <thanhtichkyluat> listKTKL = khenthuongkyluatDAO.DanhSachKTKL(username.getMatk());
+            request.setAttribute("listKTKL", listKTKL);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/khenthuongkyluat/khenthuongkyluat.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
+            dispatcher.forward(request, response);
+        }
     }
     private void Formquanlynhanvien(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
