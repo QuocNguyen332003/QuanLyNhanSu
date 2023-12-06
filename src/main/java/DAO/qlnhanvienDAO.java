@@ -14,10 +14,9 @@ import java.util.List;
 
 public class qlnhanvienDAO {
     private static final String SELECT_ALL_THONGTIN = "select * from nhanvien where matk = ?;";
-    private static final String SELECT_ALL_NV = "select matk from nhanvien;";
-    private static final String SELECT_ALL = "select * from nhanvien where macn = ?;";
-    private static final String SELECT_NHANVIEN_PB = "select matk from nhanvien where mapb = ?;";
-    private static final String SELECT_NHANVIEN_CN = "select matk from nhanvien where macn = ?;";
+    private static final String SELECT_ALL_NV = "select * from nhanvien;";
+    private static final String SELECT_NHANVIEN_PB = "select * from nhanvien where mapb = ?;";
+    private static final String SELECT_NHANVIEN_CN = "select * from nhanvien where macn = ?;";
     public static nhanvien LayThongTinNhanVien(String matk){
         nhanvien nv = new nhanvien();
         try (Connection connection = JDBCUtils.getConnection();
@@ -55,7 +54,12 @@ public class qlnhanvienDAO {
             // Step 4: Process the ResultSet object.
             while (rs.next()) {
                 String matk = rs.getString("matk");
-                listNhanvien.add(new nhanvien(matk,null,null,null,null,null));
+                String macn = rs.getString("macn");
+                String mapb = rs.getString("mapb");
+                LocalDate ngaybatdau = rs.getDate("ngaybatdau").toLocalDate();
+                String tinhtrang = rs.getString("tinhtrang");
+                String congviec = rs.getString("congviec");
+                listNhanvien.add(new nhanvien(matk,macn,mapb,ngaybatdau,tinhtrang,congviec));
             }
         } catch (SQLException exception) {
             JDBCUtils.printSQLException(exception);
@@ -70,7 +74,7 @@ public class qlnhanvienDAO {
         try (Connection connection = JDBCUtils.getConnection();
 
              // Step 2:Create a statement using connection object
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_NHANVIEN_CN);) {
             System.out.println(preparedStatement);
             if (maCN != null){
                 preparedStatement.setString(1, maCN);

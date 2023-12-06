@@ -142,4 +142,16 @@ public class phongbanController extends HttpServlet {
         pbDAO.updatePhongBan(updatephongban);
         response.sendRedirect("quanlyphongban");
     }
+
+    private String getMatk(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            taikhoan username = (taikhoan) session.getAttribute("user");
+            return username.getMatk();
+        }
+        else {
+            return null;
+        }
+    }
 }

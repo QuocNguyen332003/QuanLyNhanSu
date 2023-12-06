@@ -13,6 +13,11 @@
         crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/quanlynhanvien.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/base.css" />
+    <style>
+        .button_add{
+            width: 16rem;
+        }
+    </style>
 </head>
 
 <body>
@@ -26,7 +31,7 @@
             	<jsp:include page="../header_menu/thongtincoban.jsp" />
                 <nav class="navbar navbar-expand-md navbar-dark navbar_css">
                     <div class = "col-10">
-                       <h2> Quản lý khen thưởng và kỷ luật </h2>
+                       <h2> Quản lý nhân viên </h2>
                     </div>
                     <ul class="navbar-nav ml-auto col-2">
                     	<li class="nav-item" >
@@ -46,27 +51,48 @@
                     <div class="container body">
                     	<div class="container text-left">
                             <form class="form-inline">
+                                <div class="form-group mx-3">
+                                    <label for="search" class="mr-2"> Tìm kiếm:</label>
+                                    <input class = "form-control box_search" id = "search" onkeyup="Search_textbox()" placeholder="Search">
+                                </div>
                                 <div class="form-group mx-2">
-                                    <label for="" class="mr-2"> Mã chi nhánh:</label>
-                                    <select class="form-control form-control-sm box_search">
-                                        <!-- Option 1 -->
+                                    <label for="select_macn" class="mr-2"> Mã chi nhánh:</label>
+                                    <select class="form-control form-control-sm box_search" id = "select_macn" onchange="search_Input('select_macn')">
+                                        <option value="ALL">Tất cả</option>
+                                        <c:forEach var="item" items="${setmacn_nv}">
+                                            <option value="<c:out value="${item}" />">${item}</option>
+                                        </c:forEach>
                                     </select>
                                 </div>
                                 <div class="form-group mx-2">
-                                    <label for="" class="mr-2"> Mã phòng ban:</label>
-                                    <select class="form-control form-control-sm box_search">
-                                        <!-- Option 1 -->
+                                    <label for="select_mapb" class="mr-2"> Mã phòng ban:</label>
+                                    <select class="form-control form-control-sm box_search" id = "select_mapb" onchange="search_Input('select_mapb')">
+                                        <option value="ALL">Tất cả</option>
+                                        <c:forEach var="item" items="${setmapb_nv}">
+                                            <option value="<c:out value="${item}" />">${item}</option>
+                                        </c:forEach>
                                     </select>
                                 </div>
                                 <div class="form-group mx-2">
-                                    <label for="" class="mr-2"> Mã nhân viên:</label>
-                                    <select class="form-control form-control-sm box_search">
-                                        <!-- Option 1 -->
+                                    <label for="select_matk" class="mr-2"> Mã nhân viên:</label>
+                                    <select class="form-control form-control-sm box_search" id = "select_matk" onchange="search_Input('select_matk')">
+                                        <option value="ALL">Tất cả</option>
+                                        <c:forEach var="item" items="${setmatk_nv}">
+                                            <option value="<c:out value="${item}" />">${item}</option>
+                                        </c:forEach>
                                     </select>
                                 </div>
-                                <div class="form-group mx-2">
-                                    <button class = "button_add">Thêm nhân viên</button>
-                                </div>
+                                <c:set var="capbac" value="${capbac}" />
+                                <c:if test="${capbac > 1}">
+                                    <div class="form-group mx-2">
+                                        <a class = "button_add" href="<%=request.getContextPath()%>/themnhanvien">Thêm nhân viên</a>
+                                    </div>
+                                </c:if>
+                                <c:if test="${capbac == 1}">
+                                    <div class="form-group mx-2">
+                                        <button type="button" class = "button_add" onclick="openFormRequest()">Yêu cầu thêm nhân viên</button>
+                                    </div>
+                                </c:if>
                             </form>
                         </div>
                         <br>
@@ -76,13 +102,33 @@
                                     <th>Mã nhân viên</th>
 				                    <th>Mã phòng ban</th>
 				                    <th>Mã Chi Nhánh</th>
-				                    <th>Mã chi nhánh</th>
 				                    <th>Ngày bắt đầu</th>
 				                    <th>Tình trạng </th>
+                                    <th>Công Việc </th>
 				                    <th>SA THẢI</th>
 				                    <th>XEM THÊM</th>
+                                    <c:if test="${capbac > 1}">
+                                        <th>CHỈ ĐỊNH</th>
+                                    </c:if>
                                 </tr>
                             </thead>
+                            <tbody id = "row_table">
+                            <c:forEach var="x" items="${listnv}">
+                                <tr>
+                                    <td>${x.matk}</td>
+                                    <td>${x.mapb}</td>
+                                    <td>${x.macn}</td>
+                                    <td>${x.ngaybatdau}</td>
+                                    <td>${x.tinhtrang}</td>
+                                    <td>${x.congviec}</td>
+                                    <td><a href="sathai?matk=<c:out value='${x.matk}' />">Sa thải</a></td>
+                                    <td><a href="xemthongtinnhanvien?matk=<c:out value='${x.matk}' />">Xem thêm</a></td>
+                                    <c:if test="${capbac > 1}">
+                                        <td><a href="chidinh?mapb=<c:out value='${x.matk}' />">Chỉ định</a></td>
+                                    </c:if>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
                         </table>
                     </div>
                     
@@ -154,6 +200,49 @@
 
                         function closeFormNotify() {
                           	document.getElementById("thongbao").style.display = "none";
+                        }
+                        function Search_textbox() {
+                            var input, filter, table, tr, td, i, txtValue;
+                            input = document.getElementById("search");
+                            filter = input.value.toUpperCase();
+                            table = document.getElementById("row_table");
+                            tr = table.getElementsByTagName("tr");
+                            for (i = 0; i < tr.length; i++) {
+                                td = tr[i].getElementsByTagName("td");
+                                let j = 0;
+                                for (j = 0; j < td.length; j++){
+                                    let x = tr[i].getElementsByTagName("td")[j];
+                                    if (x) {
+                                        txtValue = x.textContent || x.innerText;
+                                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                            tr[i].style.display = "";
+                                            break;
+                                        } else {
+                                            tr[i].style.display = "none";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        function search_Input(box_search){
+                            var input, filter, table, tr, td, i, txtValue;
+                            input = document.getElementById(box_search);
+                            filter = input.value.toUpperCase();
+                            table = document.getElementById("row_table");
+                            tr = table.getElementsByTagName("tr");
+                            for (i = 0; i < tr.length; i++) {
+                                td = tr[i].getElementsByTagName("td");
+                                let j = box_search === "select_matk"? 0: box_search === "select_mapb"? 1: 2;
+                                let x = tr[i].getElementsByTagName("td")[j];
+                                if (x) {
+                                    txtValue = x.textContent || x.innerText;
+                                    if (txtValue.toUpperCase().indexOf(filter) > -1 || filter.toUpperCase().indexOf("ALL") > -1) {
+                                        tr[i].style.display = "";
+                                    } else {
+                                        tr[i].style.display = "none";
+                                    }
+                                }
+                            }
                         }
                    	</script>
                 </div>

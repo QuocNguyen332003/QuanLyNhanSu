@@ -14,7 +14,7 @@
 <aside class="sidebar">
     <div class="logo">
         <img src="fuk.jpeg" alt="logo">
-        <h2>Nguyễn Bảo Quốc</h2>
+        <h2>${tennhanvien_menu.hoten}</h2>
     </div>
     <ul class="links">
         <li>
