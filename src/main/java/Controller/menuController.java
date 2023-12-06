@@ -13,7 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import DAO.*;
+import DAO.chinhanhDAO;
+import DAO.congtacDAO;
+import DAO.phongbanDAO;
+import DAO.thongtincanhanDAO;
 import Model.*;
 
 @WebServlet(name = "menu", urlPatterns = { "/trangchu", "/thongtincanhan", "/congtac", "/khenthuongkyluat", "/quanlynhanvien", "/quanlyphongban","/quanlychinhanh"})
@@ -64,6 +67,17 @@ public class menuController extends HttpServlet {
             throw new ServletException(ex);
         }
     }
+    private String getMatk(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            taikhoan username = (taikhoan) session.getAttribute("user");
+            return username.getMatk();
+        }
+        else {
+            return null;
+        }
+    }
     private void Formtrangchu(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/sodocay/sodo.jsp");
@@ -71,8 +85,46 @@ public class menuController extends HttpServlet {
     }
     private void Formthongtincanhan(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
-        dispatcher.forward(request, response);
+        HttpSession session = request.getSession(false);
+        if(session != null){
+            taikhoan tk = (taikhoan) session.getAttribute("user");
+
+            String matk = getMatk(request,response);
+
+            thongtincanhan tt = thongtincanhanDAO.layThongTinCaNhan(matk);
+            request.setAttribute("thongtincanhan", tt);
+
+            String cccd = thongtincanhanDAO.layCCCD(matk);
+            request.setAttribute("cancuoc",cccd);
+
+            taikhoan tkhoan = thongtincanhanDAO.layTaiKhoan(matk);
+            request.setAttribute("taikhoan", tkhoan);
+
+            String chucvu = thongtincanhanDAO.layChucVu(matk);
+            request.setAttribute("chucvu", chucvu);
+            System.out.println(chucvu);
+
+            String congviec = thongtincanhanDAO.LayCongViec(matk);
+            request.setAttribute("congviec",congviec);
+
+            LocalDate ngaybatdau = thongtincanhanDAO.layNgayBatDau(matk);
+            request.setAttribute("ngaybatdau",ngaybatdau);
+
+            String tenpb = thongtincanhanDAO.layTenPB(matk);
+            request.setAttribute("tenpb",tenpb);
+
+            String tencn = thongtincanhanDAO.layTenCN(matk);
+            request.setAttribute("tencn",tencn);
+
+
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
+            dispatcher.forward(request, response);
+        }else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
+            dispatcher.forward(request, response);
+        }
+
     }
     private void Formcongtac(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {

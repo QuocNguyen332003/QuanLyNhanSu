@@ -36,5 +36,9 @@ public class taikhoan implements Serializable {
     	this.pass=pass;
     	this.matk=matk;
     }
+    public taikhoan(String username, String pass) {
+        this.username=username;
+        this.pass=pass;
+    }
     public taikhoan() {}
 }
