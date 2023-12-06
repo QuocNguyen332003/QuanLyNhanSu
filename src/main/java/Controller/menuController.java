@@ -3,6 +3,7 @@ package Controller;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -13,15 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import DAO.chinhanhDAO;
-import DAO.congtacDAO;
-import DAO.phongbanDAO;
-import DAO.thongtincanhanDAO;
+import DAO.*;
 import Model.*;
 
 @WebServlet(name = "menu", urlPatterns = { "/trangchu", "/thongtincanhan", "/congtac", "/khenthuongkyluat", "/quanlynhanvien", "/quanlyphongban","/quanlychinhanh"})
 public class menuController extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private DAO.khenthuongkyluatDAO khenthuongkyluatDAO;
 
     public void init() {
     }
@@ -161,16 +160,44 @@ public class menuController extends HttpServlet {
     }
     private void Formquanlyphongban(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        List <phongban> listphongban = phongbanDAO.selectAllphongban();
-        request.setAttribute("listphongban", listphongban);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/quanlyphongban.jsp");
-        dispatcher.forward(request, response);
+        HttpSession session = request.getSession(false);
+        int capbac = (int) session.getAttribute("capbac");
+        nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
+        String mapb = nv.getMapb();
+        String macn = nv.getMacn();
+        if (session != null) {
+            taikhoan username = (taikhoan) session.getAttribute("user");
+            if(capbac == 3) {
+                List<phongban> listphongban = phongbanDAO.selectAllphongban();
+                request.setAttribute("listphongban", listphongban);
+            }
+            if(capbac == 2){
+                List<phongban> listphongban = phongbanDAO.selectAllphongban_CN(macn);
+                request.setAttribute("listphongban", listphongban);
+            }
+            if(capbac == 1) {
+                List<phongban> listphongban = phongbanDAO.selectAllphongban_PB(mapb);
+                request.setAttribute("listphongban", listphongban);
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/quanlyphongban.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
+            dispatcher.forward(request, response);
+        }
     }
     private void Formquanlychinhanh(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh();
-        request.setAttribute("listchinhanh", listchinhanh);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/quanlychinhanh.jsp");
-        dispatcher.forward(request, response);
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            taikhoan username = (taikhoan) session.getAttribute("user");
+            List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh();
+            request.setAttribute("listchinhanh", listchinhanh);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/quanlychinhanh.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
+            dispatcher.forward(request, response);
+        }
     }
 }

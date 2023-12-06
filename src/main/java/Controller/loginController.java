@@ -16,18 +16,9 @@ import javax.servlet.http.HttpSession;
 
 import javax.mail.*;
 
-import DAO.loginDAO;
-import DAO.changeDAO;
-import DAO.chucvuDAO;
-import DAO.forgotDAO;
-import DAO.qlnhanvienDAO;
-import DAO.chinhanhDAO;
+import DAO.*;
 
-import Model.chucvu;
-import Model.nhanvien;
-import Model.chinhanh;
-import Model.taikhoan;
-import Model.thongtincanhan;
+import Model.*;
 import DAO.chucvuDAO;
 @WebServlet(name = "login", urlPatterns = { "/login", "/forgot", "/change","/sendmail"})
 public class loginController extends HttpServlet {
@@ -100,10 +91,16 @@ public class loginController extends HttpServlet {
                 session.setAttribute("thongtinnv", thongtinnv);
 
                 String tenchucvu = chucvuDAO.TenCapBac(tk.getMatk());
-                session.setAttribute("tencapbac_menu", tenchucvu);
+                session.setAttribute("tencapbac_header", tenchucvu);
+
+                phongban ttphongban = phongbanDAO.selectPhongBan(thongtinnv.getMapb());
+                session.setAttribute("phongban_header", ttphongban);
 
                 chinhanh inf_chinhanh = chinhanhDAO.selectChiNhanh(thongtinnv.getMacn());
                 session.setAttribute("chinhanh_header", inf_chinhanh);
+
+                thongtincanhan tennv = thongtincanhanDAO.layThongTinCaNhan(tk.getMatk());
+                session.setAttribute("tennhanvien_menu", tennv);
 
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/trangchu");
                 dispatcher.forward(request, response);
