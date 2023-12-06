@@ -85,12 +85,12 @@
                                 <c:set var="capbac" value="${capbac}" />
                                 <c:if test="${capbac > 1}">
                                     <div class="form-group mx-2">
-                                        <button class = "button_add">Thêm nhân viên</button>
+                                        <a class = "button_add" href="<%=request.getContextPath()%>/themnhanvien">Thêm nhân viên</a>
                                     </div>
                                 </c:if>
                                 <c:if test="${capbac == 1}">
                                     <div class="form-group mx-2">
-                                        <button class = "button_add">Yêu cầu thêm nhân viên</button>
+                                        <button type="button" class = "button_add" onclick="openFormRequest()">Yêu cầu thêm nhân viên</button>
                                     </div>
                                 </c:if>
                             </form>
