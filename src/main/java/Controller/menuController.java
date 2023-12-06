@@ -3,7 +3,10 @@ package Controller;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -104,8 +107,44 @@ public class menuController extends HttpServlet {
     }
     private void Formquanlynhanvien(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/qlnhanvien/quanlynhanvien.jsp");
-        dispatcher.forward(request, response);
+
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            taikhoan username = (taikhoan) session.getAttribute("user");
+            int capbac = (int) session.getAttribute("capbac");
+            List <nhanvien> listnv = null;
+            if (capbac == 1){
+                String mapb = phongbanDAO.LayMaPB(username.getMatk());
+                listnv = qlnhanvienDAO.LayNhanVienPB(mapb);
+            } else if (capbac == 2) {
+                String macn = chinhanhDAO.LayMaCN(username.getMatk());
+                listnv = qlnhanvienDAO.LayNhanVienCN(macn);
+            } else if (capbac == 3) {
+                listnv = qlnhanvienDAO.LayNhanVien();
+            }
+            if (capbac != 0){
+                List<String> listmatk = new ArrayList<>();
+                List<String> listmapb = new ArrayList<>();
+                List<String> listmacn = new ArrayList<>();
+                for (nhanvien nv: listnv) {
+                    listmatk.add(nv.getMatk());
+                    listmapb.add(nv.getMapb());
+                    listmacn.add(nv.getMacn());
+                }
+                Set<String> setmatk_nv = new HashSet<String>(listmatk);
+                Set<String> setmapb_nv = new HashSet<String>(listmapb);
+                Set<String> setmacn_nv = new HashSet<String>(listmacn);
+                request.setAttribute("setmatk_nv", setmatk_nv);
+                request.setAttribute("setmapb_nv", setmapb_nv);
+                request.setAttribute("setmacn_nv", setmacn_nv);
+            }
+            request.setAttribute("listnv", listnv);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/qlnhanvien/quanlynhanvien.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
+            dispatcher.forward(request, response);
+        }
     }
     private void Formquanlyphongban(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
