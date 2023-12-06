@@ -17,15 +17,15 @@
 <div class="body-infor">
     <div class="section">
         <i class="fas fa-user"></i>
-        <h2>Trưởng phòng</h2>
+        <h2>${tencapbac_menu}</h2>
     </div>
     <div class="section">
         <i class="fas fa-users"></i>
-        <h2>Phòng nhân sự</h2>
+        <h2>${thongtinnv.mapb}</h2>
     </div>
     <div class="section">
         <i class="fas fa-building"></i>
-        <h2>Hồ Chí Minh</h2>
+        <h2>${chinhanh_header.tencn}</h2>
     </div>
 </div>
 </body>

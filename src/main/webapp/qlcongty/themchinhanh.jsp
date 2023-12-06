@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,7 +22,7 @@
 </head>
 
 <body>
-<form id="myForm" method="post">
+<form id="myForm" >
     <div class="header-menu-plus">
         <a href="#">Cập Nhật Chi Nhánh</a>
     </div>
@@ -33,14 +34,30 @@
     <label for="tencn">Tên Chi Nhánh:</label>
     <input type="text" id="tencn" name="tencn" value="${chinhanh.tencn}" required>
 
-    <label for="diachi">Địa chỉ:</label>
-    <input type="text" id="diachi" name="diachi" value="${chinhanh.diachi}" required>
 
-    <label for="magiamdoc">Mã Giám Đốc:</label>
-    <input type="text" id="magiamdoc" name="magiamdoc" value="${chinhanh.magiamdoc}" required>
+    <label for="diachi">Địa chỉ:</label>
+    <select id="diachi" name="diachi">
+        <!-- Add an empty option -->
+        <option>${chinhanh.diachi}</option>
+        <c:forEach items="${listdiachi}" var="x">
+            <option>${x.madc}</option>
+        </c:forEach>
+    </select>
+
+    <label for="magiamdoc">Mã giám đốc:</label>
+    <select id="magiamdoc" name="magiamdoc">
+        <!-- Add an empty option -->
+        <option>${chinhanh.magiamdoc}</option>
+        <c:forEach items="${listnhanvien}" var="x">
+            <option>${x.matk}</option>
+        </c:forEach>
+    </select>
 
     <label for="tinhtrang">Tình Trạng:</label>
-    <input type="text" id="tinhtrang" name="tinhtrang" value="${chinhanh.tinhtrang}">
+    <select id="tinhtrang" name="tinhtrang">
+        <option value="Hoạt động"}>Hoạt động</option>
+        <option value="Không hoạt động">Không hoạt động</option>
+    </select>
 
     <br>
     <button type="submit">Lưu</button>

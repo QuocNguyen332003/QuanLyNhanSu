@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
+<%@ page isErrorPage="true" %>
 
 <head>
     <meta charset="UTF-8">
@@ -11,17 +13,18 @@
         window.onload = function() {
             var phongban = '${phongban}';
             var form = document.getElementById('myForm');
-            if (phongban != null && phongban != '') {
+            alert(phongban);
+            if (phongban != null && phongban != '' ) {
                 form.action = 'updatePhongBan';
             } else {
                 form.action = 'insertPhongBan';
             }
+            // Get the select element
         }
     </script>
 </head>
-
 <body>
-<form id="myForm" method="post">
+<form id="myForm">
     <div class="header-menu-plus">
         <a href="#">Cập Nhật Phòng Ban</a>
     </div>
@@ -33,25 +36,32 @@
     <label for="tenpb">Tên Phòng Ban:</label>
     <input type="text" id="tenpb" name="tenpb" value="${phongban.tenpb}" required>
 
-    <label for="macn">Mã Chi Nhánh:</label>
-    <select class="form-control form-control-sm box_search" id="macn"
-            onchange="searchTable()">
+    <label for="macnSelect" class="mr-2">Mã chi nhánh:</label>
+    <select id="macnSelect" name = "macnSelect">
         <!-- Add an empty option -->
-        <option value="">- Select -</option>
+        <option>${phongban.macn}</option>
         <c:forEach items="${listchinhanh}" var="x">
             <option>${x.macn}</option>
         </c:forEach>
     </select>
 
-    <label for="matrphong">Mã Trưởng Phòng:</label>
-    <input type="text" id="matrphong" name="matrphong" value="${phongban.matrphong}" required>
+    <label for="matrphongSelect">Mã Trưởng Phòng:</label>
+    <select id="matrphongSelect" name="matrphongSelect">
+        <!-- Add an empty option -->
+        <option>${phongban.matrphong}</option>
+        <c:forEach items="${listnhanvien}" var="x">
+            <option>${x.matk}</option>
+        </c:forEach>
+    </select>
 
-    <label for="mapbtr">Mã Phòng Ban Cha:</label>
-    <input type="text" id="mapbtr" name="mapbtr" value="${phongban.mapbtr}">
-
+    <label for="mapbtrSelect">Mã Trưởng Phòng:</label>
+    <select id="mapbtrSelect" name="mapbtrSelect">
+        <!-- Add an empty option -->
+        <option>${phongban.matrphong}</option>
+    </select>
     <br>
+
     <button type="submit">Cập Nhật</button>
 </form>
 </body>
-
 </html>

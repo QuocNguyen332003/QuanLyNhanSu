@@ -34,4 +34,22 @@ public class chucvuDAO {
         }
         return capbac;
     }
+
+    public static String TenCapBac(String matk) {
+        String tencapbac = null;
+        int capbac = 0;
+        try (Connection connection = JDBCUtils.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL)) {
+            preparedStatement.setString(1, matk);
+            // Step 3: Execute the query or update query
+            ResultSet rs = preparedStatement.executeQuery();
+
+            // Step 4: Process the ResultSet object.
+            while (rs.next()) {
+                tencapbac = rs.getString("tentk");
+            }
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+        return tencapbac;
+    }
 }

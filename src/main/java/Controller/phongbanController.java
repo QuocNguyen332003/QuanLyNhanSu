@@ -16,10 +16,12 @@ import javax.servlet.http.HttpSession;
 import DAO.chinhanhDAO;
 import DAO.congtacDAO;
 import DAO.phongbanDAO;
-import JDBCUtils.JDBCUtils;
+import DAO.qlnhanvienDAO;
 import Model.congtac;
 import Model.chinhanh;
 import Model.phongban;
+import Model.nhanvien;
+import Model.taikhoan;
 
 @WebServlet(name = "phongban", urlPatterns = { "/deletePhongBan", "/addPhongBan","/insertPhongBan","/editPhongBan","/updatePhongBan"})
 public class phongbanController extends HttpServlet {
@@ -76,27 +78,45 @@ public class phongbanController extends HttpServlet {
             throws SQLException, IOException, ServletException {
         List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh();
         request.setAttribute("listchinhanh", listchinhanh);
+
+        String macn = "CN001";
+        List<nhanvien> listnhanvien  = qlnhanvienDAO.selectAllnhanvien(macn);
+        request.setAttribute("listnhanvien", listnhanvien);
+        System.out.println(listnhanvien);
+
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/themphongban.jsp");
         dispatcher.forward(request, response);
     }
     private void FormEditPhongBan(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
+        List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh();
+        request.setAttribute("listchinhanh", listchinhanh);
+
+        String macn = "CN001";
+        List<nhanvien> listnhanvien  = qlnhanvienDAO.selectAllnhanvien(macn);
+        request.setAttribute("listnhanvien", listnhanvien);
+
         String mapb = request.getParameter("mapb");
         phongban existingPhongBan = pbDAO.selectPhongBan(mapb);
+
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("qlcongty/themphongban.jsp");
         request.setAttribute("phongban", existingPhongBan);
+
         dispatcher.forward(request, response);
     }
     private void insertPhongBan(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
 
         String mapb = request.getParameter("mapb");
         String tenpb = request.getParameter("tenpb");
-        String macn = request.getParameter("macn");
-        String matrphong = request.getParameter("matrphong");
-        String mapbtr = request.getParameter("mapbtr");
+        String macn = request.getParameter("macnSelect");
+        String matrphong = request.getParameter("matrphongSelect");
+        String mapbtr = request.getParameter("mapbtrSelect");
 
         // Tạo đối tượng phongban từ thông tin lấy được
         phongban newphongban = new phongban(mapb, tenpb, macn, matrphong, LocalDate.now(), mapbtr);
+
 
         // Gọi phương thức insertPhongBan của DAO để thêm vào cơ sở dữ liệu
         phongbanDAO pbDAO = new phongbanDAO();
@@ -112,9 +132,9 @@ public class phongbanController extends HttpServlet {
 
         String mapb = request.getParameter("mapb");
         String tenpb = request.getParameter("tenpb");
-        String macn = request.getParameter("macn");
-        String matrphong = request.getParameter("matrphong");
-        String mapbtr = request.getParameter("mapbtr");
+        String macn = request.getParameter("macnSelect");
+        String matrphong = request.getParameter("matrphongSelect");
+        String mapbtr = request.getParameter("mapbtrSelect");
 
         phongban updatephongban = new phongban(mapb, tenpb, macn, matrphong, null, mapbtr);
         // Gọi phương thức insertPhongBan của DAO để thêm vào cơ sở dữ liệu

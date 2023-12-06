@@ -56,6 +56,34 @@ public class chinhanhDAO {
         }
         return rowDeleted;
     }
+    public static chinhanh selectChiNhanh(String Macn) {
+        chinhanh cn = null;
+        // Step 1: Establishing a Connection
+        try (Connection connection = JDBCUtils.getConnection();
+             // Step 2:Create a statement using connection object
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_CN_BY_MACN);) {
+            preparedStatement.setString(1, Macn);
+            System.out.println(preparedStatement);
+            // Step 3: Execute the query or update query
+            ResultSet rs = preparedStatement.executeQuery();
+
+            // Step 4: Process the ResultSet object.
+            while (rs.next()) {
+                String macn = rs.getString("macn");
+                String tencn = rs.getString("tencn");
+                String diachi = rs.getString("diachi");
+                String magiamdoc = rs.getString("magiamdoc");
+                String tinhtrang = rs.getString("tinhtrang");
+                LocalDate ngaytao = rs.getDate("ngaytao").toLocalDate();  // Use java.util.Date
+
+                cn = new chinhanh(macn, tencn, diachi, magiamdoc, tinhtrang, ngaytao);
+
+            }
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+        return cn;
+    }
     public static String LayMaCN(String magiamdoc) throws SQLException {
         String result = null;
         boolean rowDeleted;
@@ -97,32 +125,4 @@ public class chinhanhDAO {
         return rowUpdated;
     }
 
-    public chinhanh selectChiNhanh(String Macn) {
-        chinhanh cn = null;
-        // Step 1: Establishing a Connection
-        try (Connection connection = JDBCUtils.getConnection();
-             // Step 2:Create a statement using connection object
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_CN_BY_MACN);) {
-            preparedStatement.setString(1, Macn);
-            System.out.println(preparedStatement);
-            // Step 3: Execute the query or update query
-            ResultSet rs = preparedStatement.executeQuery();
-
-            // Step 4: Process the ResultSet object.
-            while (rs.next()) {
-                String macn = rs.getString("macn");
-                String tencn = rs.getString("tencn");
-                String diachi = rs.getString("diachi");
-                String magiamdoc = rs.getString("magiamdoc");
-                String tinhtrang = rs.getString("tinhtrang");
-                LocalDate ngaytao = rs.getDate("ngaytao").toLocalDate();  // Use java.util.Date
-
-                cn = new chinhanh(macn, tencn, diachi, magiamdoc, tinhtrang, ngaytao);
-
-            }
-        } catch (SQLException exception) {
-            JDBCUtils.printSQLException(exception);
-        }
-        return cn;
-    }
 }

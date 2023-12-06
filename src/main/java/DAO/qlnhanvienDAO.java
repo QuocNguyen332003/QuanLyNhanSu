@@ -66,6 +66,39 @@ public class qlnhanvienDAO {
         }
         return listNhanvien;
     }
+    public static List< nhanvien > selectAllnhanvien(String maCN) {
+
+        List < nhanvien > listnhanvien = new ArrayList< >();
+
+        // Step 1: Establishing a Connection
+        try (Connection connection = JDBCUtils.getConnection();
+
+             // Step 2:Create a statement using connection object
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_NHANVIEN_CN);) {
+            System.out.println(preparedStatement);
+            if (maCN != null){
+                preparedStatement.setString(1, maCN);
+            }
+            // Step 3: Execute the query or update queryc
+            ResultSet rs = preparedStatement.executeQuery();
+
+            // Step 4: Process the ResultSet object.
+            while (rs.next()) {
+                String matk = rs.getString("matk");
+                String macn = rs.getString("macn");
+                String mapb = rs.getString("mapb");
+                LocalDate ngaybatdau = rs.getDate("ngaybatdau").toLocalDate();
+                String tinhtrang = rs.getString("tinhtrang");
+                String congviec = rs.getString("congviec");
+                listnhanvien.add(new nhanvien(matk,macn,mapb,ngaybatdau,tinhtrang,congviec));
+                System.out.println(listnhanvien);
+
+            }
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+        return listnhanvien;
+    }
     public static List<nhanvien> LayNhanVien(){
         return LayDanhSachNhanVien(SELECT_ALL_NV, null);
     }
