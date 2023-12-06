@@ -17,15 +17,15 @@
 <div class="body-infor">
     <div class="section">
         <i class="fas fa-user"></i>
-        <h2>${tencapbac_menu}</h2>
+        <h2> ${tencapbac_header}</h2>
     </div>
     <div class="section">
         <i class="fas fa-users"></i>
-        <h2>${thongtinnv.mapb}</h2>
+        <h2>Phòng ${phongban_header.tenpb}</h2>
     </div>
     <div class="section">
         <i class="fas fa-building"></i>
-        <h2>${chinhanh_header.tencn}</h2>
+        <h2>Chi nhánh ${chinhanh_header.tencn}</h2>
     </div>
 </div>
 </body>

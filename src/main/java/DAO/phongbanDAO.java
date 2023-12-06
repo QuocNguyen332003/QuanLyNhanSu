@@ -1,6 +1,7 @@
 package DAO;
 
 import JDBCUtils.JDBCUtils;
+import Model.nhanvien;
 import Model.phongban;
 
 import java.sql.*;
@@ -13,6 +14,7 @@ public class phongbanDAO {
 
     private static final String SELECT_ALL = "select * from phongban";
     private static final String SELECT_ALL_CN = "select * from phongban where macn = ?";
+    private static final String SELECT_ALL_PB = "select * from phongban where mapb = ?";
     private static final String DELETE_PB_BY_MAPB = "delete from phongban where mapb = ?;";
 
     private static final String SELECT_PB_BY_MAPB = "select * from phongban where mapb = ?";
@@ -36,6 +38,55 @@ public class phongbanDAO {
             ResultSet rs = preparedStatement.executeQuery();
 
             // Step 4: Process the ResultSet object.
+            while (rs.next()) {
+                String mapb = rs.getString("mapb");
+                String tenpb = rs.getString("tenpb");
+                String macn = rs.getString("macn");
+                String matrphong = rs.getString("matrphong");
+                LocalDate ngaytao = rs.getDate("ngaytao").toLocalDate(); // Use java.util.Date
+                String mapbtr = rs.getString("mapbtr");
+
+                listphongban.add(new phongban(mapb, tenpb, macn, matrphong, ngaytao, mapbtr));
+
+            }
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+        return listphongban;
+    }
+    public static List< phongban > selectAllphongban_CN(String machinhanh) {
+
+        List < phongban > listphongban = new ArrayList< >();
+
+        try (Connection connection = JDBCUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_CN);) {
+            preparedStatement.setString(1,machinhanh);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                String mapb = rs.getString("mapb");
+                String tenpb = rs.getString("tenpb");
+                String macn = rs.getString("macn");
+                String matrphong = rs.getString("matrphong");
+                LocalDate ngaytao = rs.getDate("ngaytao").toLocalDate(); // Use java.util.Date
+                String mapbtr = rs.getString("mapbtr");
+
+                listphongban.add(new phongban(mapb, tenpb, macn, matrphong, ngaytao, mapbtr));
+
+            }
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+        return listphongban;
+    }
+
+    public static List< phongban > selectAllphongban_PB(String maphongban) {
+
+        List < phongban > listphongban = new ArrayList< >();
+
+        try (Connection connection = JDBCUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_PB);) {
+            preparedStatement.setString(1,maphongban);
+            ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 String mapb = rs.getString("mapb");
                 String tenpb = rs.getString("tenpb");
@@ -89,7 +140,7 @@ public class phongbanDAO {
         return rowUpdated;
     }
 
-    public phongban selectPhongBan(String Mapb) {
+    public static phongban selectPhongBan(String Mapb) {
         phongban pb = null;
         // Step 1: Establishing a Connection
         try (Connection connection = JDBCUtils.getConnection();
@@ -131,25 +182,4 @@ public class phongbanDAO {
         }
         return result;
     }
-    public static List< phongban > selectAllphongban_CN(String machinhanh) {
-
-        List < phongban > listphongban = new ArrayList< >();
-
-        try (Connection connection = JDBCUtils.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_CN);) {
-            preparedStatement.setString(1,machinhanh);
-            ResultSet rs = preparedStatement.executeQuery();
-
-            // Step 4: Process the ResultSet object.
-            while (rs.next()) {
-                String mapb = rs.getString("mapb");
-                listphongban.add(new phongban(mapb, null, null, null, null, null));
-
-            }
-        } catch (SQLException exception) {
-            JDBCUtils.printSQLException(exception);
-        }
-        return listphongban;
-    }
-
 }
