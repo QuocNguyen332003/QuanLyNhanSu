@@ -14,6 +14,11 @@ public class cancuoccongdan implements Serializable{
 
 	}
 
+	public cancuoccongdan(String matk, String cccd) {
+		this.matk=matk;
+		this.cccd=cccd;
+	}
+
 	public String getMatk() {
 		return matk;
 	}

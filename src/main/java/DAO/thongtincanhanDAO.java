@@ -14,7 +14,6 @@ public class thongtincanhanDAO {
     private static final String SELECT_ALL_TTCANHAN = "select * from thongtincanhan where matk = ?;";
     private static final String SELECT_CCCD = "select * from cancuoccongdan where matk = ?;";
     private static final String SELECT_ALL_TAIKHOAN = "select * from taikhoan where matk = ?;";
-    private static final String UPDATE_TAIKHOAN = "update taikhoan set pass = ? where matk = ?;";
     private static final String SELECT_CHUCVU = "select * from chucvu where matk = ?;";
     private static final String SELECT_CONGVIEC = "select * from nhanvien where matk = ?;";
     private static final String SELECT_NGAYBATDAU = "select * from nhanvien where matk = ?";
@@ -22,6 +21,11 @@ public class thongtincanhanDAO {
             "from phongban join nhanvien on phongban.mapb = nhanvien.mapb where matk = ?;";
     private static final String SELECT_TENCN = "select * " +
             "from chinhanh join nhanvien on chinhanh.macn = nhanvien.macn where matk = ?;";
+
+    private static final String UPDATE_TAIKHOAN = "update taikhoan set pass = ? where matk = ?;";
+    private static final String UPDATE_TTCANHAN = "update thongtincanhan set hoten = ?, ngaysinh = ?, gioitinh = ?, diachi = ?, sdt = ?, email = ?, bangcap = ? where matk = ?;";
+    private static final String UPDATE_CCCD = "update cancuoccongdan set cccd = ? where matk = ?;";
+
 
     public static thongtincanhan layThongTinCaNhan(String matk)
     {
@@ -47,7 +51,6 @@ public class thongtincanhanDAO {
             JDBCUtils.printSQLException(exception);}
         return tt;
     }
-
     public static String layCCCD(String matk){
         String cccd = "";
         try(Connection connection = JDBCUtils.getConnection();
@@ -64,7 +67,6 @@ public class thongtincanhanDAO {
         }
         return cccd;
     }
-
     public static taikhoan layTaiKhoan(String matk){
         taikhoan tk = new taikhoan();
         try (Connection connection = JDBCUtils.getConnection();
@@ -82,18 +84,6 @@ public class thongtincanhanDAO {
         }
         return tk;
     }
-
-    public static void capNhatMatKhau(String matk, String password){
-        try (Connection connection = JDBCUtils.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TAIKHOAN);) {
-            preparedStatement.setString(1, password);
-            preparedStatement.setString(2, matk);
-            preparedStatement.executeUpdate();
-        } catch (SQLException exception) {
-            JDBCUtils.printSQLException(exception);
-        }
-    }
-
     public static String layChucVu(String matk){
         String chucvu = "";
         try (Connection connection = JDBCUtils.getConnection();
@@ -124,7 +114,6 @@ public class thongtincanhanDAO {
         }
         return congviec;
     }
-
     public static LocalDate layNgayBatDau(String matk) {
         LocalDate ngaybatdau = null;
         try (Connection connection = JDBCUtils.getConnection();
@@ -140,7 +129,6 @@ public class thongtincanhanDAO {
         }
         return ngaybatdau;
     }
-
     public static String layTenPB(String matk){
         String tenpb = "";
         try (Connection connection = JDBCUtils.getConnection();
@@ -156,7 +144,6 @@ public class thongtincanhanDAO {
         }
         return tenpb;
     }
-
     public static String layTenCN(String matk) {
         String tencn = "";
         try (Connection connection = JDBCUtils.getConnection();
@@ -171,5 +158,38 @@ public class thongtincanhanDAO {
             JDBCUtils.printSQLException(exception);
         }
         return tencn;
+    }
+    public static void capNhatMatKhau(taikhoan taikhoan) {
+        try (Connection connection = JDBCUtils.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TAIKHOAN)) {
+            preparedStatement.setString(1, taikhoan.getPass());
+            preparedStatement.setString(2, taikhoan.getMatk());
+            preparedStatement.executeUpdate();
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+    }
+    public static void capNhatThongTinCaNhan(thongtincanhan tt){
+        try (Connection connection = JDBCUtils.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TTCANHAN)) {
+            preparedStatement.setString(1, tt.getHoten());
+            preparedStatement.setDate(2, JDBCUtils.getSQLDate(tt.getNgaysinh()));
+            preparedStatement.setString(3,tt.getGioitinh());
+            preparedStatement.setString(4,tt.getDiachi());
+            preparedStatement.setString(5,tt.getSdt());
+            preparedStatement.setString(6,tt.getEmail());
+            preparedStatement.setString(7,tt.getBangcap());
+            preparedStatement.setString(8,tt.getMatk());
+            preparedStatement.executeUpdate();
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+    }
+    public static void capNhatCCCD(cancuoccongdan cccd){
+        try(Connection connection = JDBCUtils.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CCCD)){
+            preparedStatement.setString(1,cccd.getCccd());
+            preparedStatement.setString(2,cccd.getMatk());
+            preparedStatement.executeUpdate();
+        }catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
     }
 }

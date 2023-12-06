@@ -1,7 +1,6 @@
 package Controller;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,8 +18,6 @@ import javax.servlet.http.HttpSession;
 
 import DAO.congtacDAO;
 import Model.congtac;
-import Model.nhanvien;
-import Model.phongban;
 import Model.taikhoan;
 import DAO.phongbanDAO;
 import DAO.chinhanhDAO;
