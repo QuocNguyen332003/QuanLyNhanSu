@@ -9,7 +9,11 @@ public class cancuoccongdan implements Serializable{
 	private String cccd;
 	private Date ngaycap;
 	private String madc;
-	
+
+	public cancuoccongdan() {
+
+	}
+
 	public String getMatk() {
 		return matk;
 	}
