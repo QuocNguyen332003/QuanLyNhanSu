@@ -16,11 +16,10 @@ public class loginDAO {
         Class.forName("com.mysql.jdbc.Driver");
 
         try (Connection connection = JDBCUtils.getConnection();
-             // Step 2:Create a statement using connection object
              PreparedStatement preparedStatement = connection
                      .prepareStatement("select * from taikhoan where username = ? and pass = ? ")) {
             preparedStatement.setString(1, tk.getUsername());
-            preparedStatement.setString(2, tk.getMatk());
+            preparedStatement.setString(2, tk.getPass());
 
             System.out.println(preparedStatement);
             ResultSet rs = preparedStatement.executeQuery();

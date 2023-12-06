@@ -4,6 +4,7 @@ import JDBCUtils.JDBCUtils;
 import Model.congtac;
 import DAO.phongbanDAO;
 import Model.nhanvien;
+import Model.phongban;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -83,19 +84,14 @@ public class congtacDAO {
             JDBCUtils.printSQLException(exception);
         }
     }
-    public static List< congtac > DanhSachCongTac_NV_PB(String mapb) {
-
-        List < congtac > listcongtac = new ArrayList< >();
-        List <nhanvien> listnhanvien = qlnhanvienDAO.LayNhanVienPB(mapb);
-
-        for (nhanvien nv: listnhanvien) {
+    private static List<congtac> getCongTacs(List<nhanvien> nhanviens){
+        List<congtac> listcongtac = new ArrayList<>();
+        for (nhanvien nv: nhanviens) {
             try (Connection connection = JDBCUtils.getConnection();
                  PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL);) {
                 preparedStatement.setString(1, nv.getMatk());
-                // Step 3: Execute the query or update query
                 ResultSet rs = preparedStatement.executeQuery();
                 System.out.println(preparedStatement);
-                // Step 4: Process the ResultSet object.
                 while (rs.next()) {
                     LocalDate ngaybatdau = rs.getDate("ngaybatdau").toLocalDate();
                     String tentochuc = rs.getString("tentochuc");
@@ -109,5 +105,17 @@ public class congtacDAO {
             }
         }
         return listcongtac;
+    }
+    public static List< congtac > DanhSachCongTac_NV_PB(String mapb) {
+        List <nhanvien> listnhanvien = qlnhanvienDAO.LayNhanVienPB(mapb);
+        return getCongTacs(listnhanvien);
+    }
+    public static List< congtac > DanhSachCongTac_NV_CN(String macn) {
+        List <nhanvien> listnhanvien = qlnhanvienDAO.LayNhanVienCN(macn);
+        return getCongTacs(listnhanvien);
+    }
+    public static List< congtac > DanhSachCongTac_ALL_NV() {
+        List <nhanvien> listnhanvien = qlnhanvienDAO.LayNhanVien();
+        return getCongTacs(listnhanvien);
     }
 }

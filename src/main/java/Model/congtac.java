@@ -11,7 +11,11 @@ public class congtac implements Serializable{
 	private String diachi;
 	private String chucvu;
 	private String lydo;
-	
+
+	public congtac() {
+
+	}
+
 	public String getMatk() {
 		return matk;
 	}

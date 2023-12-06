@@ -6,6 +6,7 @@
 %>
 
 <%@ page import="Model.taikhoan" %>
+<%@ page import="Model.congtac" %>
 <html>
 
 <head>
@@ -37,18 +38,27 @@
 			margin: 1rem;
 			display: flex; flex-direction: row; justify-content: space-around;
 		}
-		.form_add {
-			width: 100rem;
-			height: 30rem;
+		.form_tacvu{
 			display: none;
 			position: fixed;
-			top: 20rem;
-			left:30rem;
 			background-color: #F4F5F7;
 			border: 3px solid var(--maincolor);
 			box-shadow: 0 0 1rem 0.3rem var(--maincolor);
 			z-index: 9;
 		}
+		.form_add {
+			width: 100rem;
+			height: 30rem;
+			top: 20rem;
+			left:30rem;
+		}
+		.form_xoa{
+			width: 40rem;
+			height: 25rem;
+			top: 30rem;
+			left:60rem;
+		}
+
 		.form_button button{
 			width: 10rem; height: 3rem;
 			background-color: var(--maincolor);
@@ -60,6 +70,10 @@
 		.text_btn{
 			background-color: white;
 			color: var(--maincolor);
+		}
+		.form_xoa h5{
+			width: 100%;
+			height: 5rem;
 		}
 	</style>
 </head>
@@ -116,7 +130,7 @@
 								<button type="button" class = "text_btn" id = "btn_huy${count}" style="display:none;">Hủy</button>
 							</div>
 							<div class = "col-md-1 box_button">
-								<button formaction="<%=request.getContextPath()%>/xoacongtac" class = "button_icon">
+								<button type="button" class = "button_icon" onclick="openFormXoa${count}()" >
 									<i class="fa-solid fa-trash fa-2xl"></i>
 								</button>
 								<button type="button" class = "button_icon" id = "btn_edit${count}">
@@ -125,6 +139,17 @@
 								<button formaction="<%=request.getContextPath()%>/thaydoicongtac" class = "button_icon" id = "btn_save${count}">
 									<i class="fa-solid fa-floppy-disk fa-2xl"></i>
 								</button>
+							</div>
+							<div class="form_xoa form_tacvu" id="form_xoa${count}">
+								<h3 class = "form_title">Xác nhận xóa </h3>
+								<div class="form-group form-inline">
+									<h5 class = "label_form_control">Bạn có chắc chắn xóa công tác vào ngày ${item_ct.ngaybatdau} tại tổ chức ${item_ct.tentochuc} không?</h5>
+									<h5>Bấm Xác nhận để xóa.</h5>
+								</div>
+								<div class="form_button">
+									<button formaction="<%=request.getContextPath()%>/xoacongtac" type="submit">Xác nhận</button>
+									<button type="button" onclick="closeFormXoa${count}()">Hủy</button>
+								</div>
 							</div>
 						</form>
 						<script>
@@ -153,8 +178,15 @@
 								diachi${count}.setAttribute("readonly", true);
 								chucvu${count}.setAttribute("readonly", true);
 								lydo${count}.setAttribute("readonly", true);
+
 								btnhuy${count}.style.display = "none";
 							});
+							function openFormXoa${count}() {
+								document.getElementById("form_xoa${count}").style.display = "block";
+							}
+							function closeFormXoa${count}(){
+								document.getElementById("form_xoa${count}").style.display = "none";
+							}
 						</script>
 						<c:set var="count" value="${count + 1}" />
 					</c:forEach>
@@ -164,7 +196,7 @@
 							</button>
 						</div>
                     </div>
-					<div class="form_add" id="add">
+					<div class="form_add form_tacvu" id="add">
 						<form action="<%=request.getContextPath()%>/themcongtac" class="form-container">
 							<h3 class = "form_title">Thêm quá trình công tác </h3>
 							<div class="form-group form-inline">

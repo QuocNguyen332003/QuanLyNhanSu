@@ -19,6 +19,9 @@
 			width: 100%; height: 3rem;
 			text-align: center;
 		}
+		.input-box input{
+			padding-left: 3rem;
+		}
 	</style>
 </head>
 <body>
@@ -55,8 +58,7 @@
 				<%} %>
 			</div>
 			<div class="box_show">
-				<input type="checkbox" name="showpass" id = "showpass">
-				<label for="showpass"><i>Show pass</i></label>
+				<input type="checkbox" onclick="showpass()"><i>Show pass</i>
 			</div>
 
 			<div class = "box_button_login"><button type="submit" class="btn"><b>Xác nhận</b></button></div>
@@ -64,5 +66,21 @@
 		</form>
 	</div>
 </div>
+<script>
+	function showpass() {
+		var x = document.getElementById("oldpasaword");
+			y = document.getElementById("newpassword");
+			z = document.getElementById("confirmnewpass");
+		if (x.type === "password") {
+			x.type = "text";
+			y.type = "text";
+			z.type = "text";
+		} else {
+			x.type = "password";
+			y.type = "password";
+			z.type = "password";
+		}
+	}
+</script>
 </body>
 </html>

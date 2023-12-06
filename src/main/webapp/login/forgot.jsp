@@ -13,7 +13,16 @@
         crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/login.css" />
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/base.css" />
-    
+	<style>
+		input { text-transform: none; }
+		.error_mess{
+			width: 100%; height: 3rem;
+			text-align: center;
+		}
+		.input-box input{
+			padding-left: 3rem;
+		}
+	</style>
 </head>
 <body>
 	<div class="container">
@@ -21,34 +30,44 @@
 			<img src="https://www.evn.com.vn/userfile/VH/User/huyent_tcdl/images/2021/6/hrmscuatapdoan24621(1).jpeg" style="width:700px;height:460px;">
 		</div>
 		<div class="form">
-			<form action="<%=request.getContextPath()%>/forgot" method="post">
+			<form action="<%=request.getContextPath()%>/sendmail" method="post">
             <h1>QUÊN MẬT KHẨU</h1>
             
             <div class="input-box">
 				<div class = "box_icon_login"> <i class="fa-solid fa-user fa-2xl"></i> </div>
-            	<input type="text" name="username" placeholder="Tài khoản" required>
+				<input type="text" name="username" placeholder="Tài khoản" value="<%= request.getAttribute("inputUsername") != null ? request.getAttribute("inputUsername") : "" %>" required>
             </div>
             
             <div class="input-box">
 				<div class = "box_icon_login"> <i class="fa-solid fa-envelope fa-2xl"></i></div>
-            	<input type="email" name="email" placeholder="Gmail" required>
+				<input type="email" name="email" placeholder="Gmail" value="<%= request.getAttribute("inputEmail") != null ? request.getAttribute("inputEmail") : "" %>" required>
             </div>
+				<div class="error_mess" style="color:red;">
+					<%String errorMsg = (String) request.getAttribute("error"); %>
+					<%if (errorMsg != null) { %>
+					<p><%=errorMsg %></p>
+					<%} %>
+				</div>
+			<div class = "box_button_login">
+				<button type="submit" class="btn btn_gui"><b>Gửi mã</b></button>
+			</div>
+			</form>
 
-			<div class = "box_button_login"> <button type="submit" class="btn btn_gui"><b>Gửi mã</b></button> </div>
-
+			<form action="<%=request.getContextPath()%>/forgot" method="post">
+				<input type="hidden" name="username" value="<%= request.getAttribute("inputUsername") != null ? request.getAttribute("inputUsername") : "" %>">
+				<input type="hidden" name="email" value="<%= request.getAttribute("inputEmail") != null ? request.getAttribute("inputEmail") : "" %>">
             <div class="input-box">
 				<div class = "box_icon_login"> <i class="fa-solid fa-pen-to-square fa-2xl"></i> </div>
             	<input type="text" name="otp" placeholder="Mã OTP" required>
             </div>
-            	
+
             <div class="input-box">
 				<div class = "box_icon_login"> <i class="fa-solid fa-lock-open fa-2xl"></i></div>
-            	<input type="password" name="newpassword" placeholder="Nhập lại mật khẩu" required>
+            	<input type="password" name="newpassword" placeholder="Nhập lại mật khẩu mới" required>
             </div>
 
 			<div class = "box_button_login"> <button type="submit" class="btn"><b>Xác nhận</b></button> </div>
-            
-        </form>
+			</form>
     	</div>
 	</div>
 </body>

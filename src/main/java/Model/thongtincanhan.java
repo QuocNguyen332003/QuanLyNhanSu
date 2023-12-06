@@ -37,4 +37,5 @@ public class thongtincanhan implements Serializable{
         this.email=email;
         this.bangcap=bangcap;
     }
+    public thongtincanhan(){}
 }
