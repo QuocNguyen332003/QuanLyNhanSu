@@ -23,6 +23,7 @@ import Model.chinhanh;
 import Model.phongban;
 import Model.nhanvien;
 import Model.taikhoan;
+import com.google.gson.Gson;
 
 @WebServlet(name = "phongban", urlPatterns = { "/deletePhongBan", "/addPhongBan","/insertPhongBan","/editPhongBan","/updatePhongBan"})
 public class phongbanController extends HttpServlet {
@@ -119,7 +120,6 @@ public class phongbanController extends HttpServlet {
         String mapb = nv.getMapb();
         String macn = nv.getMacn();
         String mainComboValue = request.getParameter("mainComboValue");
-        System.out.println(mainComboValue);
 
 
 
@@ -148,11 +148,23 @@ public class phongbanController extends HttpServlet {
 
                 List<nhanvien> listnhanvien  = qlnhanvienDAO.selectAllnhanvien(mainComboValue);
                 request.setAttribute("listnhanvien", listnhanvien);
-                System.out.println(listnhanvien);
 
+                List<String> matrphongOptions = qlnhanvienDAO.selectAllNhanVienNames(mainComboValue);// Fetch matrphong options based on selectedMacn
+
+                String matrphongOptionsJson = new Gson().toJson(matrphongOptions);
+                System.out.println(mainComboValue);
+                System.out.println("PASS");
+                System.out.println(matrphongOptionsJson);
+                if(mainComboValue == null){
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/themphongban.jsp");
+                    dispatcher.forward(request, response);
+                }
+                {
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(matrphongOptionsJson);
+                }
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/themphongban.jsp");
-            dispatcher.forward(request, response);
         }
         else
         {
@@ -196,6 +208,7 @@ public class phongbanController extends HttpServlet {
         pbDAO.updatePhongBan(updatephongban);
         response.sendRedirect("quanlyphongban");
     }
+
 
     private String getMatk(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

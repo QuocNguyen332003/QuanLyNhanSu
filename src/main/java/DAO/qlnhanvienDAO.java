@@ -99,6 +99,31 @@ public class qlnhanvienDAO {
         }
         return listnhanvien;
     }
+    public static List<String> selectAllNhanVienNames(String maCN) {
+        List<String> employeeNames = new ArrayList<>();
+
+        // Step 1: Establishing a Connection
+        try (Connection connection = JDBCUtils.getConnection();
+             // Step 2: Create a statement using connection object
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_NHANVIEN_CN);) {
+            System.out.println(preparedStatement);
+            if (maCN != null) {
+                preparedStatement.setString(1, maCN);
+            }
+            // Step 3: Execute the query
+            ResultSet rs = preparedStatement.executeQuery();
+
+            // Step 4: Process the ResultSet object.
+            while (rs.next()) {
+                String matk = rs.getString("matk"); // Replace "tennhanvien" with the actual column name for the employee's name
+                employeeNames.add(matk);
+            }
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+        return employeeNames;
+    }
+
     public static List<nhanvien> LayNhanVien(){
         return LayDanhSachNhanVien(SELECT_ALL_NV, null);
     }
