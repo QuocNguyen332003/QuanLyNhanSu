@@ -51,7 +51,7 @@
                     </ul>
                 </nav>
                 <br>
-                <div class="row">
+                <form class="row" action="<%=request.getContextPath()%>/tuyennhanvien">
 					<div class="container body container_css">
 						<div class = "col">
 							<div class="box_info">
@@ -146,12 +146,29 @@
 							</div>
 						</div>
 					</div>
-                    <div class = "box_button_add">
-							<button class = "button_text">
+                    <div class = "box_button_add" id = "btnadd">
+							<button class = "button_text" type="submit">
 								Lưu thay đổi
 							</button>
 						</div>
-                </div>
+                </form>
+				<script>
+
+					window.onload = function() {
+						<c:if test="${thongtincanhan != null}">
+							let btnadd = document.getElementById("btnadd");
+							btnadd.style.display = "none";
+						</c:if>
+						<c:if test="${thongtincanhan == null}">
+							let input_tt = document.getElementsByTagName("input");
+							let i = 0;
+						for (i = 0; i < input_tt.length; i++) {
+							input_tt[i].removeAttribute("readonly");
+						}
+						</c:if>
+					};
+
+				</script>
             </div>
         </div>
     </div>

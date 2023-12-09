@@ -17,6 +17,35 @@
         .button_add{
             width: 16rem;
         }
+        .form_tacvu{
+            display: none;
+            position: fixed;
+            background-color: #F4F5F7;
+            border: 3px solid var(--maincolor);
+            box-shadow: 0 0 1rem 0.3rem var(--maincolor);
+            z-index: 9;
+        }
+        .form_sathai{
+            width: 40rem;
+            height: 25rem;
+            top: 30rem;
+            left:60rem;
+        }
+        .form_chidinhcongviec{
+            width: 40rem;
+            height: 25rem;
+            top: 30rem;
+            left:60rem;
+        }
+        .form_button button{
+            width: 10rem; height: 3rem;
+            background-color: var(--maincolor);
+            color: white;
+        }
+        .form_xoa h5{
+            width: 100%;
+            height: 5rem;
+        }
     </style>
 </head>
 
@@ -113,6 +142,7 @@
                                 </tr>
                             </thead>
                             <tbody id = "row_table">
+                            <c:set var="count" value="0" />
                             <c:forEach var="x" items="${listnv}">
                                 <tr>
                                     <td>${x.matk}</td>
@@ -121,12 +151,73 @@
                                     <td>${x.ngaybatdau}</td>
                                     <td>${x.tinhtrang}</td>
                                     <td>${x.congviec}</td>
-                                    <td><a href="sathai?matk=<c:out value='${x.matk}' />">Sa thải</a></td>
+                                    <td><button onclick="openFormXoa${count}()">Sa thải</button></td>
                                     <td><a href="xemthongtinnhanvien?matk=<c:out value='${x.matk}' />">Xem thêm</a></td>
                                     <c:if test="${capbac > 1}">
-                                        <td><a href="chidinh?mapb=<c:out value='${x.matk}' />">Chỉ định</a></td>
+                                        <td><button onclick="openFormChiDinh${count}()">Chỉ định</button></td>
                                     </c:if>
                                 </tr>
+                                <div class = "form_sathai form_tacvu" id = "form_sathai${count}">
+                                    <h3 class = "form_title">Xác nhận sa thải </h3>
+                                    <div class="form-group form-inline">
+                                        <h5 class = "label_form_control">Bạn có chắc chắn sa thải nhân viên ${x.matk} không?</h5>
+                                        <h5>Bấm Xác nhận để xóa.</h5>
+                                    </div>
+                                    <div class="form_button">
+                                        <a href="<%=request.getContextPath()%>/sathainhanvien?matk=<c:out value='${x.matk}' />" >Xác nhận</a>
+                                        <button type="button" onclick="closeFormXoa${count}()">Hủy</button>
+                                    </div>
+                                </div>
+                                <div class = "form_chidinhcongviec form_tacvu" id = "form_chidinh${count}" >
+                                    <form action="<%=request.getContextPath()%>/chidinhnhanvien">
+                                        <h3 class = "form_title">Chỉ định nhân viên </h3>
+                                        <div class="form-group form-inline" style="display: none;">
+                                            <label for="matk${count}" class = "label_form_control"><b>Mã tài khoản:</b></label>
+                                            <input type="text" value="<c:out value='${x.matk}' />" class="form-control" id="matk${count}" placeholder="Công việc" name="matk" required>
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label for="macn${count}" class = "label_form_control"><b>Mã chi nhánh:</b></label>
+                                            <select id="macn${count}" name="macn" class="form-control box_form_control form-select">
+                                                <option value="ALL">Tất cả</option>
+                                                <c:forEach var="item" items="${setmacn_nv}">
+                                                    <option value="<c:out value="${item}" />">${item}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label for="mapb${count}" class = "label_form_control"><b>Mã phòng ban:</b></label>
+                                            <select id="mapb${count}" name="mapb" class="form-control box_form_control form-select">
+                                                <option value="ALL">Tất cả</option>
+                                                <c:forEach var="item" items="${chitietphongban}">
+                                                    <option value="<c:out value="${item.mapb}" />">${item.mapb}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label for="congviec${count}" class = "label_form_control"><b>Công việc:</b></label>
+                                            <input type="text" class="form-control" id="congviec${count}" placeholder="Công việc" name="congviec" required>
+                                        </div>
+                                        <div class="form_button">
+                                            <button type="submit">Xác nhận</button>
+                                            <button type="button" onclick="closeFormChiDinh${count}()">Hủy</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <script>
+                                    function openFormXoa${count}() {
+                                        document.getElementById("form_sathai${count}").style.display = "block";
+                                    }
+                                    function closeFormXoa${count}(){
+                                        document.getElementById("form_sathai${count}").style.display = "none";
+                                    }
+                                    function openFormChiDinh${count}() {
+                                        document.getElementById("form_chidinh${count}").style.display = "block";
+                                    }
+                                    function closeFormChiDinh${count}(){
+                                        document.getElementById("form_chidinh${count}").style.display = "none";
+                                    }
+                                </script>
+                            <c:set var="count" value="${count + 1}"/>
                             </c:forEach>
                             </tbody>
                         </table>
@@ -145,29 +236,7 @@
                             </div>
                         </form>
                     </div>
-                    
-                    <div class="form_chidinh" id="chidinh">
-                        <form action="chidinh" class="form-container">
-                            <h3 class = "form_title">Chỉ định công việc</h3>
-                            <div class="form-group form-inline">
-                                <label for="matk" class = "label_form_control"><b>Mã nhân viên:</b></label>
-                                <input type="text" class="form-control" id="matk" placeholder="Mã nhân viên" name="matk" required>
-                            </div>
-                            <div class="form-group form-inline">
-                                <label for="congviec" class = "label_form_control"><b>Công việc:</b></label>
-                                <input type="text" class="form-control" id="congviec" placeholder="Công việc" name="congviec" required>
-                            </div>
-                            <div class="form-group form-inline">
-                                <label for="phongban" class = "label_form_control"><b>Phòng Ban:</b></label>
-                                <input type="text" class="form-control" id="phongban" placeholder="Phòng Ban" name="phongban" required>
-                            </div>
-                            <div class="form_button">
-                                <button type="submit">Xác nhận</button>
-                                <button type="button" onclick="closeFormAdd()">Hủy</button>
-                            </div>
-                        </form>
-                    </div>
-                    
+
                     <div class="form_thongbao" id="thongbao">
                         <ul>
                         	<li>
@@ -186,13 +255,6 @@
 
                         function closeFormRequest() {
                           	document.getElementById("yeucau").style.display = "none";
-                        }
-                        function openFormAdd() {
-                          	document.getElementById("chidinh").style.display = "block";
-                        }
-
-                        function closeFormAdd() {
-                          	document.getElementById("chidinh").style.display = "none";
                         }
                         function openFormNotify() {
                           	document.getElementById("thongbao").style.display = "block";

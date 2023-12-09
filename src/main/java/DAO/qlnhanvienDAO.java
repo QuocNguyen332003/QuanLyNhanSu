@@ -17,6 +17,9 @@ public class qlnhanvienDAO {
     private static final String SELECT_ALL_NV = "select * from nhanvien;";
     private static final String SELECT_NHANVIEN_PB = "select * from nhanvien where mapb = ?;";
     private static final String SELECT_NHANVIEN_CN = "select * from nhanvien where macn = ?;";
+    private static final String UPDATE_TINHTRANG = "update nhanvien set tinhtrang =? where matk = ?;";
+    private static final String UPDATE_CHIDINH = "update nhanvien set mapb = ?, macn = ?, congviec = ? where matk = ?;";
+    private static final String INSERT_NHANVIEN = "INSERT INTO nhanvien" + "  (matk, mapb, macn, ngaybatdau,  tinhtrang, congviec) VALUES " + " (?, ?, ?, ?, ?, ?);";
     public static nhanvien LayThongTinNhanVien(String matk){
         nhanvien nv = new nhanvien();
         try (Connection connection = JDBCUtils.getConnection();
@@ -107,5 +110,45 @@ public class qlnhanvienDAO {
     }
     public static List<nhanvien> LayNhanVienCN(String macn) {
         return LayDanhSachNhanVien(SELECT_NHANVIEN_CN, macn);
+    }
+    public static void SaThaiNhanVien(String matk){
+        try (Connection connection = JDBCUtils.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TINHTRANG);) {
+            preparedStatement.setString(1, "Nghỉ việc");
+            preparedStatement.setString(2, matk);
+            System.out.println(preparedStatement);
+            preparedStatement.executeUpdate();
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+    }
+    public static void ChiDinhNhanVien(String matk, String mapb, String macn, String congviec){
+        try (Connection connection = JDBCUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CHIDINH);) {
+            preparedStatement.setString(1, mapb);
+            preparedStatement.setString(2, macn);
+            preparedStatement.setString(3, congviec);
+            preparedStatement.setString(4, matk);
+
+            System.out.println(preparedStatement);
+            preparedStatement.executeUpdate();
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+    }
+    public static void ThemNhanVien(nhanvien nv){
+        try (Connection connection = JDBCUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_NHANVIEN);) {
+            preparedStatement.setString(1, nv.getMatk());
+            preparedStatement.setString(2, nv.getMapb());
+            preparedStatement.setString(3, nv.getMacn());
+            preparedStatement.setDate(4, JDBCUtils.getSQLDate(nv.getNgaybatdau()));
+            preparedStatement.setString(5, nv.getTinhtrang());
+            preparedStatement.setString(6, nv.getCongviec());
+            System.out.println(preparedStatement);
+            preparedStatement.executeUpdate();
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
     }
 }
