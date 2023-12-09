@@ -13,7 +13,6 @@
         window.onload = function() {
             var phongban = '${phongban}';
             var form = document.getElementById('myForm');
-            alert(phongban);
             if (phongban != null && phongban != '' ) {
                 form.action = 'updatePhongBan';
             } else {
@@ -21,7 +20,7 @@
             }
             // Get the select element
         }
-
+``
         function updateNhanVienList() {
             var mainComboValue = document.getElementById("macnSelect").value;
             var matrphongSelect = document.getElementById('matrphongSelect');
@@ -32,7 +31,14 @@
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
+                    alert(xhr.responseText);
+                    alert("PASS")
                     var options = JSON.parse(xhr.responseText);
+
+                    // Remove all existing options
+                    while (matrphongSelect.firstChild) {
+                        matrphongSelect.removeChild(matrphongSelect.firstChild);
+                    }
 
                     // Add the new options to matrphongSelect
                     options.forEach(function(option) {
@@ -41,7 +47,6 @@
                         matrphongSelect.add(newOption);
                     });
                 }
-                location.reload();
             };
             xhr.send();
         }
