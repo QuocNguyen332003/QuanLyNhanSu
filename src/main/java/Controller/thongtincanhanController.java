@@ -3,6 +3,7 @@ package Controller;
 import Model.cancuoccongdan;
 import Model.taikhoan;
 import Model.thongtincanhan;
+import Model.diachi;
 
 import DAO.thongtincanhanDAO;
 
@@ -17,7 +18,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-@WebServlet(name = "thongtincanhan", urlPatterns = { "/thaydoithongtin"})
+@WebServlet(name = "thongtincanhan", urlPatterns = { "/thaydoithongtin","/thaydoidiachi","/thaydoicccd"})
 public class thongtincanhanController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public void init() {
@@ -33,9 +34,14 @@ public class thongtincanhanController extends HttpServlet {
             switch (action) {
                 case "/thaydoithongtin":
                     capNhatThongTin(request, response);
-                    capNhatCCCD(request, response);
                     capNhatMatKhau(request, response);
                     response.sendRedirect("thongtincanhan");
+                    break;
+                case "/thaydoicccd":
+                    capNhatCCCD(request, response);
+                    break;
+                case "/thaydoidiachi":
+                    capNhatDiaChi(request,response);
                     break;
                 default:
                     RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
@@ -64,12 +70,10 @@ public class thongtincanhanController extends HttpServlet {
             String hoten = request.getParameter("hoten");
             LocalDate ngaysinh = LocalDate.parse(request.getParameter("ngaysinh"));
             String gioitinh = request.getParameter("gioitinh");
-            String diachi = request.getParameter("diachi");
             String sdt = request.getParameter("sdt");
             String email = request.getParameter("email");
-            thongtincanhan tt = new thongtincanhan(matk, hoten, ngaysinh, gioitinh, diachi, sdt, email);
+            thongtincanhan tt = new thongtincanhan(matk, hoten, ngaysinh, gioitinh, sdt, email);
             thongtincanhanDAO.capNhatThongTinCaNhan(tt);
-
         } else {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
             dispatcher.forward(request, response);
@@ -78,10 +82,31 @@ public class thongtincanhanController extends HttpServlet {
     private void capNhatCCCD(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         String matk = getMatk(request, response);
+        String madc = "";
         if (matk != null) {
             String cccd = request.getParameter("cccd");
-            cancuoccongdan cancuoc = new cancuoccongdan(matk, cccd);
+            LocalDate ngaycap = LocalDate.parse(request.getParameter("ngaycap"));
+            cancuoccongdan cancuoc = new cancuoccongdan(matk, cccd, ngaycap,madc);
             thongtincanhanDAO.capNhatCCCD(cancuoc);
+            response.sendRedirect("thongtincanhan");
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
+            dispatcher.forward(request, response);
+        }
+    }
+    private void capNhatDiaChi(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        String matk = getMatk(request, response);
+        thongtincanhan tt = thongtincanhanDAO.layThongTinCaNhan(matk);
+        String madc = tt.getDiachi();
+        if (matk != null) {
+            String tinhtp = request.getParameter("tinhtp");
+            String quanhuyen = request.getParameter("quanhuyen");
+            String phuongxa = request.getParameter("phuongxa");
+            String sonha = request.getParameter("sonha");
+            diachi dc = new diachi(madc,tinhtp,quanhuyen,phuongxa,sonha);
+            thongtincanhanDAO.capNhatDiaChi(dc);
+            response.sendRedirect("thongtincanhan");
         } else {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
             dispatcher.forward(request, response);

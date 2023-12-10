@@ -71,7 +71,7 @@ public class qlnhanvienController extends HttpServlet {
             thongtincanhan tt = thongtincanhanDAO.layThongTinCaNhan(matk);
             request.setAttribute("thongtincanhan", tt);
 
-            String cccd = thongtincanhanDAO.layCCCD(matk);
+            cancuoccongdan cccd = thongtincanhanDAO.layCCCD(matk);
             request.setAttribute("cancuoc",cccd);
 
             taikhoan tkhoan = thongtincanhanDAO.layTaiKhoan(matk);

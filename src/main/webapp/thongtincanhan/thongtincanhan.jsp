@@ -17,6 +17,59 @@
 </head>
 <style>
 	input { text-transform: none; }
+	.button_luu{
+		position: absolute;
+		width: 5rem;
+		height: 5rem;
+		top: 16.5rem;
+		left: 93rem;
+		background-color: var(--maincolor);
+		border: none;
+		border-radius: 5rem;
+		cursor: pointer;
+		transition: background-color 0.2s ease;
+	}
+	.button_luu:hover {
+		background-color: rgba(0, 0, 0, 0.5);
+	}
+	.button_show{
+		width: 1.5rem;
+		height: 1.5rem;
+		background-color: var(--maincolor);
+		border-radius: 5rem;
+		cursor: pointer;
+		transition: background-color 0.2s ease;
+	}
+	.form_tacvu{
+		display: none;
+		position: fixed;
+		background-color: #F4F5F7;
+		border: 3px solid var(--maincolor);
+		box-shadow: 0 0 1rem 0.3rem var(--maincolor);
+		z-index: 9;
+	}
+	.form_add {
+		width: 100rem;
+		height: 30rem;
+		top: 20rem;
+		left:30rem;
+	}
+	.form_button{
+		margin: 1rem;
+		display: flex; flex-direction: row; justify-content: space-around;
+	}
+	.form_button button{
+		width: 10rem; height: 3rem;
+		background-color: var(--maincolor);
+		color: white;
+	}
+	.form_title{
+		width: 100%; height: 3rem;
+		background-color: #4F4F4F;
+		text-align: center;
+		color: white;
+		margin-bottom: 1rem;
+	}
 </style>
 <body>
     <jsp:include page="../header_menu/header.jsp" />
@@ -66,15 +119,20 @@
 								</div>
 								<div class="form-group form-inline">
 									<label for="cccd" ><b>Số CCCD:</b></label>
-									<input type="text" class=" control" id="cccd" placeholder="Số CCCD" name="cccd" value="${cancuoc}" readonly required>
+									<input type="text" class=" control" id="cccd" placeholder="Số CCCD" name="cccd" value="${cancuoc.cccd}" readonly required>
+									<button type="button" class = "button_show" onclick="openFormCC()">
+										<i class="fa-solid fa-plus fa-sm"></i>
+									</button>
 								</div>
 								<div class="form-group form-inline">
 									<label for="diachi" ><b>Địa chỉ:</b></label>
 									<input type="text" class=" control" id="diachi" placeholder="Địa chỉ" name="diachi" value="${thongtincanhan.diachi}" readonly required>
+									<button type="button" class = "button_show" onclick="openFormDC()">
+										<i class="fa-solid fa-plus fa-sm"></i>
+									</button>
 								</div>
 							</div>
 						</div>
-					
 						<div class = "col">
 							<div class="box_info">
 								<p class="style_text"><b>Thông tin liên lạc</b></p>
@@ -139,11 +197,71 @@
 						</div>
                     </div>
 					<div>
-						<button formaction="<%=request.getContextPath()%>/thaydoithongtin" class="button_icon" id="btn_save">
+						<button class="button_luu" formaction="<%=request.getContextPath()%>/thaydoithongtin"  id="btn_save">
 							<i class="fa-solid fa-floppy-disk fa-2xl"></i>
 						</button>
 					</div>
                 </form>
+				<div class="form_add form_tacvu" id="xemcc">
+					<form action="<%=request.getContextPath()%>/thaydoicccd" class="form-container">
+						<h3 class = "form_title">CCCD</h3>
+						<div class="form-group form-inline">
+							<label for="cc_cccd" class = "label_form_control">CCCD:</label>
+							<input type="text" class="form-control box_form_control" id="cc_cccd" placeholder="CCCD" name="cc_cccd" value="${cancuoc.cccd}" readonly required>
+						</div>
+						<div class="form-group form-inline">
+							<label for="cc_ngaycap" class = "label_form_control">Ngày cấp:</label>
+							<input type="date" class="form-control box_form_control" id="cc_ngaycap" placeholder="Ngày cấp" name="cc_ngaycap" value="${cancuoc.ngaycap}" readonly required>
+						</div>
+						<div class="form-group form-inline">
+							<label for="cc_tinhtp" class = "label_form_control">Tỉnh:</label>
+							<input type="text" class="form-control box_form_control" id="cc_tinhtp" placeholder="Tỉnh" name="cc_tinhtp" value="${diachi.tinhtp}" readonly required>
+						</div>
+						<div class="form-group form-inline">
+							<label for="cc_quanhuyen" class = "label_form_control">Quận/Huyện:</label>
+							<input type="text" class="form-control box_form_control" id="cc_quanhuyen" placeholder="Quận/Huyện" name="cc_quanhuyen" value="${diachi.quanhuyen}" readonly required>
+						</div>
+						<div class="form-group form-inline">
+							<label for="cc_phuongxa" class = "label_form_control">Phường/Xã:</label>
+							<input type="text" class="form-control box_form_control"id="cc_phuongxa" placeholder="Phường/Xã" name="cc_phuongxa" value="${diachi.phuongxa}" readonly required>
+						</div>
+						<div class="form-group form-inline">
+							<label for="cc_sonha" class = "label_form_control">Số nhà:</label>
+							<input type="text" class="form-control box_form_control"id="cc_sonha" placeholder="Số nhà" name="cc_sonha" value="${diachi.sonha}" readonly required>
+						</div>
+						<div class="form_button">
+							<button type="button" id="btn_suacc">Sửa</button>
+							<button type="submit" id="btn_luucc">Xác nhận</button>
+							<button type="button" onclick="closeFormCC()" id="btn_huycc">Hủy</button>
+						</div>
+					</form>
+				</div>
+				<div class="form_add form_tacvu" id="xemdc">
+					<form action="<%=request.getContextPath()%>/thaydoidiachi" class="form-container">
+						<h3 class = "form_title">Địa chỉ</h3>
+						<div class="form-group form-inline">
+							<label for="dc_tinhtp" class = "label_form_control">Tỉnh:</label>
+							<input type="text" class="form-control box_form_control" id="dc_tinhtp" placeholder="Tỉnh" name="dc_tinh" value="${diachi.tinhtp}" readonly required>
+						</div>
+						<div class="form-group form-inline">
+							<label for="dc_quanhuyen" class = "label_form_control">Quận/Huyện:</label>
+							<input type="text" class="form-control box_form_control" id="dc_quanhuyen" placeholder="Quận/Huyện" name="dc_quanhuyen" value="${diachi.quanhuyen}" readonly required>
+						</div>
+						<div class="form-group form-inline">
+							<label for="dc_phuongxa" class = "label_form_control">Phường/Xã:</label>
+							<input type="text" class="form-control box_form_control"id="dc_phuongxa" placeholder="Phường/Xã" name="dc_phuongxa" value="${diachi.phuongxa}" readonly required>
+						</div>
+						<div class="form-group form-inline">
+							<label for="dc_sonha" class = "label_form_control">Số nhà:</label>
+							<input type="text" class="form-control box_form_control"id="dc_sonha" placeholder="Số nhà" name="dc_sonha" value="${diachi.sonha}" readonly required>
+						</div>
+						<div class="form_button">
+							<button type="button" id="btn_suadc">Sửa</button>
+							<button type="submit" id="btn_luudc">Xác nhận</button>
+							<button type="button" onclick="closeFormDC()" id="btn_huydc">Hủy</button>
+						</div>
+					</form>
+				</div>
             </div>
         </div>
     </div>
@@ -165,9 +283,29 @@
 		let email = document.getElementById("email");
 		let pass = document.getElementById("pass");
 
+		let cc_cccd = document.getElementById("cc_cccd");
+		let cc_ngaycap = document.getElementById("cc_ngaycap");
+		let cc_tinhtp = document.getElementById("cc_tinhtp");
+		let cc_quanhuyen = document.getElementById("cc_quanhuyen");
+		let cc_phuongxa = document.getElementById("cc_phuongxa");
+		let cc_sonha = document.getElementById("cc_sonha");
+
+		let dc_tinhtp = document.getElementById("dc_tinhtp");
+		let dc_quanhuyen = document.getElementById("dc_quanhuyen");
+		let dc_phuongxa = document.getElementById("dc_phuongxa");
+		let dc_sonha = document.getElementById("dc_sonha");
+
 		let btn_suathongtin = document.getElementById("btn_suathongtin");
 		let btn_doimk = document.getElementById("btn_doimk");
 		let btn_save = document.getElementById("btn_save");
+
+		let btn_suacc = document.getElementById("btn_suacc");
+		let btn_huycc = document.getElementById("btn_huycc");
+		let btn_luucc = document.getElementById("btn_luucc");
+
+		let btn_suadc = document.getElementById("btn_suadc");
+		let btn_luudc = document.getElementById("btn_luudc");
+		let btn_huydc = document.getElementById("btn_huydc");
 
 		let isEditing = false;
 
@@ -176,8 +314,6 @@
 				hoten.removeAttribute("readonly");
 				ngaysinh.removeAttribute("readonly");
 				gioitinh.removeAttribute("readonly");
-				cccd.removeAttribute("readonly");
-				diachi.removeAttribute("readonly");
 				sdt.removeAttribute("readonly");
 				email.removeAttribute("readonly");
 				isEditing = true;
@@ -185,8 +321,6 @@
 				hoten.setAttribute("readonly", true);
 				ngaysinh.setAttribute("readonly", true);
 				gioitinh.setAttribute("readonly", true);
-				cccd.setAttribute("readonly", true);
-				diachi.setAttribute("readonly", true);
 				sdt.setAttribute("readonly", true);
 				email.setAttribute("readonly", true);
 				isEditing = false;
@@ -203,12 +337,67 @@
 			hoten.setAttribute("readonly", true);
 			ngaysinh.setAttribute("readonly", true);
 			gioitinh.setAttribute("readonly", true);
-			cccd.setAttribute("readonly", true);
-			diachi.setAttribute("readonly", true);
 			sdt.setAttribute("readonly", true);
-			email.setAttribute("readonly", true);
 			pass.setAttribute("readonly", true);
 		});
+		btn_suacc.addEventListener("click",function (){
+			moFormCCCD();
+		});
+		btn_huycc.addEventListener("click",function (){
+			dongFormCCCD();
+		});
+		btn_luucc.addEventListener("click",function (){
+			dongFormCCCD();
+		});
+		btn_suadc.addEventListener("click",function (){
+			moFormDC();
+		});
+		btn_huydc.addEventListener("click",function (){
+			dongFormDC();
+		});
+		btn_luudc.addEventListener("click",function (){
+			dongFormDC();
+		});
+		function moFormCCCD(){
+			cc_cccd.removeAttribute("readonly");
+			cc_ngaycap.removeAttribute("readonly")
+			cc_tinhtp.removeAttribute("readonly");
+			cc_quanhuyen.removeAttribute("readonly");
+			cc_phuongxa.removeAttribute("readonly");
+			cc_sonha.removeAttribute("readonly");
+		}
+		function dongFormCCCD(){
+			cc_cccd.setAttribute("readonly",true);
+			cc_ngaycap.setAttribute("readonly",true);
+			cc_tinhtp.setAttribute("readonly",true);
+			cc_quanhuyen.setAttribute("readonly",true);
+			cc_phuongxa.setAttribute("readonly",true);
+			cc_sonha.setAttribute("readonly",true);
+		}
+		function moFormDC(){
+			dc_tinhtp.removeAttribute("readonly");
+			dc_quanhuyen.removeAttribute("readonly");
+			dc_phuongxa.removeAttribute("readonly");
+			dc_sonha.removeAttribute("readonly");
+		}
+		function dongFormDC(){
+			dc_tinhtp.setAttribute("readonly",true);
+			dc_quanhuyen.setAttribute("readonly",true);
+			dc_phuongxa.setAttribute("readonly",true);
+			dc_sonha.setAttribute("readonly",true);
+		}
+		function openFormCC() {
+			document.getElementById("xemcc").style.display = "block";
+		}
+		function openFormDC() {
+			document.getElementById("xemdc").style.display = "block";
+		}
+		function closeFormCC() {
+			document.getElementById("xemcc").style.display = "none";
+		}
+		function closeFormDC() {
+			document.getElementById("xemdc").style.display = "none";
+		}
 	</script>
 </body>
 </html>

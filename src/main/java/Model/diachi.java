@@ -9,8 +9,10 @@ public class diachi implements Serializable{
 	private String quanhuyen;
 	private String phuongxa;
 	private String sonha;
-	
-	public String getMadc() {
+
+	public diachi() {}
+
+    public String getMadc() {
 		return madc;
 	}
 	

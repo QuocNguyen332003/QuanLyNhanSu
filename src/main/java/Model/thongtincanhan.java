@@ -39,12 +39,11 @@ public class thongtincanhan implements Serializable{
         this.email=email;
         this.bangcap=bangcap;
     }
-    public thongtincanhan(String matk, String hoten, LocalDate ngaysinh, String gioitinh, String diachi, String sdt, String email) {
+    public thongtincanhan(String matk, String hoten, LocalDate ngaysinh, String gioitinh, String sdt, String email) {
         this.matk=matk;
         this.hoten=hoten;
         this.ngaysinh=ngaysinh;
         this.gioitinh=gioitinh;
-        this.diachi=diachi;
         this.sdt=sdt;
         this.email=email;
     }

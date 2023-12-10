@@ -94,7 +94,12 @@ public class menuController extends HttpServlet {
             thongtincanhan tt = thongtincanhanDAO.layThongTinCaNhan(matk);
             request.setAttribute("thongtincanhan", tt);
 
-            String cccd = thongtincanhanDAO.layCCCD(matk);
+            String madc = tt.getDiachi();
+
+            diachi dc = thongtincanhanDAO.layDiaChi(madc);
+            request.setAttribute("diachi",dc);
+
+            cancuoccongdan cccd = thongtincanhanDAO.layCCCD(matk);
             request.setAttribute("cancuoc",cccd);
 
             taikhoan tkhoan = thongtincanhanDAO.layTaiKhoan(matk);
@@ -115,7 +120,6 @@ public class menuController extends HttpServlet {
 
             String tencn = thongtincanhanDAO.layTenCN(matk);
             request.setAttribute("tencn",tencn);
-
 
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
