@@ -175,6 +175,8 @@ public class menuController extends HttpServlet {
                 List<String> listmatk = new ArrayList<>();
                 List<String> listmapb = new ArrayList<>();
                 List<String> listmacn = new ArrayList<>();
+                List<phongban> listchitietpb = new ArrayList<>();
+                listchitietpb = phongbanDAO.selectAllphongban();
                 for (nhanvien nv: listnv) {
                     listmatk.add(nv.getMatk());
                     listmapb.add(nv.getMapb());
@@ -186,6 +188,7 @@ public class menuController extends HttpServlet {
                 request.setAttribute("setmatk_nv", setmatk_nv);
                 request.setAttribute("setmapb_nv", setmapb_nv);
                 request.setAttribute("setmacn_nv", setmacn_nv);
+                request.setAttribute("chitietphongban", listchitietpb);
             }
             request.setAttribute("listnv", listnv);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/qlnhanvien/quanlynhanvien.jsp");
@@ -226,6 +229,10 @@ public class menuController extends HttpServlet {
     private void Formquanlychinhanh(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         HttpSession session = request.getSession(false);
+        int capbac = (int) session.getAttribute("capbac");
+        nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
+        String mapb = nv.getMapb();
+        String macn = nv.getMacn();
         if (session != null) {
             taikhoan username = (taikhoan) session.getAttribute("user");
             List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh();

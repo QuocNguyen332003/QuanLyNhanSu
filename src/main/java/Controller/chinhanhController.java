@@ -69,30 +69,52 @@ public class chinhanhController extends HttpServlet {
     }
     private void FormThemChiNhanh(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("qlcongty/themchinhanh.jsp");
-        List <diachi> listdiachi = diachiDAO.DanhSachDiaChi();
-        request.setAttribute("listdiachi", listdiachi);
-        List <nhanvien> listnhanvien = qlnhanvienDAO.LayNhanVien();
-        request.setAttribute("listnhanvien", listnhanvien);
-        dispatcher.forward(request, response);
+
+        HttpSession session = request.getSession(false);
+        int capbac = (int) session.getAttribute("capbac");
+        nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
+        String mapb = nv.getMapb();
+        String macn = nv.getMacn();
+        if (session != null) {
+            List <diachi> listdiachi = diachiDAO.DanhSachDiaChi();
+            request.setAttribute("listdiachi", listdiachi);
+
+            List <nhanvien> listnhanvien = qlnhanvienDAO.LayNhanVien();
+            request.setAttribute("listnhanvien", listnhanvien);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("qlcongty/themchinhanh.jsp");
+            dispatcher.forward(request, response);
+        }
+        else
+        {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
+            dispatcher.forward(request, response);
+        };
     }
     private void FormEditChiNhanh(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        String macn = request.getParameter("macn");
-        chinhanh existingChiNhanh = cnDAO.selectChiNhanh(macn);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("qlcongty/themchinhanh.jsp");
-        request.setAttribute("chinhanh", existingChiNhanh);
+        HttpSession session = request.getSession(false);
+        int capbac = (int) session.getAttribute("capbac");
+        nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
+        String mapb = nv.getMapb();
+        String macn = nv.getMacn();
+        if (session != null) {
+            String maCN = request.getParameter("macn");
+            chinhanh existingChiNhanh = cnDAO.selectChiNhanh(maCN);
+            request.setAttribute("chinhanh", existingChiNhanh);
 
-        List <diachi> listdiachi = diachiDAO.DanhSachDiaChi();
-        request.setAttribute("listdiachi", listdiachi);
+            List <diachi> listdiachi = diachiDAO.DanhSachDiaChi();
+            request.setAttribute("listdiachi", listdiachi);
 
-        List <nhanvien> listnhanvien = qlnhanvienDAO.selectAllnhanvien(macn);
-        request.setAttribute("listnhanvien", listnhanvien);
-
-        System.out.println();
-
-
-        dispatcher.forward(request, response);
+            List <nhanvien> listnhanvien = qlnhanvienDAO.LayNhanVien();
+            request.setAttribute("listnhanvien", listnhanvien);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("qlcongty/themchinhanh.jsp");
+            dispatcher.forward(request, response);
+        }
+        else{
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
+            dispatcher.forward(request, response);
+        };
     }
     private void insertChiNhanh(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
 

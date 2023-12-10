@@ -1,5 +1,6 @@
 package DAO;
 import JDBCUtils.JDBCUtils;
+import Model.nhanvien;
 import Model.thongtincanhan;
 import Model.taikhoan;
 import Model.cancuoccongdan;
@@ -25,7 +26,8 @@ public class thongtincanhanDAO {
     private static final String UPDATE_TAIKHOAN = "update taikhoan set pass = ? where matk = ?;";
     private static final String UPDATE_TTCANHAN = "update thongtincanhan set hoten = ?, ngaysinh = ?, gioitinh = ?, diachi = ?, sdt = ?, email = ?, bangcap = ? where matk = ?;";
     private static final String UPDATE_CCCD = "update cancuoccongdan set cccd = ? where matk = ?;";
-
+    private  static  final String INSERT_THONGTINCANHAN =  "INSERT INTO thongtincanhan" + "  (matk, hoten, ngaysinh,gioitinh, diachi,  sdt, email, bangcap) VALUES " + " (?, ?, ?, ?, ?, ?,?,?);";
+    private  static  final String INSERT_CCCD =  "INSERT INTO cancuoccongdan" + "  (matk, cccd, ngaycap,madc) VALUES " + " (?, ?, ?, ?);";
 
     public static thongtincanhan layThongTinCaNhan(String matk)
     {
@@ -189,6 +191,36 @@ public class thongtincanhanDAO {
             preparedStatement.setString(2,cccd.getMatk());
             preparedStatement.executeUpdate();
         }catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+    }
+    public static void ThemThongTinCaNhan(thongtincanhan ttcn){
+        try (Connection connection = JDBCUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_THONGTINCANHAN);) {
+            preparedStatement.setString(1, ttcn.getMatk());
+            preparedStatement.setString(2, ttcn.getHoten());
+            preparedStatement.setDate(3, JDBCUtils.getSQLDate(ttcn.getNgaysinh()));
+            preparedStatement.setString(4, ttcn.getGioitinh());
+            preparedStatement.setString(5, ttcn.getDiachi());
+            preparedStatement.setString(6, ttcn.getSdt());
+            preparedStatement.setString(7, ttcn.getEmail());
+            preparedStatement.setString(8, ttcn.getBangcap());
+            System.out.println(preparedStatement);
+            preparedStatement.executeUpdate();
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+    }
+    public static void ThemCCCD(cancuoccongdan cccd){
+        try (Connection connection = JDBCUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CCCD);) {
+            preparedStatement.setString(1, cccd.getMatk());
+            preparedStatement.setString(2, cccd.getCccd());
+            preparedStatement.setDate(3, JDBCUtils.getSQLDate(cccd.getNgaycap()));
+            preparedStatement.setString(4, cccd.getMadc());
+            System.out.println(preparedStatement);
+            preparedStatement.executeUpdate();
+        } catch (SQLException exception) {
             JDBCUtils.printSQLException(exception);
         }
     }

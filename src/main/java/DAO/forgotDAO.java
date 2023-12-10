@@ -18,9 +18,12 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import JDBCUtils.JDBCUtils;
+import Model.cancuoccongdan;
 import Model.taikhoan;
 import Model.thongtincanhan;
 public class forgotDAO {
+    private  static  final String INSERT_CCCD =  "INSERT INTO taikhoan" + "  (username, pass, matk) VALUES " + " (?, ?, ?);";
+    private  static  final String CHECK_MATK = "select * from taikhoan where matk = ?";
     public boolean kiemtratk(taikhoan tk, thongtincanhan tt) throws ClassNotFoundException {
         boolean result = false;
 
@@ -100,5 +103,53 @@ public class forgotDAO {
             JDBCUtils.printSQLException(e);
         }
         return rowUpdated;
+    }
+    public static void ThemTaiKhoan(taikhoan tk){
+        try (Connection connection = JDBCUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CCCD);) {
+            preparedStatement.setString(1, tk.getUsername());
+            preparedStatement.setString(2, tk.getPass());
+            preparedStatement.setString(3, tk.getMatk());
+            System.out.println(preparedStatement);
+            preparedStatement.executeUpdate();
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+    }
+    public static boolean CheckID(String id){
+        try (Connection connection = JDBCUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(CHECK_MATK);) {
+            preparedStatement.setString(1, id);
+            System.out.println(preparedStatement);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()){
+                return true;
+            }
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+        return false;
+    }
+    public static String getNewMatk() {
+        int[] id_num = {0, 0, 0, 1};
+        String id = null;
+        while (true) {
+            id = "N" + id_num[0] + id_num[1] + id_num[2]+ id_num[3];
+            if (CheckID(id)) {
+                id_num[3] = id_num[3] + 1;
+                id_num[2] = id_num[2] + id_num[3] / 10;
+                id_num[1] = id_num[1] + id_num[2] / 10;
+                id_num[0] = id_num[0] + id_num[1] / 10;
+
+                id_num[3] = id_num[3] % 10;
+                id_num[2] = id_num[2] % 10;
+                id_num[1] = id_num[1] % 10;
+                id_num[0] = id_num[0] % 10;
+            } else {
+                break;
+            }
+        }
+        return id;
+
     }
 }

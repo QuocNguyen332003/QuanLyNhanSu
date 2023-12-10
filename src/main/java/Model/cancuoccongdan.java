@@ -2,12 +2,13 @@ package Model;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDate;
 
 public class cancuoccongdan implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String matk;
 	private String cccd;
-	private Date ngaycap;
+	private LocalDate ngaycap;
 	private String madc;
 
 	public cancuoccongdan() {
@@ -35,11 +36,11 @@ public class cancuoccongdan implements Serializable{
 		this.cccd=cccd;
 	}
 	
-	public Date getNgaycapp() {
+	public LocalDate getNgaycap() {
 		return ngaycap;
 	}
 	
-	public void setNgaycap(Date ngaycap) {
+	public void setNgaycap(LocalDate ngaycap) {
 		this.ngaycap=ngaycap;
 	}
 	
@@ -47,7 +48,7 @@ public class cancuoccongdan implements Serializable{
 		return madc;
 	}
 	
-	public cancuoccongdan(String matk, String cccd, Date ngaycap, String madc) {
+	public cancuoccongdan(String matk, String cccd, LocalDate ngaycap, String madc) {
 		this.matk=matk;
 		this.cccd=cccd;
 		this.ngaycap=ngaycap;

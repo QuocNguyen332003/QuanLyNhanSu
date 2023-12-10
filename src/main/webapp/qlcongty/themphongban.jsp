@@ -13,13 +13,42 @@
         window.onload = function() {
             var phongban = '${phongban}';
             var form = document.getElementById('myForm');
-            alert(phongban);
             if (phongban != null && phongban != '' ) {
                 form.action = 'updatePhongBan';
             } else {
                 form.action = 'insertPhongBan';
             }
             // Get the select element
+        }
+``
+        function updateNhanVienList() {
+            var mainComboValue = document.getElementById("macnSelect").value;
+            var matrphongSelect = document.getElementById('matrphongSelect');
+
+            // Use AJAX to send mainComboValue to the server and update dependent combo box
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "editPhongBan?mainComboValue=" + encodeURIComponent(mainComboValue), true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    alert(xhr.responseText);
+                    alert("PASS")
+                    var options = JSON.parse(xhr.responseText);
+
+                    // Remove all existing options
+                    while (matrphongSelect.firstChild) {
+                        matrphongSelect.removeChild(matrphongSelect.firstChild);
+                    }
+
+                    // Add the new options to matrphongSelect
+                    options.forEach(function(option) {
+                        var newOption = document.createElement('option');
+                        newOption.text = option;
+                        matrphongSelect.add(newOption);
+                    });
+                }
+            };
+            xhr.send();
         }
     </script>
 </head>
@@ -37,25 +66,22 @@
     <input type="text" id="tenpb" name="tenpb" value="${phongban.tenpb}" required>
 
     <label for="macnSelect" class="mr-2">Mã chi nhánh:</label>
-    <select id="macnSelect" name = "macnSelect">
-        <!-- Add an empty option -->
-        <option>${phongban.macn}</option>
+    <select id="macnSelect" name = "macnSelect" onchange="updateNhanVienList()">
         <c:forEach items="${listchinhanh}" var="x">
             <option>${x.macn}</option>
         </c:forEach>
     </select>
 
     <label for="matrphongSelect">Mã Trưởng Phòng:</label>
-    <select id="matrphongSelect" name="matrphongSelect">
+    <select id="matrphongSelect" name="matrphongSelect" >
         <!-- Add an empty option -->
-        <option>${phongban.matrphong}</option>
         <c:forEach items="${listnhanvien}" var="x">
             <option>${x.matk}</option>
         </c:forEach>
     </select>
 
     <label for="mapbtrSelect">Mã Trưởng Phòng:</label>
-    <select id="mapbtrSelect" name="mapbtrSelect">
+    <select id="mapbtrSelect" name="mapbtrSelect" >
         <!-- Add an empty option -->
         <option>${phongban.matrphong}</option>
     </select>

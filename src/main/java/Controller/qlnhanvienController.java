@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 
 import DAO.*;
 import Model.*;
-@WebServlet(name = "qlnhanvien", urlPatterns = {"/xemthongtinnhanvien", "/themnhanvien"})
+@WebServlet(name = "qlnhanvien", urlPatterns = {"/xemthongtinnhanvien", "/themnhanvien","/sathainhanvien","/chidinhnhanvien","/tuyennhanvien"})
 public class qlnhanvienController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -40,7 +40,16 @@ public class qlnhanvienController extends HttpServlet {
                     XemThongTinCaNhan(request, response);
                     break;
                 case "/themnhanvien":
-                    XemThongTinCaNhan(request, response);
+                    ThemNhanVien(request, response);
+                    break;
+                case "/sathainhanvien":
+                    SaThaiNhanVien(request, response);
+                    break;
+                case "/chidinhnhanvien":
+                    ChiDinhNhanVien(request, response);
+                    break;
+                case "/tuyennhanvien":
+                    TuyenNhanVien(request, response);
                     break;
                 default:
                     RequestDispatcher dispatcher = request.getRequestDispatcher("/qlnhanvien/quanlynhanvien.jsp");
@@ -89,5 +98,58 @@ public class qlnhanvienController extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
             dispatcher.forward(request, response);
         }
+    }
+    public void ThemNhanVien(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException{
+        request.setAttribute("thongtincanhan", null);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/qlnhanvien/chitietnhanvien.jsp");
+        dispatcher.forward(request, response);
+    }
+    public void SaThaiNhanVien(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException{
+        String matk = request.getParameter("matk");
+        qlnhanvienDAO.SaThaiNhanVien(matk);
+        response.sendRedirect("quanlynhanvien");
+    }
+    public void ChiDinhNhanVien(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException{
+        String matk = request.getParameter("matk");
+        String mapb = request.getParameter("mapb");
+        String macn = request.getParameter("macn");
+        String congviec = request.getParameter("congviec");
+        qlnhanvienDAO.ChiDinhNhanVien(matk, mapb, macn,congviec);
+        response.sendRedirect("quanlynhanvien");
+    }
+    public void TuyenNhanVien(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException{
+        String matk = forgotDAO.getNewMatk();
+        String hoten = request.getParameter("hoten");
+        LocalDate ngaysinh = LocalDate.parse(request.getParameter("ngaysinh"));
+        String gioitinh = request.getParameter("gioitinh");
+        String so_cccd = request.getParameter("cccd");
+        String diachi = request.getParameter("diachi");
+        String sdt = request.getParameter("sdt");
+        String email = request.getParameter("email");
+        String username = request.getParameter("username");
+        String pass = request.getParameter("pass");
+        String congviec = request.getParameter("congviec");
+        String chucvu = request.getParameter("chucvu");
+        String phongban = request.getParameter("phongban");
+        String chinhanh = request.getParameter("chinhanh");
+        String bangcap = request.getParameter("bangcap");
+        LocalDate ngaybatdau = LocalDate.parse(request.getParameter("ngaybatdau"));
+
+
+        thongtincanhan ttcn = new thongtincanhan(matk, hoten, ngaysinh, gioitinh,null,sdt,email,bangcap);
+        cancuoccongdan cccd = new cancuoccongdan(matk, so_cccd,ngaybatdau,null);
+        nhanvien nv = new nhanvien(matk,chinhanh,phongban,ngaybatdau,"Đang hoạt động",congviec);
+        taikhoan tk = new taikhoan(username,pass,matk);
+
+        qlnhanvienDAO.ThemNhanVien(nv);
+        forgotDAO.ThemTaiKhoan(tk);
+        thongtincanhanDAO.ThemThongTinCaNhan(ttcn);
+        thongtincanhanDAO.ThemCCCD(cccd);
+
+        response.sendRedirect("quanlynhanvien");
     }
 }
