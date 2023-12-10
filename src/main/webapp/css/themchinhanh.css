@@ -1,7 +1,7 @@
 /* Thêm định dạng cho phần tử form */
 form {
     width: 50%; /* Đặt chiều rộng của form tùy ý */
-    height: 600px;
+    height: 800px;
     margin: 0 auto; /* Để căn giữa theo chiều ngang */
     border: 2px solid;
 }

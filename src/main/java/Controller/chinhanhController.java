@@ -21,8 +21,12 @@ public class chinhanhController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private chinhanhDAO cnDAO ;
+    private diachiDAO dcDAO;
+
     public void init() {
+
         cnDAO = new chinhanhDAO();
+        dcDAO = new diachiDAO();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -103,8 +107,9 @@ public class chinhanhController extends HttpServlet {
             chinhanh existingChiNhanh = cnDAO.selectChiNhanh(maCN);
             request.setAttribute("chinhanh", existingChiNhanh);
 
-            List <diachi> listdiachi = diachiDAO.DanhSachDiaChi();
-            request.setAttribute("listdiachi", listdiachi);
+            String madc = request.getParameter("diachi");
+            diachi diachi_selected = diachiDAO.Selected_DiaChi(madc);
+            request.setAttribute("diachi_selected", diachi_selected);
 
             List <nhanvien> listnhanvien = qlnhanvienDAO.LayNhanVien();
             request.setAttribute("listnhanvien", listnhanvien);
@@ -121,18 +126,25 @@ public class chinhanhController extends HttpServlet {
 
         String macn = request.getParameter("macn");
         String tencn = request.getParameter("tencn");
-        String diachi = request.getParameter("diachi");
         String magiamdoc = request.getParameter("magiamdoc");
         String tinhtrang = request.getParameter("tinhtrang");
 
+        String madc = diachiDAO.DiaChiChiNhanh();
+        String tinhtp = request.getParameter("tinh/tp");
+        String quanhuyen = request.getParameter("quan/huyen");
+        String phuongxa = request.getParameter("phuong/xa");
+        String sonha = request.getParameter("sonha");
+
 
         // Tạo đối tượng phongban từ thông tin lấy được
-        chinhanh newchinhanh = new chinhanh(macn, tencn, diachi, magiamdoc, tinhtrang, LocalDate.now());
-        System.out.println(newchinhanh);
+        chinhanh newchinhanh = new chinhanh(macn, tencn, madc, magiamdoc, tinhtrang, LocalDate.now());
+        diachi newdiachi = new diachi(madc, tinhtp, quanhuyen, phuongxa, sonha);
         chinhanhDAO cnDAO = new chinhanhDAO();
+        diachiDAO dcDAO = new diachiDAO();
         try {
+            dcDAO.insertDiaChi_CN(newdiachi);
             cnDAO.insertChiNhanh(newchinhanh);
-            response.sendRedirect("quanlychinhanh"); // Chuyển hướng sau khi thêm thành công
+            response.sendRedirect("quanlychinhanh");// Chuyển hướng sau khi thêm thành công
         } catch (SQLException e) {
             // Xử lý lỗi SQL (hiển thị hoặc log lỗi)
             e.printStackTrace();// Chuyển hướng đến trang lỗi nếu có lỗi
@@ -146,7 +158,15 @@ public class chinhanhController extends HttpServlet {
         String magiamdoc = request.getParameter("magiamdoc");
         String tinhtrang = request.getParameter("tinhtrang");
 
-        chinhanh updatechinhanh = new chinhanh(macn, tencn, diachi, magiamdoc, tinhtrang, null);
+        String tinhtp = request.getParameter("tinh/tp");
+        String quanhuyen = request.getParameter("quan/huyen");
+        String phuongxa = request.getParameter("phuong/xa");
+        String sonha = request.getParameter("sonha");
+        String madc = diachiDAO.LayMaDC(macn);
+
+        chinhanh updatechinhanh = new chinhanh(macn, tencn, madc, magiamdoc, tinhtrang, null);
+        diachi updatediachi = new diachi(madc, tinhtp, quanhuyen, phuongxa, sonha);
+        dcDAO.uodateDiaChi_CN(updatediachi);
         cnDAO.updateChiNhanh(updatechinhanh);
         response.sendRedirect("quanlychinhanh");
     }
