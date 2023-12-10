@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 
 import DAO.*;
 import Model.*;
-@WebServlet(name = "qlnhanvien", urlPatterns = {"/xemthongtinnhanvien", "/themnhanvien","/sathainhanvien","/chidinhnhanvien","/tuyennhanvien"})
+@WebServlet(name = "qlnhanvien", urlPatterns = {"/xemthongtinnhanvien", "/themnhanvien","/sathainhanvien","/chidinhnhanvien","/tuyennhanvien","/duyetyeucau","/tuchoiyeucau"})
 public class qlnhanvienController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -50,6 +50,12 @@ public class qlnhanvienController extends HttpServlet {
                     break;
                 case "/tuyennhanvien":
                     TuyenNhanVien(request, response);
+                    break;
+                case "/duyetyeucau":
+                    DuyetYeuCau(request, response);
+                    break;
+                case "/tuchoiyeucau":
+                    TuChoiYeuCau(request, response);
                     break;
                 default:
                     RequestDispatcher dispatcher = request.getRequestDispatcher("/qlnhanvien/quanlynhanvien.jsp");
@@ -150,6 +156,18 @@ public class qlnhanvienController extends HttpServlet {
         thongtincanhanDAO.ThemThongTinCaNhan(ttcn);
         thongtincanhanDAO.ThemCCCD(cccd);
 
+        response.sendRedirect("quanlynhanvien");
+    }
+    public void DuyetYeuCau(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException{
+        String mayeucau = request.getParameter("mayeucau");
+        yeucauDAO.Update_tinhtrang_yes(mayeucau);
+        response.sendRedirect("quanlynhanvien");
+    }
+    public void TuChoiYeuCau(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException{
+        String mayeucau = request.getParameter("mayeucau");
+        yeucauDAO.Update_tinhtrang_no(mayeucau);
         response.sendRedirect("quanlynhanvien");
     }
 }

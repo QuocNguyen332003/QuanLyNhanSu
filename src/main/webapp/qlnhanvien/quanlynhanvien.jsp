@@ -1,3 +1,4 @@
+<%@ page import="DAO.yeucauDAO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
@@ -45,6 +46,49 @@
         .form_xoa h5{
             width: 100%;
             height: 5rem;
+        }
+        .form_thongbao{
+            width: 40rem;
+            height: 40rem;
+            display: none;
+            position: fixed;
+            top: 20rem;
+            left:82rem;
+            background-color: #F4F5F7;
+            border: 3px solid var(--maincolor);
+            box-shadow: 0 0 1rem 0.3rem var(--maincolor);
+            z-index: 9;
+        }
+        .form_thongbao li{
+            width: 40rem; height: 6rem;
+            border: 1px solid var(--maincolor);
+            display: flex; flex-direction: row; justify-content: space-around;
+        }
+        .box_button_thongbao{
+            position: fixed;
+            top: 55rem;
+            left:95rem;
+        }
+        .box_noidung_thongbao{
+            width: 30rem;
+        }
+        .box_tinhtrang_thongbao{
+            width: 5rem;
+            text-align: center;
+        }
+        .box_check_thongbao{
+            width: 5rem;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .box_check_thongbao a{
+            width: 2.5rem; height: 2.5rem;
+            background-color: transparent;
+        }
+        .greencolor{
+            color: green;
+        }
+        .redcolor{
+            color: red;
         }
     </style>
 </head>
@@ -239,13 +283,22 @@
 
                     <div class="form_thongbao" id="thongbao">
                         <ul>
+                            <c:set var="count" value="0" />
+                            <c:forEach var="x" items="${listyeucau}">
                         	<li>
-                        		<a href="#" >Trưởng phòng ban Tài chính yêu cầu thêm nhân viên cho phòng ban</a>
+                        		<p class = "box_noidung_thongbao">Trưởng phòng ban ${x.matk} yêu cầu thêm nhân viên ${x.congviec}</p>
+                                <div class = "box_tinhtrang_thongbao">${x.tinhtrang}</div>
+                                <div class = "box_check_thongbao" style="display:${sessionScope.capbac == 2 && x.tinhtrang == "chưa duyệt" ? 'inline' : 'none'}">
+                                    <a href="<%=request.getContextPath()%>/duyetyeucau?mayeucau=<c:out value='${x.mayeucau}' />"><i class="fa-solid fa-check fa-xs greencolor"></i></a>
+                                    <a href="<%=request.getContextPath()%>/tuchoiyeucau?mayeucau=<c:out value='${x.mayeucau}' />"><i class="fa-solid fa-x fa-xs redcolor"></i></a>
+                                </div>
                         	</li>
+                            <c:set var="count" value="${count + 1}"/>
+                            </c:forEach>
                         </ul>
-                        <div class="form_button">
-                                <button type="button" onclick="closeFormNotify()">Hủy</button>
-                            </div>
+                        <div class="form_button box_button_thongbao">
+                           <button type="button" onclick="closeFormNotify()">Đóng</button>
+                        </div>
                     </div>
                     
                     <script>
