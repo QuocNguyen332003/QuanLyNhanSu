@@ -20,7 +20,6 @@
             }
             // Get the select element
         }
-``
         function updateNhanVienList() {
             var mainComboValue = document.getElementById("macnSelect").value;
             var matrphongSelect = document.getElementById('matrphongSelect');
@@ -31,8 +30,6 @@
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
-                    alert(xhr.responseText);
-                    alert("PASS")
                     var options = JSON.parse(xhr.responseText);
 
                     // Remove all existing options
@@ -53,7 +50,7 @@
     </script>
 </head>
 <body>
-<form id="myForm">
+<form id="myForm" >
     <div class="header-menu-plus">
         <a href="#">Cập Nhật Phòng Ban</a>
     </div>
@@ -67,6 +64,7 @@
 
     <label for="macnSelect" class="mr-2">Mã chi nhánh:</label>
     <select id="macnSelect" name = "macnSelect" onchange="updateNhanVienList()">
+        <option>${phongban.macn}</option>
         <c:forEach items="${listchinhanh}" var="x">
             <option>${x.macn}</option>
         </c:forEach>
@@ -74,16 +72,16 @@
 
     <label for="matrphongSelect">Mã Trưởng Phòng:</label>
     <select id="matrphongSelect" name="matrphongSelect" >
-        <!-- Add an empty option -->
+        <option>${phongban.matrphong}</option>
         <c:forEach items="${listnhanvien}" var="x">
             <option>${x.matk}</option>
         </c:forEach>
     </select>
 
-    <label for="mapbtrSelect">Mã Trưởng Phòng:</label>
+    <label for="mapbtrSelect">Mã Phòng Ban Cha:</label>
     <select id="mapbtrSelect" name="mapbtrSelect" >
-        <!-- Add an empty option -->
         <option>${phongban.matrphong}</option>
+        <option></option>
     </select>
     <br>
 

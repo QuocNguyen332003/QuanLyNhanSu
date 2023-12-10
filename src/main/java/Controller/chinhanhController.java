@@ -108,6 +108,7 @@ public class chinhanhController extends HttpServlet {
 
             List <nhanvien> listnhanvien = qlnhanvienDAO.LayNhanVien();
             request.setAttribute("listnhanvien", listnhanvien);
+
             RequestDispatcher dispatcher = request.getRequestDispatcher("qlcongty/themchinhanh.jsp");
             dispatcher.forward(request, response);
         }
