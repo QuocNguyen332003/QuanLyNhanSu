@@ -18,7 +18,7 @@ public class chinhanhDAO {
 
     private static final String UPDATE_CN = "update chinhanh set tencn = ?, diachi = ?, magiamdoc =?, tinhtrang = ? where macn = ?;";
     private static final String INSERT_CN_BY_MACN = "INSERT INTO chinhanh (macn, tencn, diachi, magiamdoc, tinhtrang, ngaytao) VALUES (?, ?, ?, ?, ?, ?)";
-
+    private static final String SELECT_MACN = "select magiamdoc from chinhanh where macn = ?;";
     public static List<chinhanh> selectAllchinhanh() {
 
         List < chinhanh > listchinhanh = new ArrayList< >();
@@ -156,5 +156,17 @@ public class chinhanhDAO {
         }
         return rowUpdated;
     }
-
+    public static String LayMaGiamDoc(String macn) throws SQLException {
+        String result = null;
+        boolean rowDeleted;
+        try (Connection connection = JDBCUtils.getConnection(); PreparedStatement statement = connection.prepareStatement(SELECT_MACN);) {
+            statement.setString(1, macn);
+            ResultSet rs = statement.executeQuery();
+            System.out.println(statement);
+            while (rs.next()) {
+                result = rs.getString("magiamdoc");
+            }
+        }
+        return result;
+    }
 }

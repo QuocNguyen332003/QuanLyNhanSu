@@ -268,7 +268,7 @@
                     </div>
                     
                     <div class="form_yeucau" id="yeucau">
-                        <form action="/yeucau" class="form-container">
+                        <form action="<%=request.getContextPath()%>/themyeucau" class="form-container">
                             <h3 class = "form_title">Yêu cầu nhân viên</h3>
                             <div class="form-group form-inline">
                                 <label for="tencongviec" class = "label_form_control"><b>Công Việc:</b></label>
@@ -286,7 +286,7 @@
                             <c:set var="count" value="0" />
                             <c:forEach var="x" items="${listyeucau}">
                         	<li>
-                        		<p class = "box_noidung_thongbao">Trưởng phòng ban ${x.matk} yêu cầu thêm nhân viên ${x.congviec}</p>
+                        		<p class = "box_noidung_thongbao">Trưởng phòng ban ${x.mapb} yêu cầu thêm nhân viên ${x.congviec}</p>
                                 <div class = "box_tinhtrang_thongbao">${x.tinhtrang}</div>
                                 <div class = "box_check_thongbao" style="display:${sessionScope.capbac == 2 && x.tinhtrang == "chưa duyệt" ? 'inline' : 'none'}">
                                     <a href="<%=request.getContextPath()%>/duyetyeucau?mayeucau=<c:out value='${x.mayeucau}' />"><i class="fa-solid fa-check fa-xs greencolor"></i></a>
