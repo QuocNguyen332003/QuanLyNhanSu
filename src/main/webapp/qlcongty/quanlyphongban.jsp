@@ -97,7 +97,7 @@
 									<td>${x.matrphong}</td>
 									<td>${x.ngaytao}</td>
 									<td>${x.mapbtr}</td>
-									<td><a href="editPhongBan?mapb=<c:out value='${x.mapb}' />" style="display:${sessionScope.capbac == 0 || sessionScope.capbac == 1 ? 'none' : 'inline'}" >Edit</a>
+									<td><a href="editPhongBan?mapb=<c:out value='${x.mapb}' />&macn=<c:out value='${x.macn}' />" style="display:${sessionScope.capbac == 0 || sessionScope.capbac == 1 ? 'none' : 'inline'}" >Edit</a>
 										&nbsp;&nbsp;&nbsp;&nbsp; <a
 												href="deletePhongBan?mapb=<c:out value='${x.mapb}' />" style="display:${sessionScope.capbac == 0 || sessionScope.capbac == 1 ? 'none' : 'inline'}" >Delete</a></td>
 								</tr>

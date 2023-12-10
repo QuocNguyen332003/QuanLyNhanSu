@@ -19,10 +19,15 @@
             }
         }
     </script>
+    <style>
+        #myForm {
+            height: 740px;
+        }
+    </style>
 </head>
 
 <body>
-<form id="myForm" >
+<form id="myForm">
     <div class="header-menu-plus">
         <a href="#">Cập Nhật Chi Nhánh</a>
     </div>
@@ -34,15 +39,18 @@
     <label for="tencn">Tên Chi Nhánh:</label>
     <input type="text" id="tencn" name="tencn" value="${chinhanh.tencn}" required>
 
+    <label for="tinh/tp">Tỉnh/Thành Phố:</label>
+    <input type="text" id="tinh/tp" name="tinh/tp" value="${diachi_selected.tinhtp}" required>
 
-    <label for="diachi">Địa chỉ:</label>
-    <select id="diachi" name="diachi">
-        <!-- Add an empty option -->
-        <option>${chinhanh.diachi}</option>
-        <c:forEach items="${listdiachi}" var="x">
-            <option>${x.madc}</option>
-        </c:forEach>
-    </select>
+    <label for="quan/huyen">Quận/Huyện:</label>
+    <input type="text" id="quan/huyen" name="quan/huyen" value="${diachi_selected.quanhuyen}" required>
+
+    <label for="phuong/xa">Phường/Xã:</label>
+    <input type="text" id="phuong/xa" name="phuong/xa" value="${diachi_selected.phuongxa}" required>
+
+    <label for="sonha">Số nhà:</label>
+    <input type="text" id="sonha" name="sonha" value="${diachi_selected.sonha}" required>
+
 
     <label for="magiamdoc">Mã giám đốc:</label>
     <select id="magiamdoc" name="magiamdoc">

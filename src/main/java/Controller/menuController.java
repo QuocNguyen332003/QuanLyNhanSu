@@ -72,11 +72,11 @@ public class menuController extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session != null) {
             taikhoan username = (taikhoan) session.getAttribute("user");
-            return username.getMatk();
+            if (username != null){
+                return username.getMatk();
+            }
         }
-        else {
-            return null;
-        }
+        return null;
     }
     private void Formtrangchu(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
@@ -133,7 +133,8 @@ public class menuController extends HttpServlet {
     private void Formcongtac(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         HttpSession session = request.getSession(false);
-        if (session != null) {
+        String user = getMatk(request,response);
+        if (session != null && user != null) {
             taikhoan username = (taikhoan) session.getAttribute("user");
             List < congtac > listcongtac = congtacDAO.DanhSachCongTac(username.getMatk());
             request.setAttribute("listcongtac", listcongtac);
@@ -169,9 +170,15 @@ public class menuController extends HttpServlet {
             if (capbac == 1){
                 String mapb = phongbanDAO.LayMaPB(username.getMatk());
                 listnv = qlnhanvienDAO.LayNhanVienPB(mapb);
+                List<yeucau> listyeucau = new ArrayList<>();
+                listyeucau = yeucauDAO.DanhSachYeuCau_TruongPhong(username.getMatk());
+                request.setAttribute("listyeucau", listyeucau);
             } else if (capbac == 2) {
                 String macn = chinhanhDAO.LayMaCN(username.getMatk());
                 listnv = qlnhanvienDAO.LayNhanVienCN(macn);
+                List<yeucau> listyeucau = new ArrayList<>();
+                listyeucau = yeucauDAO.DanhSachYeuCau_GiamDoc(username.getMatk());
+                request.setAttribute("listyeucau", listyeucau);
             } else if (capbac == 3) {
                 listnv = qlnhanvienDAO.LayNhanVien();
             }

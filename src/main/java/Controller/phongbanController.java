@@ -82,9 +82,7 @@ public class phongbanController extends HttpServlet {
         nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
         String mapb = nv.getMapb();
         String macn = nv.getMacn();
-
         String mainComboValue = request.getParameter("mainComboValue");
-        System.out.println(mainComboValue);
 
         if (session != null) {
             if(capbac == 2){ // giamdoc
@@ -93,16 +91,39 @@ public class phongbanController extends HttpServlet {
 
                 List<nhanvien> listnhanvien  = qlnhanvienDAO.selectAllnhanvien(macn);
                 request.setAttribute("listnhanvien", listnhanvien);
+
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/themphongban.jsp");
+                dispatcher.forward(request, response);
             }
-            if(capbac == 3){ // admin
-                List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh();
+            if (capbac == 3) { // admin
+                System.out.print(mainComboValue);
+                String maPB = request.getParameter("mapb");
+
+                phongban existingPhongBan = pbDAO.selectPhongBan(maPB);
+                request.setAttribute("phongban", existingPhongBan);
+
+                List<chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh();
                 request.setAttribute("listchinhanh", listchinhanh);
 
-                List<nhanvien> listnhanvien  = qlnhanvienDAO.LayNhanVien();
+                List<nhanvien> listnhanvien = qlnhanvienDAO.selectAllnhanvien(mainComboValue);
                 request.setAttribute("listnhanvien", listnhanvien);
+
+                List<String> matrphongOptions = qlnhanvienDAO.selectAllNhanVienNames(mainComboValue);
+
+                String matrphongOptionsJson = new Gson().toJson(matrphongOptions);
+                // Kiểm tra giá trị của tonClickedValue != null &&trường ẩn
+                if(mainComboValue == null) {
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/themphongban.jsp");
+                    dispatcher.forward(request, response);
+                }
+
+                if(mainComboValue != null) {
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(matrphongOptionsJson);
+
+                }
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/themphongban.jsp");
-            dispatcher.forward(request, response);
         }
         else
         {
@@ -116,62 +137,73 @@ public class phongbanController extends HttpServlet {
 
         HttpSession session = request.getSession(false);
         int capbac = (int) session.getAttribute("capbac");
-        nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
+        nhanvien nv = (nhanvien) session.getAttribute("thongtinnv");
         String mapb = nv.getMapb();
         String macn = nv.getMacn();
         String mainComboValue = request.getParameter("mainComboValue");
 
-
-
         if (session != null) {
-            if(capbac == 2){ // giamdoc
+            if (capbac == 2) { // giamdoc
                 String maPB = request.getParameter("mapb");
                 phongban existingPhongBan = pbDAO.selectPhongBan(maPB);
 
                 request.setAttribute("phongban", existingPhongBan);
 
-                List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh_MaCN(macn);
+                List<chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh_MaCN(macn);
                 request.setAttribute("listchinhanh", listchinhanh);
+                System.out.println(macn);
 
-
-                List<nhanvien> listnhanvien  = qlnhanvienDAO.selectAllnhanvien(macn);
+                List<nhanvien> listnhanvien = qlnhanvienDAO.selectAllnhanvien(macn);
                 request.setAttribute("listnhanvien", listnhanvien);
 
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/themphongban.jsp");
+                dispatcher.forward(request, response);
             }
-            if(capbac == 3){ // admin
+            if (capbac == 3) { // admin
+                System.out.print(mainComboValue);
                 String maPB = request.getParameter("mapb");
+                String maCN = request.getParameter("macn");
+                String selectedValue = request.getParameter("macnSelect");
                 phongban existingPhongBan = pbDAO.selectPhongBan(maPB);
                 request.setAttribute("phongban", existingPhongBan);
 
-                List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh();
+                List<chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh();
                 request.setAttribute("listchinhanh", listchinhanh);
+                if(mainComboValue == null){
+                    List<nhanvien> listnhanvien = qlnhanvienDAO.selectAllnhanvien(maCN);
+                    request.setAttribute("listnhanvien", listnhanvien);
+                    System.out.println(macn);
+                    System.out.println(listnhanvien);
+                }
+                if(mainComboValue != null ) {
+                    List<nhanvien> listnhanvien = qlnhanvienDAO.selectAllnhanvien(mainComboValue);
+                    request.setAttribute("listnhanvien", listnhanvien);
+                    System.out.println(listnhanvien);
+                }
 
-                List<nhanvien> listnhanvien  = qlnhanvienDAO.selectAllnhanvien(mainComboValue);
-                request.setAttribute("listnhanvien", listnhanvien);
-
-                List<String> matrphongOptions = qlnhanvienDAO.selectAllNhanVienNames(mainComboValue);// Fetch matrphong options based on selectedMacn
+                List<String> matrphongOptions = qlnhanvienDAO.selectAllNhanVienNames(mainComboValue);
 
                 String matrphongOptionsJson = new Gson().toJson(matrphongOptions);
-                System.out.println(mainComboValue);
-                System.out.println("PASS");
-                System.out.println(matrphongOptionsJson);
-                if(mainComboValue == null){
+                // Kiểm tra giá trị của tonClickedValue != null &&trường ẩn
+                if(mainComboValue == null) {
                     RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/themphongban.jsp");
                     dispatcher.forward(request, response);
                 }
-                {
+
+                if(mainComboValue != null) {
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
                     response.getWriter().write(matrphongOptionsJson);
+
                 }
             }
-        }
-        else
-        {
+        } else {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
             dispatcher.forward(request, response);
-        };
+        }
+
     }
+
     private void insertPhongBan(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
 
         String mapb = request.getParameter("mapb");
@@ -201,6 +233,7 @@ public class phongbanController extends HttpServlet {
         String macn = request.getParameter("macnSelect");
         String matrphong = request.getParameter("matrphongSelect");
         String mapbtr = request.getParameter("mapbtrSelect");
+
 
         phongban updatephongban = new phongban(mapb, tenpb, macn, matrphong, null, mapbtr);
         // Gọi phương thức insertPhongBan của DAO để thêm vào cơ sở dữ liệu
