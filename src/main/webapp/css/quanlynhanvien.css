@@ -27,18 +27,7 @@
     box-shadow: 0 0 1rem 0.3rem var(--maincolor);
     z-index: 9;
 }
-.form_thongbao{
-    width: 40rem;
-    height: 20rem;
-    display: none;
-    position: fixed;
-    top: 25rem;
-    left:82rem;
-    background-color: #F4F5F7;
-    border: 3px solid var(--maincolor);
-    box-shadow: 0 0 1rem 0.3rem var(--maincolor);
-    z-index: 9;
-}
+
 .form_title{
     width: 40rem; height: 3rem;
     background-color: var(--maincolor);
