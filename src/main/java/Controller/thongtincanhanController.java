@@ -35,6 +35,7 @@ public class thongtincanhanController extends HttpServlet {
                     capNhatThongTin(request, response);
                     capNhatCCCD(request, response);
                     capNhatMatKhau(request, response);
+                    response.sendRedirect("thongtincanhan");
                     break;
                 default:
                     RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
@@ -68,7 +69,7 @@ public class thongtincanhanController extends HttpServlet {
             String email = request.getParameter("email");
             thongtincanhan tt = new thongtincanhan(matk, hoten, ngaysinh, gioitinh, diachi, sdt, email);
             thongtincanhanDAO.capNhatThongTinCaNhan(tt);
-            response.sendRedirect("thongtincanhan");
+
         } else {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
             dispatcher.forward(request, response);
@@ -81,7 +82,6 @@ public class thongtincanhanController extends HttpServlet {
             String cccd = request.getParameter("cccd");
             cancuoccongdan cancuoc = new cancuoccongdan(matk, cccd);
             thongtincanhanDAO.capNhatCCCD(cancuoc);
-            response.sendRedirect("thongtincanhan");
         } else {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
             dispatcher.forward(request, response);
@@ -95,7 +95,6 @@ public class thongtincanhanController extends HttpServlet {
             String pass = request.getParameter("pass");
             taikhoan tk = new taikhoan(user,pass,matk);
             thongtincanhanDAO.capNhatMatKhau(tk);
-            response.sendRedirect("thongtincanhan");
         } else {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
             dispatcher.forward(request, response);

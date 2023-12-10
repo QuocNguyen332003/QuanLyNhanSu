@@ -37,15 +37,10 @@
                                <i class="fa-solid fa-pen-to-square fa-2xl"></i>
                             </button>
                         </li>
-                        <li class="nav-item" >
-                            <button formaction="<%=request.getContextPath()%>/thaydoithongtin" class="button_icon" id="btn_save">
-                               <i class="fa-solid fa-floppy-disk fa-2xl"></i>
-                            </button>
-                        </li>
                     </ul>
                 </nav>
                 <br>
-                <div class="row">
+                <form class="row">
                     <div class="container body container_css">
 						<div class = "col">
 							<div class="box_info">
@@ -102,10 +97,10 @@
 								<div class="form-group form-inline">
 									<label for="pass"><b>Mật khẩu:</b></label>
 									<input type="password" class="control_more" id="pass" placeholder="Mật khẩu" name="pass" value="${taikhoan.pass}" readonly required>
-									<button class="button_icon_small" onclick="showPass();"><i class="fa-solid fa-eye fa-sm"></i></button>
+									<button type="button" class="button_icon_small" onclick="showPass();"><i class="fa-solid fa-eye fa-sm"></i></button>
 								</div>
 								<div>
-									<button type="submit" class="btn_mk" id="btn_doimk"><b>Đổi mật khẩu</b></button>
+									<button type="button" class="btn_mk" id="btn_doimk"><b>Đổi mật khẩu</b></button>
 								</div>
 							</div>
 						</div>
@@ -143,7 +138,12 @@
 							</div>
 						</div>
                     </div>
-                </div>
+					<div>
+						<button formaction="<%=request.getContextPath()%>/thaydoithongtin" class="button_icon" id="btn_save">
+							<i class="fa-solid fa-floppy-disk fa-2xl"></i>
+						</button>
+					</div>
+                </form>
             </div>
         </div>
     </div>
