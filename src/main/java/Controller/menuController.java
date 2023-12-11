@@ -208,9 +208,9 @@ public class menuController extends HttpServlet {
         String user = getMatk(request,response);
         HttpSession session = request.getSession(false);
         String mainComboValue = request.getParameter("mainComboValue");
-        if (session != null && user != null) {
+        int capbac = (int) session.getAttribute("capbac");
+        if (session != null && user != null && capbac > 0) {
             taikhoan username = (taikhoan) session.getAttribute("user");
-            int capbac = (int) session.getAttribute("capbac");
             List <nhanvien> listnv = null;
             if (capbac == 1){
                 String mapb = phongbanDAO.LayMaPB(username.getMatk());
