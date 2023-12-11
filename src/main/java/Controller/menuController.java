@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import DAO.*;
 import Model.*;
+import com.google.gson.Gson;
 
 @WebServlet(name = "menu", urlPatterns = { "/trangchu", "/thongtincanhan", "/congtac", "/khenthuongkyluat", "/quanlynhanvien", "/quanlyphongban","/quanlychinhanh", "/logout"})
 public class menuController extends HttpServlet {
@@ -186,6 +187,7 @@ public class menuController extends HttpServlet {
             throws SQLException, IOException, ServletException {
         String user = getMatk(request,response);
         HttpSession session = request.getSession(false);
+        String mainComboValue = request.getParameter("mainComboValue");
         if (session != null && user != null) {
             taikhoan username = (taikhoan) session.getAttribute("user");
             int capbac = (int) session.getAttribute("capbac");
@@ -223,10 +225,23 @@ public class menuController extends HttpServlet {
                 request.setAttribute("setmapb_nv", setmapb_nv);
                 request.setAttribute("setmacn_nv", setmacn_nv);
                 request.setAttribute("chitietphongban", listchitietpb);
+
+                List<String> mapbOptions = phongbanDAO.Selected_PB_BY_CN(mainComboValue);
+
+                String mapbOptionsJson = new Gson().toJson(mapbOptions);
+                System.out.println(mapbOptionsJson);
+                if(mainComboValue != null) {
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(mapbOptionsJson);
+
+                }
             }
-            request.setAttribute("listnv", listnv);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/qlnhanvien/quanlynhanvien.jsp");
-            dispatcher.forward(request, response);
+            if(mainComboValue == null){
+                request.setAttribute("listnv", listnv);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/qlnhanvien/quanlynhanvien.jsp");
+                dispatcher.forward(request, response);
+            }
         } else {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
             dispatcher.forward(request, response);
