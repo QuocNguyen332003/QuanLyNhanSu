@@ -9,10 +9,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class chucvuDAO {
     private static final String SELECT_ALL = "select * from chucvu where matk = ?";
+    private static final String SELECT_MATK = "select matk from chucvu where tentk = ?";
     private  static  final String INSERT_CHUCVU =  "INSERT INTO chucvu" + "  (matk, tentk) VALUES " + " (?, ?);";
 
     public static int CapBacQuyenHan(String matk) {
@@ -65,5 +68,17 @@ public class chucvuDAO {
         } catch (SQLException exception) {
             JDBCUtils.printSQLException(exception);
         }
+    }
+    public static String GetAdmin(){
+        try (Connection connection = JDBCUtils.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_MATK)) {
+            preparedStatement.setString(1, "Quản Trị");
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                return  rs.getString("matk");
+            }
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+        return null;
     }
 }

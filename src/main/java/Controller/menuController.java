@@ -84,10 +84,8 @@ public class menuController extends HttpServlet {
     private void Logout(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException{
         HttpSession session = request.getSession(false);
-        String user = getMatk(request,response);
-
+        session.setAttribute("user", null);
         session.invalidate();
-        user = null;
         RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
         dispatcher.forward(request, response);
     }
@@ -96,6 +94,28 @@ public class menuController extends HttpServlet {
         HttpSession session = request.getSession(false);
         String user = getMatk(request,response);
         if(session != null && user != null){
+            String maquantri = chucvuDAO.GetAdmin();
+            thongtincanhan quantri = thongtincanhanDAO.layThongTinCaNhan(maquantri);
+            NodeTree root = new NodeTree("Công Ty", quantri.getHoten(),quantri.getSdt(), quantri.getEmail(),new ArrayList<>());
+            List<chinhanh> chinhanhs = chinhanhDAO.selectAllchinhanh();
+            for (chinhanh cn: chinhanhs) {
+                thongtincanhan giamdoc = thongtincanhanDAO.layThongTinCaNhan(cn.getMagiamdoc());
+                NodeTree node_cn = new NodeTree(cn.getTencn(),giamdoc.getHoten(),giamdoc.getSdt(),giamdoc.getEmail(),new ArrayList<>());
+                List<phongban> phongbans = phongbanDAO.selectAllphongban_CN(cn.getMacn());
+                for (phongban pb:phongbans) {
+                    thongtincanhan trphong = thongtincanhanDAO.layThongTinCaNhan(pb.getMatrphong());
+                    NodeTree node_pb = new NodeTree(pb.getTenpb(),trphong.getHoten(),trphong.getSdt(),trphong.getEmail(),new ArrayList<>());
+                    List<nhanvien> nhanviens = qlnhanvienDAO.LayNhanVienPB(pb.getMapb());
+                    for (nhanvien nv: nhanviens) {
+                        thongtincanhan nhanvien = thongtincanhanDAO.layThongTinCaNhan(nv.getMatk());
+                        NodeTree node_nv = new NodeTree(nv.getMatk(),nhanvien.getHoten(),nhanvien.getSdt(),nhanvien.getEmail(),null);
+                        node_pb.Add_NodeChild(node_nv);
+                    }
+                    node_cn.Add_NodeChild(node_pb);
+                }
+                root.Add_NodeChild(node_cn);
+            }
+            request.setAttribute("tree",root);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/sodocay/sodo.jsp");
             dispatcher.forward(request, response);
         }
