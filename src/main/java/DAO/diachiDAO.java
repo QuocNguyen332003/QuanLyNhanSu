@@ -19,8 +19,6 @@ public class diachiDAO {
     private static final String CHECK_MADC = "select * from diachi where madc = ?";
     private static final String SELECT_DC = "SELECT diachi FROM chinhanh WHERE macn = ?";
     private static final String UPDATE_DC_CN = "UPDATE diachi SET tinhtp = ?, quanhuyen = ?, phuongxa = ?, sonha = ? WHERE madc = ?";
-
-
     private static final String INSERT_DIACHICN = "INSERT INTO diachi (madc, tinhtp, quanhuyen, phuongxa, sonha) VALUES (?, ?, ?, ?, ?)";
 
     public boolean uodateDiaChi_CN(diachi dc) throws SQLException {
@@ -137,11 +135,45 @@ public class diachiDAO {
         }
         return id;
     }
+    public static String getDiaChi(String manguon) {
+        int[] id_num = {0, 0, 1};
+        String id = null;
+        while (true) {
+            id = manguon + id_num[0] + id_num[1] + id_num[2];
+            if (CheckID(id)) {
+                id_num[2] = id_num[2] + 1;
+                id_num[1] = id_num[1] + id_num[2] / 10;
+                id_num[0] = id_num[0] + id_num[1] / 10;
+
+                id_num[2] = id_num[2] % 10;
+                id_num[1] = id_num[1] % 10;
+                id_num[0] = id_num[0] % 10;
+            } else {
+                break;
+            }
+        }
+        return id;
+    }
     public void insertDiaChi_CN(diachi dc) throws SQLException {
         try (Connection connection = JDBCUtils.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_DIACHICN)) {
 
             preparedStatement.setString(1, DiaChiChiNhanh());
+            preparedStatement.setString(2, dc.getTinhtp());
+            preparedStatement.setString(3, dc.getQuanhuyen());
+            preparedStatement.setString(4, dc.getPhuongxa());
+            preparedStatement.setString(5, dc.getSonha());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+    }
+    public static void insertDiaChi(diachi dc) throws SQLException {
+        try (Connection connection = JDBCUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_DIACHICN)) {
+
+            preparedStatement.setString(1, dc.getMadc());
             preparedStatement.setString(2, dc.getTinhtp());
             preparedStatement.setString(3, dc.getQuanhuyen());
             preparedStatement.setString(4, dc.getPhuongxa());

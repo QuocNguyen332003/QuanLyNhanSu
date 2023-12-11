@@ -108,9 +108,27 @@
                     </div>
                     <ul class="navbar-nav ml-auto col-2">
                     	<li class="nav-item" >
-                            <button class="button_icon">
-                              	<i class="fa-solid fa-file-excel fa-2x"></i>
-                            </button>
+                            <c:set var="file_excel" value="" />
+                            <form action="<%=request.getContextPath()%>/readExcelNhanVien" method="post" enctype="multipart/form-data" id = "form_excel">
+                                <button class="button_icon" id = "choose-file" type="button">
+                              	    <i class="fa-solid fa-file-excel fa-2x"></i>
+                                </button>
+                                <input type="file" id="file-input" name="file" style="display: none">
+                            </form>
+                            <script>
+                                let fileInput = document.getElementById("file-input");
+                                let chooseFile = document.getElementById("choose-file");
+                                let form = document.getElementById("form_excel");
+                                chooseFile.onclick = function() {
+                                    fileInput.click();
+                                    return false;
+                                }
+                                fileInput.onchange = function() {
+                                    if (fileInput.files.length > 0) {
+                                        form.submit();
+                                    }
+                                }
+                            </script>
                         </li>
                         <li class="nav-item" >
                             <button class="button_icon" onclick="openFormNotify()">

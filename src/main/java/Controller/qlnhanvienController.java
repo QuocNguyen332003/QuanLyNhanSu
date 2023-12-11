@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 
 import DAO.*;
 import Model.*;
-@WebServlet(name = "qlnhanvien", urlPatterns = {"/xemthongtinnhanvien", "/themnhanvien","/sathainhanvien","/chidinhnhanvien","/tuyennhanvien","/themyeucau","/duyetyeucau","/tuchoiyeucau"})
+@WebServlet(name = "qlnhanvien", urlPatterns = {"/xemthongtinnhanvien", "/themnhanvien","/sathainhanvien","/chidinhnhanvien","/tuyennhanvien","/themyeucau","/duyetyeucau","/tuchoiyeucau","/themnhanvienexcel"})
 public class qlnhanvienController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -41,6 +41,9 @@ public class qlnhanvienController extends HttpServlet {
                     break;
                 case "/themnhanvien":
                     ThemNhanVien(request, response);
+                    break;
+                case "/themnhanvienexcel":
+                    ThemNhanVienExcel(request, response);
                     break;
                 case "/sathainhanvien":
                     SaThaiNhanVien(request, response);
@@ -80,8 +83,16 @@ public class qlnhanvienController extends HttpServlet {
             thongtincanhan tt = thongtincanhanDAO.layThongTinCaNhan(matk);
             request.setAttribute("thongtincanhan", tt);
 
+            String madc = tt.getDiachi();
+
+            diachi dc = thongtincanhanDAO.layDiaChi(madc);
+            request.setAttribute("diachi",dc);
+
             cancuoccongdan cccd = thongtincanhanDAO.layCCCD(matk);
             request.setAttribute("cancuoc",cccd);
+            diachi dc_cancuoc = thongtincanhanDAO.layDiaChi(cccd.getMadc());
+            request.setAttribute("diachi_cc",dc_cancuoc);
+
 
             taikhoan tkhoan = thongtincanhanDAO.layTaiKhoan(matk);
             request.setAttribute("taikhoan", tkhoan);
@@ -114,6 +125,33 @@ public class qlnhanvienController extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/qlnhanvien/chitietnhanvien.jsp");
         dispatcher.forward(request, response);
     }
+    public void ThemNhanVienExcel(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException{
+        HttpSession session = request.getSession(false);
+        List<DuLieuNhanVien> list_dlnv = (List<DuLieuNhanVien>) session.getAttribute("list_dulieunhanvien");
+        for (DuLieuNhanVien nv: list_dlnv) {
+            String matk = forgotDAO.getNewMatk();
+            String madc_cc = diachiDAO.getDiaChi("DC");
+            String madc_dc = diachiDAO.getDiaChi("DN");
+
+            diachi diachi_cc = new diachi(madc_cc, nv.getTinh_cap(), nv.getHuyen_cap(), nv.getXa_cap(), nv.getSonha_cap());
+            diachi diachi_nv = new diachi(madc_dc, nv.getTinh(), nv.getHuyen(), nv.getXa(), nv.getSonha());
+            thongtincanhan ttcn = new thongtincanhan(matk, nv.getHoten(), nv.getNgaysinh(), nv.getGioitinh(),madc_dc,nv.getSdt(),nv.getEmail(),nv.getBangcap());
+            cancuoccongdan cccd = new cancuoccongdan(matk, nv.getSocccd(),nv.getNgaycap(),madc_cc);
+            nhanvien new_nv = new nhanvien(matk,nv.getChinhanh(),nv.getPhongban(),nv.getNgaybatdau(),"Đang hoạt động",nv.getCongviec());
+            taikhoan tk = new taikhoan(nv.getUsernam(),nv.getPass(),matk);
+
+            diachiDAO.insertDiaChi(diachi_cc);
+            diachiDAO.insertDiaChi(diachi_nv);
+            qlnhanvienDAO.ThemNhanVien(new_nv);
+            forgotDAO.ThemTaiKhoan(tk);
+            thongtincanhanDAO.ThemThongTinCaNhan(ttcn);
+            thongtincanhanDAO.ThemCCCD(cccd);
+            chucvuDAO.ThemChucVu(new chucvu(matk, "Nhân Viên"));
+        }
+
+        response.sendRedirect("quanlynhanvien");
+    }
     public void SaThaiNhanVien(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException{
         String matk = request.getParameter("matk");
@@ -131,34 +169,50 @@ public class qlnhanvienController extends HttpServlet {
     }
     public void TuyenNhanVien(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException{
+
         String matk = forgotDAO.getNewMatk();
         String hoten = request.getParameter("hoten");
         LocalDate ngaysinh = LocalDate.parse(request.getParameter("ngaysinh"));
         String gioitinh = request.getParameter("gioitinh");
-        String so_cccd = request.getParameter("cccd");
-        String diachi = request.getParameter("diachi");
+
+        String so_cccd = request.getParameter("cc_cccd");
+        LocalDate ngaycap = LocalDate.parse(request.getParameter("cc_ngaycap"));
+        String madc_cc = diachiDAO.getDiaChi("DC");
+        String tinhtp_cc = request.getParameter("cc_tinhtp");
+        String cc_quanhuyen = request.getParameter("cc_quanhuyen");
+        String cc_phuongxa = request.getParameter("cc_phuongxa");
+        String cc_sonha = request.getParameter("cc_sonha");
+
+        String madc_dc = diachiDAO.getDiaChi("DN");
+        String dc_tinhtp = request.getParameter("dc_tinhtp");
+        String dc_quanhuyen = request.getParameter("dc_quanhuyen");
+        String dc_phuongxa = request.getParameter("dc_phuongxa");
+        String dc_sonha = request.getParameter("cc_sonha");
+
         String sdt = request.getParameter("sdt");
         String email = request.getParameter("email");
         String username = request.getParameter("username");
         String pass = request.getParameter("pass");
         String congviec = request.getParameter("congviec");
-        String chucvu = request.getParameter("chucvu");
         String phongban = request.getParameter("phongban");
         String chinhanh = request.getParameter("chinhanh");
         String bangcap = request.getParameter("bangcap");
         LocalDate ngaybatdau = LocalDate.parse(request.getParameter("ngaybatdau"));
 
-
-        thongtincanhan ttcn = new thongtincanhan(matk, hoten, ngaysinh, gioitinh,null,sdt,email,bangcap);
-        cancuoccongdan cccd = new cancuoccongdan(matk, so_cccd,ngaybatdau,null);
+        diachi diachi_cc = new diachi(madc_cc, tinhtp_cc, cc_quanhuyen, cc_phuongxa, cc_sonha);
+        diachi diachi_nv = new diachi(madc_dc, dc_tinhtp, dc_quanhuyen, dc_phuongxa, dc_sonha);
+        thongtincanhan ttcn = new thongtincanhan(matk, hoten, ngaysinh, gioitinh,madc_dc,sdt,email,bangcap);
+        cancuoccongdan cccd = new cancuoccongdan(matk, so_cccd,ngaycap,madc_cc);
         nhanvien nv = new nhanvien(matk,chinhanh,phongban,ngaybatdau,"Đang hoạt động",congviec);
         taikhoan tk = new taikhoan(username,pass,matk);
 
+        diachiDAO.insertDiaChi(diachi_cc);
+        diachiDAO.insertDiaChi(diachi_nv);
         qlnhanvienDAO.ThemNhanVien(nv);
         forgotDAO.ThemTaiKhoan(tk);
         thongtincanhanDAO.ThemThongTinCaNhan(ttcn);
         thongtincanhanDAO.ThemCCCD(cccd);
-
+        chucvuDAO.ThemChucVu(new chucvu(matk, "Nhân Viên"));
         response.sendRedirect("quanlynhanvien");
     }
     public void ThemYeuCau(HttpServletRequest request, HttpServletResponse response)

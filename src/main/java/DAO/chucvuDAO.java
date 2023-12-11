@@ -1,6 +1,7 @@
 package DAO;
 
 import JDBCUtils.JDBCUtils;
+import Model.chucvu;
 import Model.congtac;
 
 import java.sql.Connection;
@@ -12,6 +13,8 @@ import java.util.Objects;
 
 public class chucvuDAO {
     private static final String SELECT_ALL = "select * from chucvu where matk = ?";
+    private  static  final String INSERT_CHUCVU =  "INSERT INTO chucvu" + "  (matk, tentk) VALUES " + " (?, ?);";
+
     public static int CapBacQuyenHan(String matk) {
         int capbac = 0;
         try (Connection connection = JDBCUtils.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL)) {
@@ -51,5 +54,16 @@ public class chucvuDAO {
             JDBCUtils.printSQLException(exception);
         }
         return tencapbac;
+    }
+    public static void ThemChucVu(chucvu chucvu){
+        try (Connection connection = JDBCUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CHUCVU);) {
+            preparedStatement.setString(1, chucvu.getMatk());
+            preparedStatement.setString(2, chucvu.getTentk());
+            System.out.println(preparedStatement);
+            preparedStatement.executeUpdate();
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
     }
 }

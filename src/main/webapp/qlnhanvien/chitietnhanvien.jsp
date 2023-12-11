@@ -14,6 +14,14 @@
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/thongtincanhan.css" />
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/base.css" />
 	<style>
+		.button_show{
+			width: 1.5rem;
+			height: 1.5rem;
+			background-color: var(--maincolor);
+			border-radius: 5rem;
+			cursor: pointer;
+			transition: background-color 0.2s ease;
+		}
 		.box_button_add{
 			margin: 2rem;
 			width: 101.5rem;
@@ -25,6 +33,36 @@
 			color: white;
 			text-align: center;
 			background-color: transparent;
+		}
+		.form_tacvu{
+			display: none;
+			position: fixed;
+			background-color: #F4F5F7;
+			border: 3px solid var(--maincolor);
+			box-shadow: 0 0 1rem 0.3rem var(--maincolor);
+			z-index: 9;
+		}
+		.form_add {
+			width: 100rem;
+			height: 30rem;
+			top: 20rem;
+			left:30rem;
+		}
+		.form_button{
+			margin: 1rem;
+			display: flex; flex-direction: row; justify-content: space-around;
+		}
+		.form_button button{
+			width: 10rem; height: 3rem;
+			background-color: var(--maincolor);
+			color: white;
+		}
+		.form_title{
+			width: 100%; height: 3rem;
+			background-color: #4F4F4F;
+			text-align: center;
+			color: white;
+			margin-bottom: 1rem;
 		}
 	</style>
 </head>
@@ -61,7 +99,7 @@
 							<div class="box_info">
 								<div class="form-group form-inline">
 									<label for="matk"><b>Mã NV:</b></label>
-									<input type="text" class=" control" id="matk" placeholder="Mã NV" name="matk" value="${thongtincanhan.matk}" readonly required>
+									<input type="text" class=" control" id="matk" placeholder="Mã NV" name="matk" value="${thongtincanhan.matk}" readonly>
 								</div>
 								<div class="form-group form-inline">
 									<label for="hoten"><b>Họ và tên:</b></label>
@@ -77,15 +115,20 @@
 								</div>
 								<div class="form-group form-inline">
 									<label for="cccd" ><b>Số CCCD:</b></label>
-									<input type="text" class=" control" id="cccd" placeholder="Số CCCD" name="cccd" value="${cancuoc}" readonly required>
+									<input type="text" class=" control" id="cccd" placeholder="Số CCCD" name="cccd" value="${cancuoc.cccd}" readonly>
+									<button type="button" class = "button_show" onclick="openFormCC()">
+										<i class="fa-solid fa-plus fa-sm"></i>
+									</button>
 								</div>
 								<div class="form-group form-inline">
 									<label for="diachi" ><b>Địa chỉ:</b></label>
-									<input type="text" class=" control" id="diachi" placeholder="Địa chỉ" name="diachi" value="${thongtincanhan.diachi}" readonly required>
+									<input type="text" class=" control" id="diachi" placeholder="Địa chỉ" name="diachi" value="${thongtincanhan.diachi}" readonly>
+									<button type="button" class = "button_show" onclick="openFormDC()">
+										<i class="fa-solid fa-plus fa-sm"></i>
+									</button>
 								</div>
 							</div>
 						</div>
-
 						<div class = "col">
 							<div class="box_info">
 								<p class="style_text"><b>Thông tin liên lạc</b></p>
@@ -108,7 +151,7 @@
 								<div class="form-group form-inline">
 									<label for="pass"><b>Mật khẩu:</b></label>
 									<input type="password" class="control_more" id="pass" placeholder="Mật khẩu" name="pass" value="${taikhoan.pass}" readonly required>
-									<button class="button_icon_small" onclick="showPass();"><i class="fa-solid fa-eye fa-sm"></i></button>
+									<button type="button" class="button_icon_small" onclick="showPass();"><i class="fa-solid fa-eye fa-sm"></i></button>
 								</div>
 							</div>
 						</div>
@@ -121,23 +164,23 @@
 							<div class="box_info">
 								<div class="form-group form-inline">
 									<label for="congviec"><b>Công việc:</b></label>
-									<input type="text" class="control" id="congviec" placeholder="Công việc" name="congviec" value="${congviec}" readonly required>
+									<input type="text" class="control" id="congviec" placeholder="Công việc" name="congviec" value="${congviec}" readonly>
 								</div>
 								<div class="form-group form-inline">
 									<label for="chucvu"><b>Chức vụ:</b></label>
-									<input type="text" class="control" id="chucvu" placeholder="Chức vụ" name="chucvu" value="${chucvu}" readonly required>
+									<input type="text" class="control" id="chucvu" placeholder="Chức vụ" name="chucvu" value="${chucvu}" readonly>
 								</div>
 								<div class="form-group form-inline">
 									<label for="phongban"><b>Phòng ban:</b></label>
-									<input type="text" class="control" id="phongban" placeholder="Phòng ban" name="phongban" value="${tenpb}" readonly required>
+									<input type="text" class="control" id="phongban" placeholder="Phòng ban" name="phongban" value="${tenpb}" readonly>
 								</div>
 								<div class="form-group form-inline">
 									<label for="chinhanh"><b>Chi nhánh:</b></label>
-									<input type="text" class="control" id="chinhanh" placeholder="Chi nhánh" name="chinhanh" value="${tencn}" readonly required>
+									<input type="text" class="control" id="chinhanh" placeholder="Chi nhánh" name="chinhanh" value="${tencn}" readonly>
 								</div>
 								<div class="form-group form-inline">
 									<label for="capbac"><b>Cấp bậc:</b></label>
-									<input type="text" class="control" id="capbac" placeholder="Cấp bậc" name="bangcap" value="${thongtincanhan.bangcap}"  readonly required>
+									<input type="text" class="control" id="capbac" placeholder="Cấp bậc" name="bangcap" value="${thongtincanhan.bangcap}"  readonly>
 								</div>
 								<div class="form-group form-inline">
 									<label for="ngaybatdau"><b>Ngày bắt đầu:</b></label>
@@ -146,11 +189,70 @@
 							</div>
 						</div>
 					</div>
+					<div>
+						<button class="button_luu" formaction="<%=request.getContextPath()%>/thaydoithongtin"  id="btn_save">
+							<i class="fa-solid fa-floppy-disk fa-2xl"></i>
+						</button>
+					</div>
                     <div class = "box_button_add" id = "btnadd">
-							<button class = "button_text" type="submit">
-								Lưu thay đổi
-							</button>
+						<button class = "button_text" type="submit">Lưu thay đổi</button>
+					</div>
+					<div class="form_add form_tacvu" id="xemcc">
+						<div class="form-container">
+							<h3 class = "form_title">CCCD</h3>
+							<div class="form-group form-inline">
+								<label for="cc_cccd" class = "label_form_control">CCCD:</label>
+								<input type="text" class="form-control box_form_control" id="cc_cccd" placeholder="CCCD" name="cc_cccd" value="${cancuoc.cccd}" readonly required>
+							</div>
+							<div class="form-group form-inline">
+								<label for="cc_ngaycap" class = "label_form_control">Ngày cấp:</label>
+								<input type="date" class="form-control box_form_control" id="cc_ngaycap" placeholder="Ngày cấp" name="cc_ngaycap" value="${cancuoc.ngaycap}" readonly required>
+							</div>
+							<div class="form-group form-inline">
+								<label for="cc_tinhtp" class = "label_form_control">Tỉnh:</label>
+								<input type="text" class="form-control box_form_control" id="cc_tinhtp" placeholder="Tỉnh" name="cc_tinhtp" value="${diachi_cc.tinhtp}" readonly required>
+							</div>
+							<div class="form-group form-inline">
+								<label for="cc_quanhuyen" class = "label_form_control">Quận/Huyện:</label>
+								<input type="text" class="form-control box_form_control" id="cc_quanhuyen" placeholder="Quận/Huyện" name="cc_quanhuyen" value="${diachi_cc.quanhuyen}" readonly required>
+							</div>
+							<div class="form-group form-inline">
+								<label for="cc_phuongxa" class = "label_form_control">Phường/Xã:</label>
+								<input type="text" class="form-control box_form_control" id="cc_phuongxa" placeholder="Phường/Xã" name="cc_phuongxa" value="${diachi_cc.phuongxa}" readonly required>
+							</div>
+							<div class="form-group form-inline">
+								<label for="cc_sonha" class = "label_form_control">Số nhà:</label>
+								<input type="text" class="form-control box_form_control" id="cc_sonha" placeholder="Số nhà" name="cc_sonha" value="${diachi_cc.sonha}" readonly required>
+							</div>
+							<div class="form_button">
+								<button type="button" id="btn_luucc" onclick="closeFormCC()">Xác nhận</button>
+							</div>
 						</div>
+					</div>
+					<div class="form_add form_tacvu" id="xemdc">
+						<div class="form-container">
+							<h3 class = "form_title">Địa chỉ</h3>
+							<div class="form-group form-inline">
+								<label for="dc_tinhtp" class = "label_form_control">Tỉnh:</label>
+								<input type="text" class="form-control box_form_control" id="dc_tinhtp" placeholder="Tỉnh" name="dc_tinhtp" value="${diachi.tinhtp}" readonly required>
+							</div>
+							<div class="form-group form-inline">
+								<label for="dc_quanhuyen" class = "label_form_control">Quận/Huyện:</label>
+								<input type="text" class="form-control box_form_control" id="dc_quanhuyen" placeholder="Quận/Huyện" name="dc_quanhuyen" value="${diachi.quanhuyen}" readonly required>
+							</div>
+							<div class="form-group form-inline">
+								<label for="dc_phuongxa" class = "label_form_control">Phường/Xã:</label>
+								<input type="text" class="form-control box_form_control" id="dc_phuongxa" placeholder="Phường/Xã" name="dc_phuongxa" value="${diachi.phuongxa}" readonly required>
+							</div>
+							<div class="form-group form-inline">
+								<label for="dc_sonha" class = "label_form_control">Số nhà:</label>
+								<input type="text" class="form-control box_form_control" id="dc_sonha" placeholder="Số nhà" name="dc_sonha" value="${diachi.sonha}" readonly required>
+							</div>
+							<div class="form_button">
+								<button type="button" id="btn_luudc" onclick="closeFormDC()">Xác nhận</button>
+							</div>
+						</div>
+					</div>
                 </form>
 				<script>
 
@@ -165,9 +267,28 @@
 						for (i = 0; i < input_tt.length; i++) {
 							input_tt[i].removeAttribute("readonly");
 						}
+						document.getElementById("matk").setAttribute("readonly", true);
+						document.getElementById("cccd").setAttribute("readonly", true);
+						document.getElementById("diachi").setAttribute("readonly", true);
+						document.getElementById("chucvu").setAttribute("readonly", true);
 						</c:if>
 					};
-
+					function openFormCC() {
+						document.getElementById("xemcc").style.display = "block";
+					}
+					function openFormDC() {
+						document.getElementById("xemdc").style.display = "block";
+					}
+					function closeFormCC() {
+						document.getElementById("xemcc").style.display = "none";
+						document.getElementById("cccd").value = document.getElementById("cc_cccd").value;
+					}
+					function closeFormDC() {
+						document.getElementById("xemdc").style.display = "none";
+						let diachi = document.getElementById("dc_tinhtp").value + ", " + document.getElementById("dc_quanhuyen").value + ", " +
+								document.getElementById("dc_phuongxa").value + ", " + document.getElementById("dc_sonha").value;
+						document.getElementById("diachi").value = diachi;
+					}
 				</script>
             </div>
         </div>

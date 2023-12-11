@@ -1,10 +1,6 @@
 package DAO;
 import JDBCUtils.JDBCUtils;
-import Model.nhanvien;
-import Model.thongtincanhan;
-import Model.taikhoan;
-import Model.cancuoccongdan;
-import Model.diachi;
+import Model.*;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -26,8 +22,6 @@ public class thongtincanhanDAO {
     private static final String UPDATE_TTCANHAN = "update thongtincanhan set hoten = ?, ngaysinh = ?, gioitinh = ?, sdt = ?, email = ? where matk = ?;";
     private static final String UPDATE_CCCD = "update cancuoccongdan set cccd = ?, ngaycap = ? where matk = ?;";
     private static final String UPDATE_DIACHI = "update diachi set tinhtp = ?, quanhuyen = ?, phuongxa = ?, sonha = ? where madc = ?;";
-
-
     private  static  final String INSERT_THONGTINCANHAN =  "INSERT INTO thongtincanhan" + "  (matk, hoten, ngaysinh,gioitinh, diachi,  sdt, email, bangcap) VALUES " + " (?, ?, ?, ?, ?, ?,?,?);";
     private  static  final String INSERT_CCCD =  "INSERT INTO cancuoccongdan" + "  (matk, cccd, ngaycap,madc) VALUES " + " (?, ?, ?, ?);";
 
@@ -66,7 +60,8 @@ public class thongtincanhanDAO {
             while (rs.next()){
                 String cccd = rs.getString("cccd");
                 LocalDate ngaycap = rs.getDate("ngaycap").toLocalDate();
-                cancuoc = new cancuoccongdan(cccd,ngaycap);
+                String madc = rs.getString("madc");
+                cancuoc = new cancuoccongdan(cccd,ngaycap,madc);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -24,7 +24,11 @@ public class cancuoccongdan implements Serializable{
 		this.cccd=cccd;
 		this.ngaycap=ngaycap;
     }
-
+	public cancuoccongdan(String cccd, LocalDate ngaycap,String madc) {
+		this.cccd=cccd;
+		this.ngaycap=ngaycap;
+		this.madc = madc;
+	}
     public String getMatk() {
 		return matk;
 	}
