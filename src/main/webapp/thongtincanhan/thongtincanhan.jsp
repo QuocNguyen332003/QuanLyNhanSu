@@ -241,7 +241,7 @@
 						<h3 class = "form_title">Địa chỉ</h3>
 						<div class="form-group form-inline">
 							<label for="dc_tinhtp" class = "label_form_control">Tỉnh:</label>
-							<input type="text" class="form-control box_form_control" id="dc_tinhtp" placeholder="Tỉnh" name="dc_tinh" value="${diachi.tinhtp}" readonly required>
+							<input type="text" class="form-control box_form_control" id="dc_tinhtp" placeholder="Tỉnh" name="dc_tinhtp" value="${diachi.tinhtp}" readonly required>
 						</div>
 						<div class="form-group form-inline">
 							<label for="dc_quanhuyen" class = "label_form_control">Quận/Huyện:</label>

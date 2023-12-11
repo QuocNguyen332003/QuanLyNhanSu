@@ -82,11 +82,20 @@ public class thongtincanhanController extends HttpServlet {
     private void capNhatCCCD(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         String matk = getMatk(request, response);
-        String madc = "";
+        thongtincanhan tt = thongtincanhanDAO.layThongTinCaNhan(matk);
+        String madc = tt.getDiachi();
         if (matk != null) {
-            String cccd = request.getParameter("cccd");
-            LocalDate ngaycap = LocalDate.parse(request.getParameter("ngaycap"));
+            String cccd = request.getParameter("cc_cccd");
+            LocalDate ngaycap = LocalDate.parse(request.getParameter("cc_ngaycap"));
             cancuoccongdan cancuoc = new cancuoccongdan(matk, cccd, ngaycap,madc);
+
+            String tinhtp = request.getParameter("cc_tinhtp");
+            String quanhuyen = request.getParameter("cc_quanhuyen");
+            String phuongxa = request.getParameter("cc_phuongxa");
+            String sonha = request.getParameter("cc_sonha");
+            diachi dc = new diachi(madc,tinhtp,quanhuyen,phuongxa,sonha);
+            thongtincanhanDAO.capNhatDiaChi(dc);
+
             thongtincanhanDAO.capNhatCCCD(cancuoc);
             response.sendRedirect("thongtincanhan");
         } else {
@@ -100,10 +109,10 @@ public class thongtincanhanController extends HttpServlet {
         thongtincanhan tt = thongtincanhanDAO.layThongTinCaNhan(matk);
         String madc = tt.getDiachi();
         if (matk != null) {
-            String tinhtp = request.getParameter("tinhtp");
-            String quanhuyen = request.getParameter("quanhuyen");
-            String phuongxa = request.getParameter("phuongxa");
-            String sonha = request.getParameter("sonha");
+            String tinhtp = request.getParameter("dc_tinhtp");
+            String quanhuyen = request.getParameter("dc_quanhuyen");
+            String phuongxa = request.getParameter("dc_phuongxa");
+            String sonha = request.getParameter("dc_sonha");
             diachi dc = new diachi(madc,tinhtp,quanhuyen,phuongxa,sonha);
             thongtincanhanDAO.capNhatDiaChi(dc);
             response.sendRedirect("thongtincanhan");

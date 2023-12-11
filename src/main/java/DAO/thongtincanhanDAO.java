@@ -215,6 +215,8 @@ public class thongtincanhanDAO {
             preparedStatement.setString(3,dc.getPhuongxa());
             preparedStatement.setString(4,dc.getSonha());
             preparedStatement.setString(5,dc.getMadc());
+
+            System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
             JDBCUtils.printSQLException(exception);
@@ -225,6 +227,8 @@ public class thongtincanhanDAO {
             preparedStatement.setString(1,cccd.getCccd());
             preparedStatement.setDate(2,JDBCUtils.getSQLDate(cccd.getNgaycap()));
             preparedStatement.setString(3,cccd.getMatk());
+
+            System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
         }catch (SQLException exception) {
             JDBCUtils.printSQLException(exception);
