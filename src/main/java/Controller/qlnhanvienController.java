@@ -69,10 +69,22 @@ public class qlnhanvienController extends HttpServlet {
             throw new ServletException(ex);
         }
     }
+    private String getMatk(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            taikhoan username = (taikhoan) session.getAttribute("user");
+            if (username != null){
+                return username.getMatk();
+            }
+        }
+        return null;
+    }
     public void XemThongTinCaNhan(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         HttpSession session = request.getSession(false);
-        if(session != null){
+        String user = getMatk(request,response);
+        if(session != null && user != null){
             taikhoan tk = (taikhoan) session.getAttribute("user");
 
             String matk = request.getParameter("matk");
