@@ -80,13 +80,22 @@ public class menuController extends HttpServlet {
     }
     private void Formtrangchu(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/sodocay/sodo.jsp");
-        dispatcher.forward(request, response);
+        HttpSession session = request.getSession(false);
+        String user = getMatk(request,response);
+        if(session != null && user != null){
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/sodocay/sodo.jsp");
+            dispatcher.forward(request, response);
+        }
+        else{
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
+            dispatcher.forward(request, response);
+        }
     }
     private void Formthongtincanhan(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         HttpSession session = request.getSession(false);
-        if(session != null){
+        String user = getMatk(request,response);
+        if(session != null && user != null){
             taikhoan tk = (taikhoan) session.getAttribute("user");
 
             String matk = getMatk(request,response);
@@ -148,7 +157,8 @@ public class menuController extends HttpServlet {
     private void Formkhenthuongkyluat(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         HttpSession session = request.getSession(false);
-        if (session != null) {
+        String user = getMatk(request,response);
+        if (session != null && user != null) {
             taikhoan username = (taikhoan) session.getAttribute("user");
             List <thanhtichkyluat> listKTKL = khenthuongkyluatDAO.DanhSachKTKL(username.getMatk());
             request.setAttribute("listKTKL", listKTKL);
@@ -161,9 +171,9 @@ public class menuController extends HttpServlet {
     }
     private void Formquanlynhanvien(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-
+        String user = getMatk(request,response);
         HttpSession session = request.getSession(false);
-        if (session != null) {
+        if (session != null && user != null) {
             taikhoan username = (taikhoan) session.getAttribute("user");
             int capbac = (int) session.getAttribute("capbac");
             List <nhanvien> listnv = null;
@@ -212,11 +222,12 @@ public class menuController extends HttpServlet {
     private void Formquanlyphongban(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         HttpSession session = request.getSession(false);
+        String user = getMatk(request,response);
         int capbac = (int) session.getAttribute("capbac");
         nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
         String mapb = nv.getMapb();
         String macn = nv.getMacn();
-        if (session != null) {
+        if (session != null && user != null) {
             taikhoan username = (taikhoan) session.getAttribute("user");
             if(capbac == 3) {
                 List<phongban> listphongban = phongbanDAO.selectAllphongban();
@@ -240,11 +251,12 @@ public class menuController extends HttpServlet {
     private void Formquanlychinhanh(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         HttpSession session = request.getSession(false);
+        String user = getMatk(request,response);
         int capbac = (int) session.getAttribute("capbac");
         nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
         String mapb = nv.getMapb();
         String macn = nv.getMacn();
-        if (session != null) {
+        if (session != null && user != null) {
             taikhoan username = (taikhoan) session.getAttribute("user");
             List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh();
             request.setAttribute("listchinhanh", listchinhanh);

@@ -75,7 +75,7 @@ public class thongtincanhanController extends HttpServlet {
             thongtincanhan tt = new thongtincanhan(matk, hoten, ngaysinh, gioitinh, sdt, email);
             thongtincanhanDAO.capNhatThongTinCaNhan(tt);
         } else {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
             dispatcher.forward(request, response);
         }
     }
@@ -99,7 +99,7 @@ public class thongtincanhanController extends HttpServlet {
             thongtincanhanDAO.capNhatCCCD(cancuoc);
             response.sendRedirect("thongtincanhan");
         } else {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
             dispatcher.forward(request, response);
         }
     }
@@ -117,7 +117,7 @@ public class thongtincanhanController extends HttpServlet {
             thongtincanhanDAO.capNhatDiaChi(dc);
             response.sendRedirect("thongtincanhan");
         } else {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
             dispatcher.forward(request, response);
         }
     }
@@ -130,7 +130,7 @@ public class thongtincanhanController extends HttpServlet {
             taikhoan tk = new taikhoan(user,pass,matk);
             thongtincanhanDAO.capNhatMatKhau(tk);
         } else {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/thongtincanhan/thongtincanhan.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
             dispatcher.forward(request, response);
         }
     }
