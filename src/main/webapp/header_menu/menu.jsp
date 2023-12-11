@@ -11,10 +11,10 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/menu.css" />
 </head>
 <body>
-<aside class="sidebar">
-    <div class="logo">
-        <img src="fuk.jpeg" alt="logo">
-        <h2>${tennhanvien_menu.hoten}</h2>
+<aside class="sidebar"  style="background-color:#AAAAAA; width: 15%;margin-left: 5%; ">
+    <div class="logo" style=" margin-top: 60px;">
+        <i class="fas fa-user fa-lg" style="font-size: 50px;"></i>
+        <h2 style="font-size:23px ">${tennhanvien_menu.hoten}</h2>
     </div>
     <ul class="links">
         <li>

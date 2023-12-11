@@ -64,6 +64,17 @@ public class chinhanhController extends HttpServlet {
             throw new ServletException(ex);
         }
     }
+    private String getMatk(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            taikhoan username = (taikhoan) session.getAttribute("user");
+            return username.getMatk();
+        }
+        else {
+            return null;
+        }
+    }
     private void deleteChiNhanh(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         String macn = request.getParameter("macn");
@@ -73,13 +84,13 @@ public class chinhanhController extends HttpServlet {
     }
     private void FormThemChiNhanh(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-
+        String user = getMatk(request,response);
         HttpSession session = request.getSession(false);
         int capbac = (int) session.getAttribute("capbac");
         nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
         String mapb = nv.getMapb();
         String macn = nv.getMacn();
-        if (session != null) {
+        if (session != null && user != null) {
             List <diachi> listdiachi = diachiDAO.DanhSachDiaChi();
             request.setAttribute("listdiachi", listdiachi);
 
@@ -98,11 +109,12 @@ public class chinhanhController extends HttpServlet {
     private void FormEditChiNhanh(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         HttpSession session = request.getSession(false);
+        String user = getMatk(request,response);
         int capbac = (int) session.getAttribute("capbac");
         nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
         String mapb = nv.getMapb();
         String macn = nv.getMacn();
-        if (session != null) {
+        if (session != null && user != null) {
             String maCN = request.getParameter("macn");
             chinhanh existingChiNhanh = cnDAO.selectChiNhanh(maCN);
             request.setAttribute("chinhanh", existingChiNhanh);

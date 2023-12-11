@@ -39,9 +39,7 @@ public class forgotDAO {
             preparedStatement.setString(1, tk.getUsername());
             preparedStatement.setString(2, tt.getEmail());
 
-            System.out.println(preparedStatement);
             ResultSet rs = preparedStatement.executeQuery();
-
             result = rs.next();
 
         } catch (SQLException e) {

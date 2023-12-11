@@ -83,8 +83,8 @@ public class phongbanController extends HttpServlet {
         String mapb = nv.getMapb();
         String macn = nv.getMacn();
         String mainComboValue = request.getParameter("mainComboValue");
-
-        if (session != null) {
+        String user = getMatk(request,response);
+        if (session != null && user != null) {
             if(capbac == 2){ // giamdoc
                 List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh_MaCN(macn);
                 request.setAttribute("listchinhanh", listchinhanh);
@@ -141,8 +141,8 @@ public class phongbanController extends HttpServlet {
         String mapb = nv.getMapb();
         String macn = nv.getMacn();
         String mainComboValue = request.getParameter("mainComboValue");
-
-        if (session != null) {
+        String user = getMatk(request,response);
+        if (session != null && user != null) {
             if (capbac == 2) { // giamdoc
                 String maPB = request.getParameter("mapb");
                 phongban existingPhongBan = pbDAO.selectPhongBan(maPB);
