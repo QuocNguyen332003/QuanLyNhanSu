@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 import DAO.*;
 import Model.*;
 
-@WebServlet(name = "menu", urlPatterns = { "/trangchu", "/thongtincanhan", "/congtac", "/khenthuongkyluat", "/quanlynhanvien", "/quanlyphongban","/quanlychinhanh"})
+@WebServlet(name = "menu", urlPatterns = { "/trangchu", "/thongtincanhan", "/congtac", "/khenthuongkyluat", "/quanlynhanvien", "/quanlyphongban","/quanlychinhanh", "/logout"})
 public class menuController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -58,6 +58,9 @@ public class menuController extends HttpServlet {
                 case "/quanlychinhanh":
                     Formquanlychinhanh(request, response);
                     break;
+                case "/logout":
+                    Logout(request,response);
+                    break;
                 default:
                     RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
                     dispatcher.forward(request, response);
@@ -77,6 +80,16 @@ public class menuController extends HttpServlet {
             }
         }
         return null;
+    }
+    private void Logout(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException{
+        HttpSession session = request.getSession(false);
+        String user = getMatk(request,response);
+
+        session.invalidate();
+        user = null;
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/login/login.jsp");
+        dispatcher.forward(request, response);
     }
     private void Formtrangchu(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
