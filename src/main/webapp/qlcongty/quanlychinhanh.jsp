@@ -84,7 +84,8 @@
 								<th>Mã Giám Đốc</th>
 								<th>Tình Trạng</th>
 								<th>Ngày Tạo</th>
-								<th></th>
+								<th>Cập Nhật Chi Nhánh</th>
+								<th>Xoá Chi Nhánh</th>
 							</tr>
 							</thead>
 							<tbody>
@@ -96,9 +97,8 @@
 									<td>${x.magiamdoc}</td>
 									<td>${x.tinhtrang}</td>
 									<td>${x.ngaytao}</td>
-									<td><a href="editChiNhanh?macn=<c:out value='${x.macn}' />&diachi=<c:out value='${x.diachi}' />">Edit</a>
-										&nbsp;&nbsp;&nbsp;&nbsp; <a
-												href="deleteChiNhanh?macn=<c:out value='${x.macn}' />">Delete</a></td>
+									<td><a href="editChiNhanh?macn=<c:out value='${x.macn}' />&diachi=<c:out value='${x.diachi}' />">Edit</a></td>
+									<td><a href="deleteChiNhanh?macn=<c:out value='${x.macn}' />">Delete</a></td>
 								</tr>
 							</c:forEach>
 							</tbody>
