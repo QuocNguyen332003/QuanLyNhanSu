@@ -85,7 +85,8 @@
 								<th>Mã Trưởng Phòng</th>
 								<th>Ngày Tạo</th>
 								<th>Mã Phòng Ban</th>
-								<th></th>
+								<th>Cập Nhật Phòng Ban</th>
+								<th>Xoá phòng ban</th>
 							</tr>
 							</thead>
 							<tbody>
@@ -97,9 +98,8 @@
 									<td>${x.matrphong}</td>
 									<td>${x.ngaytao}</td>
 									<td>${x.mapbtr}</td>
-									<td><a href="editPhongBan?mapb=<c:out value='${x.mapb}' />&macn=<c:out value='${x.macn}' />" style="display:${sessionScope.capbac == 0 || sessionScope.capbac == 1 ? 'none' : 'inline'}" >Edit</a>
-										&nbsp;&nbsp;&nbsp;&nbsp; <a
-												href="deletePhongBan?mapb=<c:out value='${x.mapb}' />" style="display:${sessionScope.capbac == 0 || sessionScope.capbac == 1 ? 'none' : 'inline'}" >Delete</a></td>
+									<td><a href="editPhongBan?mapb=<c:out value='${x.mapb}' />&macn=<c:out value='${x.macn}' />" style="display:${sessionScope.capbac == 0 || sessionScope.capbac == 1 ? 'none' : 'inline'}" >Edit</a></td>
+									<td> <a href="deletePhongBan?mapb=<c:out value='${x.mapb}' />" style="display:${sessionScope.capbac == 0 || sessionScope.capbac == 1 ? 'none' : 'inline'}" >Delete</a></td>	&nbsp;&nbsp;
 								</tr>
 							</c:forEach>
 							</tbody>
