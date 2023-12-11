@@ -182,4 +182,28 @@ public class phongbanDAO {
         }
         return result;
     }
+    public static List<String> Selected_PB_BY_CN(String maCN) {
+        List<String> PBNames = new ArrayList<>();
+
+        // Step 1: Establishing a Connection
+        try (Connection connection = JDBCUtils.getConnection();
+             // Step 2: Create a statement using connection object
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_CN);) {
+            System.out.println(preparedStatement);
+            if (maCN != null) {
+                preparedStatement.setString(1, maCN);
+            }
+            // Step 3: Execute the query
+            ResultSet rs = preparedStatement.executeQuery();
+
+            // Step 4: Process the ResultSet object.
+            while (rs.next()) {
+                String macn = rs.getString("mapb"); // Replace "tennhanvien" with the actual column name for the employee's name
+                PBNames.add(macn);
+            }
+        } catch (SQLException exception) {
+            JDBCUtils.printSQLException(exception);
+        }
+        return PBNames;
+    }
 }

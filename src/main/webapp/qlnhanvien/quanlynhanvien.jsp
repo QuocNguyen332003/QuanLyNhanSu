@@ -153,7 +153,7 @@
                                 </div>
                                 <div class="form-group mx-2">
                                     <label for="select_macn" class="mr-2"> Mã chi nhánh:</label>
-                                    <select class="form-control form-control-sm box_search" id = "select_macn" onchange="search_Input('select_macn')">
+                                    <select class="form-control form-control-sm box_search" id = "select_macn"  onchange="updatePhongBanList(); Search_textbox();">
                                         <option value="ALL">Tất cả</option>
                                         <c:forEach var="item" items="${setmacn_nv}">
                                             <option value="<c:out value="${item}" />">${item}</option>
@@ -162,18 +162,9 @@
                                 </div>
                                 <div class="form-group mx-2">
                                     <label for="select_mapb" class="mr-2"> Mã phòng ban:</label>
-                                    <select class="form-control form-control-sm box_search" id = "select_mapb" onchange="search_Input('select_mapb')">
+                                    <select class="form-control form-control-sm box_search" id = "select_mapb" onchange = "Search_textbox()" >
                                         <option value="ALL">Tất cả</option>
                                         <c:forEach var="item" items="${setmapb_nv}">
-                                            <option value="<c:out value="${item}" />">${item}</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                                <div class="form-group mx-2">
-                                    <label for="select_matk" class="mr-2"> Mã nhân viên:</label>
-                                    <select class="form-control form-control-sm box_search" id = "select_matk" onchange="search_Input('select_matk')">
-                                        <option value="ALL">Tất cả</option>
-                                        <c:forEach var="item" items="${setmatk_nv}">
                                             <option value="<c:out value="${item}" />">${item}</option>
                                         </c:forEach>
                                     </select>
@@ -245,7 +236,7 @@
                                         <div class="form-group form-inline">
                                             <label for="macn${count}" class = "label_form_control"><b>Mã chi nhánh:</b></label>
                                             <select id="macn${count}" name="macn" class="form-control box_form_control form-select">
-                                                <option value="ALL">Tất cả</option>
+                                                <option value="all">Tất cả</option>
                                                 <c:forEach var="item" items="${setmacn_nv}">
                                                     <option value="<c:out value="${item}" />">${item}</option>
                                                 </c:forEach>
@@ -254,7 +245,7 @@
                                         <div class="form-group form-inline">
                                             <label for="mapb${count}" class = "label_form_control"><b>Mã phòng ban:</b></label>
                                             <select id="mapb${count}" name="mapb" class="form-control box_form_control form-select">
-                                                <option value="ALL">Tất cả</option>
+                                                <option value="all">Tất cả</option>
                                                 <c:forEach var="item" items="${chitietphongban}">
                                                     <option value="<c:out value="${item.mapb}" />">${item.mapb}</option>
                                                 </c:forEach>
@@ -362,27 +353,72 @@
                                 }
                             }
                         }
-                        function search_Input(box_search){
+                        function Search_textbox() {
                             var input, filter, table, tr, td, i, txtValue;
-                            input = document.getElementById(box_search);
+                            input = document.getElementById("search");
                             filter = input.value.toUpperCase();
                             table = document.getElementById("row_table");
                             tr = table.getElementsByTagName("tr");
+
+                            var selectMacn = document.getElementById("select_macn");
+                            var selectMapb = document.getElementById("select_mapb");
+                            var selectedMacn = selectMacn.options[selectMacn.selectedIndex].value.toUpperCase();
+                            var selectedMapb = selectMapb.options[selectMapb.selectedIndex].value.toUpperCase();
+
                             for (i = 0; i < tr.length; i++) {
                                 td = tr[i].getElementsByTagName("td");
-                                let j = box_search === "select_matk"? 0: box_search === "select_mapb"? 1: 2;
-                                let x = tr[i].getElementsByTagName("td")[j];
-                                if (x) {
-                                    txtValue = x.textContent || x.innerText;
-                                    if (txtValue.toUpperCase().indexOf(filter) > -1 || filter.toUpperCase().indexOf("ALL") > -1) {
-                                        tr[i].style.display = "";
-                                    } else {
-                                        tr[i].style.display = "none";
-                                    }
+                                let macnValue = td[2].textContent || td[2].innerText; // Assuming the column index for Mã Chi Nhánh is 2
+                                let mapbValue = td[1].textContent || td[1].innerText; // Assuming the column index for Mã Phòng Ban is 1
+
+                                if (
+                                    (selectedMacn === "ALL" || macnValue.toUpperCase() === selectedMacn) &&
+                                    (selectedMapb === "ALL" || mapbValue.toUpperCase() === selectedMapb) &&
+                                    (filter === "" || (td[0] && (td[0].textContent || td[0].innerText).toUpperCase().indexOf(filter) > -1))
+                                ) {
+                                    tr[i].style.display = "";
+                                } else {
+                                    tr[i].style.display = "none";
                                 }
                             }
                         }
+
+
+                        function updatePhongBanList() {
+                            var mainComboValue = document.getElementById("select_macn").value;
+                            var mapbSelect = document.getElementById('select_mapb');
+
+                            // Use AJAX to send macnValue to the server and update dependent combobox
+                            var xhr = new XMLHttpRequest();
+                            xhr.open("GET", "quanlynhanvien?mainComboValue=" + encodeURIComponent(mainComboValue), true);
+                            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                            xhr.onreadystatechange = function () {
+                                if (xhr.readyState == 4 && xhr.status == 200) {
+                                    var options = JSON.parse(xhr.responseText);
+                                    alert(xhr.responseText);
+                                    // Remove all existing options
+                                    options.unshift("Tất cả");
+                                    while (mapbSelect.firstChild) {
+                                        mapbSelect.removeChild(mapbSelect.firstChild);
+                                    }
+
+                                    // Add the new options to mapbSelect
+                                    options.forEach(function (option) {
+                                        var newOption = document.createElement('option');
+                                        newOption.text = option;
+                                        mapbSelect.add(newOption);
+                                    });
+                                }
+                            };
+                            xhr.send();
+                        }
                    	</script>
+                    <script type="text/javascript">
+                        document.getElementById('select_macn').addEventListener('change', function() {
+                            if (this.value === 'ALL') {
+                                location.reload();
+                            }
+                        });
+                    </script>
                 </div>
             </div>
         </div>
