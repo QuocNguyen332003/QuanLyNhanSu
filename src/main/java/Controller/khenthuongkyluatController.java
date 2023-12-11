@@ -62,11 +62,11 @@ public class khenthuongkyluatController extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session != null) {
             taikhoan username = (taikhoan) session.getAttribute("user");
-            return username.getMatk();
+            if (username != null){
+                return username.getMatk();
+            }
         }
-        else {
-            return null;
-        }
+        return null;
     }
     public String getNewId() {
         int[] id_num = {0, 0, 0, 1};
@@ -110,7 +110,6 @@ public class khenthuongkyluatController extends HttpServlet {
     private void Thaydoikhenthuongkyluat(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         String matk = getMatk(request, response);
-        System.out.println("pass");
         if (matk != null) {
             String id = request.getParameter("id");
             String soqd = request.getParameter("soqd");
@@ -142,49 +141,52 @@ public class khenthuongkyluatController extends HttpServlet {
     private void XemKTKL(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         HttpSession session = request.getSession(false);
-        List <thanhtichkyluat> listKTKL = new ArrayList<>();
-        List <nhanvien> matk_nv = new ArrayList<>();
-        int capbac = (int) session.getAttribute("capbac");
+        String matk = getMatk(request, response);
+        if (matk != null) {
+            List<thanhtichkyluat> listKTKL = new ArrayList<>();
+            List<nhanvien> matk_nv = new ArrayList<>();
+            int capbac = (int) session.getAttribute("capbac");
 
-        if (capbac == 1){
-            String mapb = phongbanDAO.LayMaPB(getMatk(request,response));
-            listKTKL = khenthuongkyluatDAO.DanhSachKTKL_NV_PB(mapb);
-            request.setAttribute("listKTKL_nv", listKTKL);
+            if (capbac == 1) {
+                String mapb = phongbanDAO.LayMaPB(getMatk(request, response));
+                listKTKL = khenthuongkyluatDAO.DanhSachKTKL_NV_PB(mapb);
+                request.setAttribute("listKTKL_nv", listKTKL);
 
-            matk_nv = qlnhanvienDAO.LayNhanVienPB(mapb);
-            request.setAttribute("listMatk_nv", matk_nv);
-        } else if (capbac == 2){
-            String macn = chinhanhDAO.LayMaCN(getMatk(request,response));
-            listKTKL = khenthuongkyluatDAO.DanhSachKTKL_NV_CN(macn);
-            request.setAttribute("listKTKL_nv", listKTKL);
+                matk_nv = qlnhanvienDAO.LayNhanVienPB(mapb);
+                request.setAttribute("listMatk_nv", matk_nv);
+            } else if (capbac == 2) {
+                String macn = chinhanhDAO.LayMaCN(getMatk(request, response));
+                listKTKL = khenthuongkyluatDAO.DanhSachKTKL_NV_CN(macn);
+                request.setAttribute("listKTKL_nv", listKTKL);
 
-            matk_nv = qlnhanvienDAO.LayNhanVienCN(macn);
-            request.setAttribute("listMatk_nv", matk_nv);
-        } else if (capbac == 3){
-            listKTKL = khenthuongkyluatDAO.DanhSachKTKL_ALL_NV();
-            request.setAttribute("listKTKL_nv", listKTKL);
+                matk_nv = qlnhanvienDAO.LayNhanVienCN(macn);
+                request.setAttribute("listMatk_nv", matk_nv);
+            } else if (capbac == 3) {
+                listKTKL = khenthuongkyluatDAO.DanhSachKTKL_ALL_NV();
+                request.setAttribute("listKTKL_nv", listKTKL);
 
-            matk_nv = qlnhanvienDAO.LayNhanVien();
-            request.setAttribute("listMatk_nv", matk_nv);
-        }
-
-        if (capbac != 0){
-            List<String> listmatk = new ArrayList<>();
-            List<LocalDate> listngay = new ArrayList<>();
-            List<String> listsoqd = new ArrayList<>();
-            for (thanhtichkyluat KTKL: listKTKL) {
-                listmatk.add(KTKL.getMatk());
-                listngay.add(KTKL.getNgay());
-                listsoqd.add(KTKL.getSoqd());
+                matk_nv = qlnhanvienDAO.LayNhanVien();
+                request.setAttribute("listMatk_nv", matk_nv);
             }
-            Set<String> setmatk_nv = new HashSet<String>(listmatk);
-            Set<LocalDate> setngay_nv = new HashSet<LocalDate>(listngay);
-            Set<String> setsoqd_nv = new HashSet<String>(listsoqd);
-            request.setAttribute("setKTKL_matk", setmatk_nv);
-            request.setAttribute("setKTKL_ngay", setngay_nv);
-            request.setAttribute("setKTKL_soqd", setsoqd_nv);
+
+            if (capbac != 0) {
+                List<String> listmatk = new ArrayList<>();
+                List<LocalDate> listngay = new ArrayList<>();
+                List<String> listsoqd = new ArrayList<>();
+                for (thanhtichkyluat KTKL : listKTKL) {
+                    listmatk.add(KTKL.getMatk());
+                    listngay.add(KTKL.getNgay());
+                    listsoqd.add(KTKL.getSoqd());
+                }
+                Set<String> setmatk_nv = new HashSet<String>(listmatk);
+                Set<LocalDate> setngay_nv = new HashSet<LocalDate>(listngay);
+                Set<String> setsoqd_nv = new HashSet<String>(listsoqd);
+                request.setAttribute("setKTKL_matk", setmatk_nv);
+                request.setAttribute("setKTKL_ngay", setngay_nv);
+                request.setAttribute("setKTKL_soqd", setsoqd_nv);
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/khenthuongkyluat/ql_khenthuongkyluat.jsp");
+            dispatcher.forward(request, response);
         }
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/khenthuongkyluat/ql_khenthuongkyluat.jsp");
-        dispatcher.forward(request, response);
     }
 }

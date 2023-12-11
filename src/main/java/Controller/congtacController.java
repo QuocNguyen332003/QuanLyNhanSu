@@ -64,16 +64,16 @@ public class congtacController extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session != null) {
             taikhoan username = (taikhoan) session.getAttribute("user");
-            return username.getMatk();
+            if (username != null){
+                return username.getMatk();
+            }
         }
-        else {
-            return null;
-        }
+        return null;
     }
     private void Themcongtac(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         String matk = getMatk(request, response);
-        if (matk != null) {
+        if (matk != null ) {
             LocalDate ngaybatdau = LocalDate.parse(request.getParameter("ngaybatdau"));
             String tentc = request.getParameter("tentochuc");
             String diachi = request.getParameter("diachi");
@@ -122,34 +122,37 @@ public class congtacController extends HttpServlet {
     private void Xemcongtac(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         HttpSession session = request.getSession(false);
-        List < congtac > listcongtac = new ArrayList<>();
-        int capbac = (int) session.getAttribute("capbac");
+        String matk = getMatk(request, response);
+        if (matk != null) {
+            List<congtac> listcongtac = new ArrayList<>();
+            int capbac = (int) session.getAttribute("capbac");
 
-        if (capbac == 1){
-            String mapb = phongbanDAO.LayMaPB(getMatk(request,response));
-            listcongtac = congtacDAO.DanhSachCongTac_NV_PB(mapb);
-            request.setAttribute("listcongtac_nv", listcongtac);
-        } else if (capbac == 2){
-            String macn = chinhanhDAO.LayMaCN(getMatk(request,response));
-            listcongtac = congtacDAO.DanhSachCongTac_NV_CN(macn);
-            request.setAttribute("listcongtac_nv", listcongtac);
-        } else if (capbac == 3){
-            listcongtac = congtacDAO.DanhSachCongTac_ALL_NV();
-            request.setAttribute("listcongtac_nv", listcongtac);
-        }
-        if (capbac != 0){
-            List<String> listmatk = new ArrayList<>();
-            List<LocalDate> listngaybatdau = new ArrayList<>();
-            for (congtac ct: listcongtac) {
-                listmatk.add(ct.getMatk());
-                listngaybatdau.add(ct.getNgaybatdau());
+            if (capbac == 1) {
+                String mapb = phongbanDAO.LayMaPB(getMatk(request, response));
+                listcongtac = congtacDAO.DanhSachCongTac_NV_PB(mapb);
+                request.setAttribute("listcongtac_nv", listcongtac);
+            } else if (capbac == 2) {
+                String macn = chinhanhDAO.LayMaCN(getMatk(request, response));
+                listcongtac = congtacDAO.DanhSachCongTac_NV_CN(macn);
+                request.setAttribute("listcongtac_nv", listcongtac);
+            } else if (capbac == 3) {
+                listcongtac = congtacDAO.DanhSachCongTac_ALL_NV();
+                request.setAttribute("listcongtac_nv", listcongtac);
             }
-            Set<String> setmatk_nv = new HashSet<String>(listmatk);
-            Set<LocalDate> setngaybatdau_nv = new HashSet<LocalDate>(listngaybatdau);
-            request.setAttribute("setcongtac_matk", setmatk_nv);
-            request.setAttribute("setcongtac_ngay", setngaybatdau_nv);
+            if (capbac != 0) {
+                List<String> listmatk = new ArrayList<>();
+                List<LocalDate> listngaybatdau = new ArrayList<>();
+                for (congtac ct : listcongtac) {
+                    listmatk.add(ct.getMatk());
+                    listngaybatdau.add(ct.getNgaybatdau());
+                }
+                Set<String> setmatk_nv = new HashSet<String>(listmatk);
+                Set<LocalDate> setngaybatdau_nv = new HashSet<LocalDate>(listngaybatdau);
+                request.setAttribute("setcongtac_matk", setmatk_nv);
+                request.setAttribute("setcongtac_ngay", setngaybatdau_nv);
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/congtac/xem_congtac.jsp");
+            dispatcher.forward(request, response);
         }
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/congtac/xem_congtac.jsp");
-        dispatcher.forward(request, response);
     }
 }

@@ -57,11 +57,11 @@ public class thongtincanhanController extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session != null) {
             taikhoan username = (taikhoan) session.getAttribute("user");
-            return username.getMatk();
+            if (username != null){
+                return username.getMatk();
+            }
         }
-        else {
-            return null;
-        }
+        return null;
     }
     private void capNhatThongTin(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
@@ -82,9 +82,9 @@ public class thongtincanhanController extends HttpServlet {
     private void capNhatCCCD(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         String matk = getMatk(request, response);
-        thongtincanhan tt = thongtincanhanDAO.layThongTinCaNhan(matk);
-        String madc = tt.getDiachi();
         if (matk != null) {
+            thongtincanhan tt = thongtincanhanDAO.layThongTinCaNhan(matk);
+            String madc = tt.getDiachi();
             String cccd = request.getParameter("cc_cccd");
             LocalDate ngaycap = LocalDate.parse(request.getParameter("cc_ngaycap"));
             cancuoccongdan cancuoc = new cancuoccongdan(matk, cccd, ngaycap,madc);
@@ -106,9 +106,9 @@ public class thongtincanhanController extends HttpServlet {
     private void capNhatDiaChi(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         String matk = getMatk(request, response);
-        thongtincanhan tt = thongtincanhanDAO.layThongTinCaNhan(matk);
-        String madc = tt.getDiachi();
         if (matk != null) {
+            thongtincanhan tt = thongtincanhanDAO.layThongTinCaNhan(matk);
+            String madc = tt.getDiachi();
             String tinhtp = request.getParameter("dc_tinhtp");
             String quanhuyen = request.getParameter("dc_quanhuyen");
             String phuongxa = request.getParameter("dc_phuongxa");

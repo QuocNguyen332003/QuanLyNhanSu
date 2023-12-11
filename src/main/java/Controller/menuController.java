@@ -272,10 +272,10 @@ public class menuController extends HttpServlet {
         HttpSession session = request.getSession(false);
         String user = getMatk(request,response);
         int capbac = (int) session.getAttribute("capbac");
-        nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
-        String mapb = nv.getMapb();
-        String macn = nv.getMacn();
-        if (session != null && user != null) {
+        if (session != null && user != null && capbac > 1) {
+            nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
+            String mapb = nv.getMapb();
+            String macn = nv.getMacn();
             taikhoan username = (taikhoan) session.getAttribute("user");
             if(capbac == 3) {
                 List<phongban> listphongban = phongbanDAO.selectAllphongban();
@@ -299,13 +299,9 @@ public class menuController extends HttpServlet {
     private void Formquanlychinhanh(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         HttpSession session = request.getSession(false);
-        String user = getMatk(request,response);
         int capbac = (int) session.getAttribute("capbac");
-        nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
-        String mapb = nv.getMapb();
-        String macn = nv.getMacn();
-        if (session != null && user != null) {
-            taikhoan username = (taikhoan) session.getAttribute("user");
+        String user = getMatk(request,response);
+        if (session != null && user != null && capbac > 2) {
             List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh();
             request.setAttribute("listchinhanh", listchinhanh);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/qlcongty/quanlychinhanh.jsp");

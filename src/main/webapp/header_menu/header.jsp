@@ -1,4 +1,5 @@
-    <%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ page import="Model.taikhoan" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +10,10 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/base.css" />
 </head>
 <body>
+<%taikhoan username = (taikhoan) session.getAttribute("user"); %>
+<%if (username == null) {%>
+<jsp:forward page="/login/login.jsp"></jsp:forward>
+<%} else {%>
 <div class="box-area">
     <header>
         <div class="wrapper">
@@ -18,5 +23,6 @@
         </div>
     </header>
 </div>
+<%}%>
 </body>
 </html>
