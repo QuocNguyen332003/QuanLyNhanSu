@@ -1,3 +1,6 @@
+<%@ page import="org.w3c.dom.Node" %>
+<%@ page import="Model.NodeTree" %>
+<%@ page import="java.util.List" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -26,6 +29,22 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/sodo.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/base.css" />
     <title>Sơ đồ</title>
+    <style>
+        .scroll {
+            overflow-y: auto; /* Hiển thị thanh cuộn theo chiều dọc khi cần */
+            max-height: 400px; /* Giới hạn chiều cao tối đa của thẻ div */
+        }
+        .button_tree{
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .button_tree:hover{
+            background-color: rgba(0,0,0, 0.5);
+        }
+        .display_none{
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -44,39 +63,122 @@
             </nav>
             <br>
             <div class="row">
-                <div class="col-md-5 mb-4 box_tree">
+                <div class="col-md-5 mb-4 box_tree scroll">
                     <ul id="tree1">
                         <br>
-                        <li><a href="#">Quản lý</a>
+                        <c:set var="stt_cn" value="0" />
+                        <c:set var="stt_pb" value="0" />
+                        <c:set var="stt_nv" value="0" />
+                        <c:set var="root" value="${tree}" />
+                        <li><button class = "button_tree">${root.name}</button>
                             <ul>
-                                <li>Chi nhánh Hồ Chí Minh</li>
-                                <li>Chi nhánh Đồng Tháp
+                                <c:forEach var="node_cn" items="${tree.node_child}">
+                                <li>
+                                    <button class = "button_tree" onclick="XemChiNhanh${stt_cn}()">${node_cn.name}</button>
+                                    <script>
+                                        function XemChiNhanh${stt_cn}(){
+                                            let list_li = document.getElementsByName("item_tree");
+                                            let li_target = document.getElementById("cn_tree${stt_cn}");
+                                            let i = 0;
+
+                                            for(i = 0; i < list_li.length; i++){
+                                                list_li[i].style.display = "none";
+                                            }
+                                            li_target.style.display = "inline";
+                                        }
+                                    </script>
                                     <ul>
-                                        <li>Reports
+                                        <c:forEach var="node_pb" items="${node_cn.node_child}">
+                                        <li>
+                                            <button class = "button_tree" onclick="XemPhongBan${stt_pb}()">${node_pb.name}</button>
+                                            <script>
+                                                function XemPhongBan${stt_pb}(){
+                                                    let list_li = document.getElementsByName("item_tree");
+                                                    let li_target = document.getElementById("pb_tree${stt_pb}");
+                                                    let i = 0;
+
+                                                    for(i = 0; i < list_li.length; i++){
+                                                        list_li[i].style.display = "none";
+                                                    }
+                                                    li_target.style.display = "inline";
+                                                }
+                                            </script>
                                             <ul>
-                                                <li>Report1</li>
-                                                <li>Report2</li>
-                                                <li>Report3</li>
+                                                <c:forEach var="node_nv" items="${node_pb.node_child}">
+                                                <li>
+                                                    <button class = "button_tree" onclick="XemNhanVien${stt_nv}()">${node_nv.name}</button>
+                                                    <script>
+                                                        function XemNhanVien${stt_nv}(){
+                                                            let list_li = document.getElementsByName("item_tree");
+                                                            let li_target = document.getElementById("nv_tree${stt_nv}");
+                                                            let i = 0;
+
+                                                            for(i = 0; i < list_li.length; i++){
+                                                                list_li[i].style.display = "none";
+                                                            }
+                                                            li_target.style.display = "inline";
+                                                        }
+                                                    </script>
+                                                </li>
+                                                    <c:set var="stt_nv" value="${stt_nv+1}" />
+                                                </c:forEach>
                                             </ul>
                                         </li>
-                                        <li>Employee Maint.</li>
+                                            <c:set var="stt_pb" value="${stt_pb+1}" />
+                                        </c:forEach>
                                     </ul>
                                 </li>
-                                <li>Chi nhánh Bến Tre</li>
-                                <li>Chi nhánh Đồng Nai</li>
-                            </ul></li>
+                                    <c:set var="stt_cn" value="${stt_cn+1}" />
+                                </c:forEach>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
 
-                <div class="col-md-5 mb-4 box_tree">
+                <div class="col-md-5 mb-4 box_tree scroll">
                     <ul id="tree2">
                         <br>
-                        <li><a href="#">Quản Lý</a>
+                        <c:set var="root" value="${tree}" />
+                        <li name = "item_tree" id = "root_tree"><h3 class = "button_tree" >${root.name}</h3>
                             <ul>
-                                <li>Phan Minh Quân</li>
-                                <li>0765058830</li>
-                                <li>21110740@student.chmute.edu.vn</li>
-                            </ul></li>
+                                <li>${root.owner}</li>
+                                <li>${root.sdt}</li>
+                                <li>${root.email}</li>
+                            </ul>
+                        </li>
+                        <c:set var="stt_cn" value="0" />
+                        <c:set var="stt_pb" value="0" />
+                        <c:set var="stt_nv" value="0" />
+                        <c:forEach var="node_cn" items="${tree.node_child}">
+                            <li class = "display_none" name = "item_tree" id = "cn_tree${stt_cn}"><h3 class = "button_tree" >${node_cn.name}</h3>
+                                <ul>
+                                    <li>${node_cn.owner}</li>
+                                    <li>${node_cn.sdt}</li>
+                                    <li>${node_cn.email}</li>
+                                </ul>
+                            </li>
+                        <c:forEach var="node_pb" items="${node_cn.node_child}">
+                            <li class = "display_none" name = "item_tree" id = "pb_tree${stt_pb}"><h3 class = "button_tree" >${node_pb.name}</h3>
+                                <ul>
+                                    <li>${node_pb.owner}</li>
+                                    <li>${node_pb.sdt}</li>
+                                    <li>${node_pb.email}</li>
+                                </ul>
+                            </li>
+                            <c:forEach var="node_nv" items="${node_pb.node_child}">
+                                <li class = "display_none" name = "item_tree" id = "nv_tree${stt_nv}"><h3 class = "button_tree" >${node_nv.name}</h3>
+                                    <ul>
+                                        <li>${node_nv.owner}</li>
+                                        <li>${node_nv.sdt}</li>
+                                        <li>${node_nv.email}</li>
+                                    </ul>
+                                </li>
+                                <c:set var="stt_nv" value="${stt_nv+1}" />
+                            </c:forEach>
+                            <c:set var="stt_pb" value="${stt_pb+1}" />
+                        </c:forEach>
+                            <c:set var="stt_cn" value="${stt_cn+1}" />
+                        </c:forEach>
                     </ul>
                 </div>
             </div>
@@ -155,7 +257,6 @@
             }
         });
     $('#tree1').treed();
-    $('#tree2').treed();
 </script>
 </body>
 
