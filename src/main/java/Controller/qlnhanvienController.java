@@ -133,126 +133,148 @@ public class qlnhanvienController extends HttpServlet {
     }
     public void ThemNhanVien(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException{
-        request.setAttribute("thongtincanhan", null);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/qlnhanvien/chitietnhanvien.jsp");
-        dispatcher.forward(request, response);
+        String user = getMatk(request,response);
+        if (user != null) {
+            request.setAttribute("thongtincanhan", null);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/qlnhanvien/chitietnhanvien.jsp");
+            dispatcher.forward(request, response);
+        }
     }
     public void ThemNhanVienExcel(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException{
         HttpSession session = request.getSession(false);
-        List<DuLieuNhanVien> list_dlnv = (List<DuLieuNhanVien>) session.getAttribute("list_dulieunhanvien");
-        for (DuLieuNhanVien nv: list_dlnv) {
-            String matk = forgotDAO.getNewMatk();
-            String madc_cc = diachiDAO.getDiaChi("DC");
-            String madc_dc = diachiDAO.getDiaChi("DN");
+        String user = getMatk(request,response);
+        if (user != null) {
+            List<DuLieuNhanVien> list_dlnv = (List<DuLieuNhanVien>) session.getAttribute("list_dulieunhanvien");
+            for (DuLieuNhanVien nv : list_dlnv) {
+                String matk = forgotDAO.getNewMatk();
+                String madc_cc = diachiDAO.getDiaChi("DC");
+                String madc_dc = diachiDAO.getDiaChi("DN");
 
-            diachi diachi_cc = new diachi(madc_cc, nv.getTinh_cap(), nv.getHuyen_cap(), nv.getXa_cap(), nv.getSonha_cap());
-            diachi diachi_nv = new diachi(madc_dc, nv.getTinh(), nv.getHuyen(), nv.getXa(), nv.getSonha());
-            thongtincanhan ttcn = new thongtincanhan(matk, nv.getHoten(), nv.getNgaysinh(), nv.getGioitinh(),madc_dc,nv.getSdt(),nv.getEmail(),nv.getBangcap());
-            cancuoccongdan cccd = new cancuoccongdan(matk, nv.getSocccd(),nv.getNgaycap(),madc_cc);
-            nhanvien new_nv = new nhanvien(matk,nv.getChinhanh(),nv.getPhongban(),nv.getNgaybatdau(),"Đang hoạt động",nv.getCongviec());
-            taikhoan tk = new taikhoan(nv.getUsernam(),nv.getPass(),matk);
+                diachi diachi_cc = new diachi(madc_cc, nv.getTinh_cap(), nv.getHuyen_cap(), nv.getXa_cap(), nv.getSonha_cap());
+                diachi diachi_nv = new diachi(madc_dc, nv.getTinh(), nv.getHuyen(), nv.getXa(), nv.getSonha());
+                thongtincanhan ttcn = new thongtincanhan(matk, nv.getHoten(), nv.getNgaysinh(), nv.getGioitinh(), madc_dc, nv.getSdt(), nv.getEmail(), nv.getBangcap());
+                cancuoccongdan cccd = new cancuoccongdan(matk, nv.getSocccd(), nv.getNgaycap(), madc_cc);
+                nhanvien new_nv = new nhanvien(matk, nv.getChinhanh(), nv.getPhongban(), nv.getNgaybatdau(), "Đang hoạt động", nv.getCongviec());
+                taikhoan tk = new taikhoan(nv.getUsernam(), nv.getPass(), matk);
+
+                diachiDAO.insertDiaChi(diachi_cc);
+                diachiDAO.insertDiaChi(diachi_nv);
+                qlnhanvienDAO.ThemNhanVien(new_nv);
+                forgotDAO.ThemTaiKhoan(tk);
+                thongtincanhanDAO.ThemThongTinCaNhan(ttcn);
+                thongtincanhanDAO.ThemCCCD(cccd);
+                chucvuDAO.ThemChucVu(new chucvu(matk, "Nhân Viên"));
+            }
+            response.sendRedirect("quanlynhanvien");
+        }
+    }
+    public void SaThaiNhanVien(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException{
+        String user = getMatk(request,response);
+        if (user != null) {
+            String matk = request.getParameter("matk");
+            qlnhanvienDAO.SaThaiNhanVien(matk);
+            response.sendRedirect("quanlynhanvien");
+        }
+    }
+    public void ChiDinhNhanVien(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException{
+        String user = getMatk(request,response);
+        if (user != null) {
+            String matk = request.getParameter("matk");
+            String mapb = request.getParameter("mapb");
+            String macn = request.getParameter("macn");
+            String congviec = request.getParameter("congviec");
+            qlnhanvienDAO.ChiDinhNhanVien(matk, mapb, macn, congviec);
+            response.sendRedirect("quanlynhanvien");
+        }
+    }
+    public void TuyenNhanVien(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException{
+        String user = getMatk(request,response);
+        if (user != null) {
+            String matk = forgotDAO.getNewMatk();
+            String hoten = request.getParameter("hoten");
+            LocalDate ngaysinh = LocalDate.parse(request.getParameter("ngaysinh"));
+            String gioitinh = request.getParameter("gioitinh");
+
+            String so_cccd = request.getParameter("cc_cccd");
+            LocalDate ngaycap = LocalDate.parse(request.getParameter("cc_ngaycap"));
+            String madc_cc = diachiDAO.getDiaChi("DC");
+            String tinhtp_cc = request.getParameter("cc_tinhtp");
+            String cc_quanhuyen = request.getParameter("cc_quanhuyen");
+            String cc_phuongxa = request.getParameter("cc_phuongxa");
+            String cc_sonha = request.getParameter("cc_sonha");
+
+            String madc_dc = diachiDAO.getDiaChi("DN");
+            String dc_tinhtp = request.getParameter("dc_tinhtp");
+            String dc_quanhuyen = request.getParameter("dc_quanhuyen");
+            String dc_phuongxa = request.getParameter("dc_phuongxa");
+            String dc_sonha = request.getParameter("cc_sonha");
+
+            String sdt = request.getParameter("sdt");
+            String email = request.getParameter("email");
+            String username = request.getParameter("username");
+            String pass = request.getParameter("pass");
+            String congviec = request.getParameter("congviec");
+            String phongban = request.getParameter("phongban");
+            String chinhanh = request.getParameter("chinhanh");
+            String bangcap = request.getParameter("bangcap");
+            LocalDate ngaybatdau = LocalDate.parse(request.getParameter("ngaybatdau"));
+
+            diachi diachi_cc = new diachi(madc_cc, tinhtp_cc, cc_quanhuyen, cc_phuongxa, cc_sonha);
+            diachi diachi_nv = new diachi(madc_dc, dc_tinhtp, dc_quanhuyen, dc_phuongxa, dc_sonha);
+            thongtincanhan ttcn = new thongtincanhan(matk, hoten, ngaysinh, gioitinh, madc_dc, sdt, email, bangcap);
+            cancuoccongdan cccd = new cancuoccongdan(matk, so_cccd, ngaycap, madc_cc);
+            nhanvien nv = new nhanvien(matk, chinhanh, phongban, ngaybatdau, "Đang hoạt động", congviec);
+            taikhoan tk = new taikhoan(username, pass, matk);
 
             diachiDAO.insertDiaChi(diachi_cc);
             diachiDAO.insertDiaChi(diachi_nv);
-            qlnhanvienDAO.ThemNhanVien(new_nv);
+            qlnhanvienDAO.ThemNhanVien(nv);
             forgotDAO.ThemTaiKhoan(tk);
             thongtincanhanDAO.ThemThongTinCaNhan(ttcn);
             thongtincanhanDAO.ThemCCCD(cccd);
             chucvuDAO.ThemChucVu(new chucvu(matk, "Nhân Viên"));
+            response.sendRedirect("quanlynhanvien");
         }
-
-        response.sendRedirect("quanlynhanvien");
-    }
-    public void SaThaiNhanVien(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, IOException, ServletException{
-        String matk = request.getParameter("matk");
-        qlnhanvienDAO.SaThaiNhanVien(matk);
-        response.sendRedirect("quanlynhanvien");
-    }
-    public void ChiDinhNhanVien(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, IOException, ServletException{
-        String matk = request.getParameter("matk");
-        String mapb = request.getParameter("mapb");
-        String macn = request.getParameter("macn");
-        String congviec = request.getParameter("congviec");
-        qlnhanvienDAO.ChiDinhNhanVien(matk, mapb, macn,congviec);
-        response.sendRedirect("quanlynhanvien");
-    }
-    public void TuyenNhanVien(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, IOException, ServletException{
-
-        String matk = forgotDAO.getNewMatk();
-        String hoten = request.getParameter("hoten");
-        LocalDate ngaysinh = LocalDate.parse(request.getParameter("ngaysinh"));
-        String gioitinh = request.getParameter("gioitinh");
-
-        String so_cccd = request.getParameter("cc_cccd");
-        LocalDate ngaycap = LocalDate.parse(request.getParameter("cc_ngaycap"));
-        String madc_cc = diachiDAO.getDiaChi("DC");
-        String tinhtp_cc = request.getParameter("cc_tinhtp");
-        String cc_quanhuyen = request.getParameter("cc_quanhuyen");
-        String cc_phuongxa = request.getParameter("cc_phuongxa");
-        String cc_sonha = request.getParameter("cc_sonha");
-
-        String madc_dc = diachiDAO.getDiaChi("DN");
-        String dc_tinhtp = request.getParameter("dc_tinhtp");
-        String dc_quanhuyen = request.getParameter("dc_quanhuyen");
-        String dc_phuongxa = request.getParameter("dc_phuongxa");
-        String dc_sonha = request.getParameter("cc_sonha");
-
-        String sdt = request.getParameter("sdt");
-        String email = request.getParameter("email");
-        String username = request.getParameter("username");
-        String pass = request.getParameter("pass");
-        String congviec = request.getParameter("congviec");
-        String phongban = request.getParameter("phongban");
-        String chinhanh = request.getParameter("chinhanh");
-        String bangcap = request.getParameter("bangcap");
-        LocalDate ngaybatdau = LocalDate.parse(request.getParameter("ngaybatdau"));
-
-        diachi diachi_cc = new diachi(madc_cc, tinhtp_cc, cc_quanhuyen, cc_phuongxa, cc_sonha);
-        diachi diachi_nv = new diachi(madc_dc, dc_tinhtp, dc_quanhuyen, dc_phuongxa, dc_sonha);
-        thongtincanhan ttcn = new thongtincanhan(matk, hoten, ngaysinh, gioitinh,madc_dc,sdt,email,bangcap);
-        cancuoccongdan cccd = new cancuoccongdan(matk, so_cccd,ngaycap,madc_cc);
-        nhanvien nv = new nhanvien(matk,chinhanh,phongban,ngaybatdau,"Đang hoạt động",congviec);
-        taikhoan tk = new taikhoan(username,pass,matk);
-
-        diachiDAO.insertDiaChi(diachi_cc);
-        diachiDAO.insertDiaChi(diachi_nv);
-        qlnhanvienDAO.ThemNhanVien(nv);
-        forgotDAO.ThemTaiKhoan(tk);
-        thongtincanhanDAO.ThemThongTinCaNhan(ttcn);
-        thongtincanhanDAO.ThemCCCD(cccd);
-        chucvuDAO.ThemChucVu(new chucvu(matk, "Nhân Viên"));
-        response.sendRedirect("quanlynhanvien");
     }
     public void ThemYeuCau(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException{
-        HttpSession session = request.getSession(false);
-        taikhoan tk = (taikhoan) session.getAttribute("user");
-        nhanvien nv = qlnhanvienDAO.LayThongTinNhanVien(tk.getMatk());
+        String user = getMatk(request,response);
+        if (user != null) {
+            HttpSession session = request.getSession(false);
+            taikhoan tk = (taikhoan) session.getAttribute("user");
+            nhanvien nv = qlnhanvienDAO.LayThongTinNhanVien(tk.getMatk());
 
-        String mayeucau = yeucauDAO.getMaYeuCau();
-        String matk = tk.getMatk();
-        LocalDate ngaygui = LocalDate.now();
-        String nguoinhan = chinhanhDAO.LayMaGiamDoc(nv.getMacn());
-        String congviec = request.getParameter("tencongviec");
-        String mapb = phongbanDAO.LayMaPB(matk);
-        String tinhtrang = "chưa duyệt";
-        yeucauDAO.ThemYeuCau(new yeucau(mayeucau,matk,ngaygui,nguoinhan,congviec,mapb,tinhtrang));
-        response.sendRedirect("quanlynhanvien");
+            String mayeucau = yeucauDAO.getMaYeuCau();
+            String matk = tk.getMatk();
+            LocalDate ngaygui = LocalDate.now();
+            String nguoinhan = chinhanhDAO.LayMaGiamDoc(nv.getMacn());
+            String congviec = request.getParameter("tencongviec");
+            String mapb = phongbanDAO.LayMaPB(matk);
+            String tinhtrang = "chưa duyệt";
+            yeucauDAO.ThemYeuCau(new yeucau(mayeucau, matk, ngaygui, nguoinhan, congviec, mapb, tinhtrang));
+            response.sendRedirect("quanlynhanvien");
+        }
     }
     public void DuyetYeuCau(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException{
-        String mayeucau = request.getParameter("mayeucau");
-        yeucauDAO.Update_tinhtrang_yes(mayeucau);
-        response.sendRedirect("quanlynhanvien");
+        String user = getMatk(request,response);
+        if (user != null) {
+            String mayeucau = request.getParameter("mayeucau");
+            yeucauDAO.Update_tinhtrang_yes(mayeucau);
+            response.sendRedirect("quanlynhanvien");
+        }
     }
     public void TuChoiYeuCau(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException{
-        String mayeucau = request.getParameter("mayeucau");
-        yeucauDAO.Update_tinhtrang_no(mayeucau);
-        response.sendRedirect("quanlynhanvien");
+        String user = getMatk(request,response);
+        if (user != null) {
+            String mayeucau = request.getParameter("mayeucau");
+            yeucauDAO.Update_tinhtrang_no(mayeucau);
+            response.sendRedirect("quanlynhanvien");
+        }
     }
 }

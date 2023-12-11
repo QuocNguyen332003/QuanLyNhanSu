@@ -68,23 +68,27 @@ public class phongbanController extends HttpServlet {
             throw new ServletException(ex);
         }
     }
+
     private void deletePhongBan(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        String mapb = request.getParameter("mapb");
-        phongbanDAO dao = new phongbanDAO();
-        dao.deletePhongBan(mapb);
-        response.sendRedirect("quanlyphongban");
+        String user = getMatk(request,response);
+        if (user != null) {
+            String mapb = request.getParameter("mapb");
+            phongbanDAO dao = new phongbanDAO();
+            dao.deletePhongBan(mapb);
+            response.sendRedirect("quanlyphongban");
+        }
     }
     private void FormThemPhongBan(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         HttpSession session = request.getSession(false);
-        int capbac = (int) session.getAttribute("capbac");
-        nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
-        String mapb = nv.getMapb();
-        String macn = nv.getMacn();
-        String mainComboValue = request.getParameter("mainComboValue");
         String user = getMatk(request,response);
         if (session != null && user != null) {
+            int capbac = (int) session.getAttribute("capbac");
+            nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
+            String macn = nv.getMacn();
+            String mainComboValue = request.getParameter("mainComboValue");
+
             if(capbac == 2){ // giamdoc
                 List <chinhanh> listchinhanh = chinhanhDAO.selectAllchinhanh_MaCN(macn);
                 request.setAttribute("listchinhanh", listchinhanh);
@@ -136,13 +140,12 @@ public class phongbanController extends HttpServlet {
             throws SQLException, IOException, ServletException {
 
         HttpSession session = request.getSession(false);
-        int capbac = (int) session.getAttribute("capbac");
-        nhanvien nv = (nhanvien) session.getAttribute("thongtinnv");
-        String mapb = nv.getMapb();
-        String macn = nv.getMacn();
-        String mainComboValue = request.getParameter("mainComboValue");
         String user = getMatk(request,response);
         if (session != null && user != null) {
+            int capbac = (int) session.getAttribute("capbac");
+            nhanvien nv = (nhanvien) session.getAttribute("thongtinnv");
+            String macn = nv.getMacn();
+            String mainComboValue = request.getParameter("mainComboValue");
             if (capbac == 2) { // giamdoc
                 String maPB = request.getParameter("mapb");
                 phongban existingPhongBan = pbDAO.selectPhongBan(maPB);
@@ -204,42 +207,46 @@ public class phongbanController extends HttpServlet {
 
     }
 
-    private void insertPhongBan(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+    private void insertPhongBan(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+        String matk = getMatk(request, response);
+        if (matk != null) {
+            String mapb = request.getParameter("mapb");
+            String tenpb = request.getParameter("tenpb");
+            String macn = request.getParameter("macnSelect");
+            String matrphong = request.getParameter("matrphongSelect");
+            String mapbtr = request.getParameter("mapbtrSelect");
 
-        String mapb = request.getParameter("mapb");
-        String tenpb = request.getParameter("tenpb");
-        String macn = request.getParameter("macnSelect");
-        String matrphong = request.getParameter("matrphongSelect");
-        String mapbtr = request.getParameter("mapbtrSelect");
-
-        // Tạo đối tượng phongban từ thông tin lấy được
-        phongban newphongban = new phongban(mapb, tenpb, macn, matrphong, LocalDate.now(), mapbtr);
+            // Tạo đối tượng phongban từ thông tin lấy được
+            phongban newphongban = new phongban(mapb, tenpb, macn, matrphong, LocalDate.now(), mapbtr);
 
 
-        // Gọi phương thức insertPhongBan của DAO để thêm vào cơ sở dữ liệu
-        phongbanDAO pbDAO = new phongbanDAO();
-        try {
-            pbDAO.insertPhongBan(newphongban);
-            response.sendRedirect("quanlyphongban"); // Chuyển hướng sau khi thêm thành công
-        } catch (SQLException e) {
-            // Xử lý lỗi SQL (hiển thị hoặc log lỗi)
-            e.printStackTrace();// Chuyển hướng đến trang lỗi nếu có lỗi
+            // Gọi phương thức insertPhongBan của DAO để thêm vào cơ sở dữ liệu
+            phongbanDAO pbDAO = new phongbanDAO();
+            try {
+                pbDAO.insertPhongBan(newphongban);
+                response.sendRedirect("quanlyphongban"); // Chuyển hướng sau khi thêm thành công
+            } catch (SQLException e) {
+                // Xử lý lỗi SQL (hiển thị hoặc log lỗi)
+                e.printStackTrace();// Chuyển hướng đến trang lỗi nếu có lỗi
+            }
         }
     }
-    private void updatePhongBan(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+    private void updatePhongBan(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+        String matk = getMatk(request, response);
+        if (matk != null) {
+            String mapb = request.getParameter("mapb");
+            String tenpb = request.getParameter("tenpb");
+            String macn = request.getParameter("macnSelect");
+            String matrphong = request.getParameter("matrphongSelect");
+            String mapbtr = request.getParameter("mapbtrSelect");
 
-        String mapb = request.getParameter("mapb");
-        String tenpb = request.getParameter("tenpb");
-        String macn = request.getParameter("macnSelect");
-        String matrphong = request.getParameter("matrphongSelect");
-        String mapbtr = request.getParameter("mapbtrSelect");
 
-
-        phongban updatephongban = new phongban(mapb, tenpb, macn, matrphong, null, mapbtr);
-        // Gọi phương thức insertPhongBan của DAO để thêm vào cơ sở dữ liệu
-        phongbanDAO pbDAO = new phongbanDAO();
-        pbDAO.updatePhongBan(updatephongban);
-        response.sendRedirect("quanlyphongban");
+            phongban updatephongban = new phongban(mapb, tenpb, macn, matrphong, null, mapbtr);
+            // Gọi phương thức insertPhongBan của DAO để thêm vào cơ sở dữ liệu
+            phongbanDAO pbDAO = new phongbanDAO();
+            pbDAO.updatePhongBan(updatephongban);
+            response.sendRedirect("quanlyphongban");
+        }
     }
 
 
@@ -248,10 +255,10 @@ public class phongbanController extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session != null) {
             taikhoan username = (taikhoan) session.getAttribute("user");
-            return username.getMatk();
+            if (username != null){
+                return username.getMatk();
+            }
         }
-        else {
-            return null;
-        }
+        return null;
     }
 }

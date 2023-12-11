@@ -69,27 +69,27 @@ public class chinhanhController extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session != null) {
             taikhoan username = (taikhoan) session.getAttribute("user");
-            return username.getMatk();
+            if (username != null){
+                return username.getMatk();
+            }
         }
-        else {
-            return null;
-        }
+        return null;
     }
     private void deleteChiNhanh(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        String macn = request.getParameter("macn");
-        chinhanhDAO dao = new chinhanhDAO();
-        dao.deleteChiNhanh(macn);
-        response.sendRedirect("quanlychinhanh");
+        HttpSession session = request.getSession(false);
+        String user = getMatk(request,response);
+        if (session != null && user != null) {
+            String macn = request.getParameter("macn");
+            chinhanhDAO dao = new chinhanhDAO();
+            dao.deleteChiNhanh(macn);
+            response.sendRedirect("quanlychinhanh");
+        }
     }
     private void FormThemChiNhanh(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         String user = getMatk(request,response);
         HttpSession session = request.getSession(false);
-        int capbac = (int) session.getAttribute("capbac");
-        nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
-        String mapb = nv.getMapb();
-        String macn = nv.getMacn();
         if (session != null && user != null) {
             List <diachi> listdiachi = diachiDAO.DanhSachDiaChi();
             request.setAttribute("listdiachi", listdiachi);
@@ -110,10 +110,6 @@ public class chinhanhController extends HttpServlet {
             throws SQLException, IOException, ServletException {
         HttpSession session = request.getSession(false);
         String user = getMatk(request,response);
-        int capbac = (int) session.getAttribute("capbac");
-        nhanvien nv = (nhanvien)session.getAttribute("thongtinnv");
-        String mapb = nv.getMapb();
-        String macn = nv.getMacn();
         if (session != null && user != null) {
             String maCN = request.getParameter("macn");
             chinhanh existingChiNhanh = cnDAO.selectChiNhanh(maCN);
@@ -134,52 +130,58 @@ public class chinhanhController extends HttpServlet {
             dispatcher.forward(request, response);
         };
     }
-    private void insertChiNhanh(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+    private void insertChiNhanh(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+        HttpSession session = request.getSession(false);
+        String user = getMatk(request,response);
+        if (session != null && user != null) {
+            String macn = request.getParameter("macn");
+            String tencn = request.getParameter("tencn");
+            String magiamdoc = request.getParameter("magiamdoc");
+            String tinhtrang = request.getParameter("tinhtrang");
 
-        String macn = request.getParameter("macn");
-        String tencn = request.getParameter("tencn");
-        String magiamdoc = request.getParameter("magiamdoc");
-        String tinhtrang = request.getParameter("tinhtrang");
-
-        String madc = diachiDAO.DiaChiChiNhanh();
-        String tinhtp = request.getParameter("tinh/tp");
-        String quanhuyen = request.getParameter("quan/huyen");
-        String phuongxa = request.getParameter("phuong/xa");
-        String sonha = request.getParameter("sonha");
+            String madc = diachiDAO.DiaChiChiNhanh();
+            String tinhtp = request.getParameter("tinh/tp");
+            String quanhuyen = request.getParameter("quan/huyen");
+            String phuongxa = request.getParameter("phuong/xa");
+            String sonha = request.getParameter("sonha");
 
 
-        // Tạo đối tượng phongban từ thông tin lấy được
-        chinhanh newchinhanh = new chinhanh(macn, tencn, madc, magiamdoc, tinhtrang, LocalDate.now());
-        diachi newdiachi = new diachi(madc, tinhtp, quanhuyen, phuongxa, sonha);
-        chinhanhDAO cnDAO = new chinhanhDAO();
-        diachiDAO dcDAO = new diachiDAO();
-        try {
-            dcDAO.insertDiaChi_CN(newdiachi);
-            cnDAO.insertChiNhanh(newchinhanh);
-            response.sendRedirect("quanlychinhanh");// Chuyển hướng sau khi thêm thành công
-        } catch (SQLException e) {
-            // Xử lý lỗi SQL (hiển thị hoặc log lỗi)
-            e.printStackTrace();// Chuyển hướng đến trang lỗi nếu có lỗi
+            // Tạo đối tượng phongban từ thông tin lấy được
+            chinhanh newchinhanh = new chinhanh(macn, tencn, madc, magiamdoc, tinhtrang, LocalDate.now());
+            diachi newdiachi = new diachi(madc, tinhtp, quanhuyen, phuongxa, sonha);
+            chinhanhDAO cnDAO = new chinhanhDAO();
+            diachiDAO dcDAO = new diachiDAO();
+            try {
+                dcDAO.insertDiaChi_CN(newdiachi);
+                cnDAO.insertChiNhanh(newchinhanh);
+                response.sendRedirect("quanlychinhanh");// Chuyển hướng sau khi thêm thành công
+            } catch (SQLException e) {
+                // Xử lý lỗi SQL (hiển thị hoặc log lỗi)
+                e.printStackTrace();// Chuyển hướng đến trang lỗi nếu có lỗi
+            }
         }
     }
-    private void updateChiNhanh(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+    private void updateChiNhanh(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+        HttpSession session = request.getSession(false);
+        String user = getMatk(request,response);
+        if (session != null && user != null) {
+            String macn = request.getParameter("macn");
+            String tencn = request.getParameter("tencn");
+            String diachi = request.getParameter("diachi");
+            String magiamdoc = request.getParameter("magiamdoc");
+            String tinhtrang = request.getParameter("tinhtrang");
 
-        String macn = request.getParameter("macn");
-        String tencn = request.getParameter("tencn");
-        String diachi = request.getParameter("diachi");
-        String magiamdoc = request.getParameter("magiamdoc");
-        String tinhtrang = request.getParameter("tinhtrang");
+            String tinhtp = request.getParameter("tinh/tp");
+            String quanhuyen = request.getParameter("quan/huyen");
+            String phuongxa = request.getParameter("phuong/xa");
+            String sonha = request.getParameter("sonha");
+            String madc = diachiDAO.LayMaDC(macn);
 
-        String tinhtp = request.getParameter("tinh/tp");
-        String quanhuyen = request.getParameter("quan/huyen");
-        String phuongxa = request.getParameter("phuong/xa");
-        String sonha = request.getParameter("sonha");
-        String madc = diachiDAO.LayMaDC(macn);
-
-        chinhanh updatechinhanh = new chinhanh(macn, tencn, madc, magiamdoc, tinhtrang, null);
-        diachi updatediachi = new diachi(madc, tinhtp, quanhuyen, phuongxa, sonha);
-        dcDAO.uodateDiaChi_CN(updatediachi);
-        cnDAO.updateChiNhanh(updatechinhanh);
-        response.sendRedirect("quanlychinhanh");
+            chinhanh updatechinhanh = new chinhanh(macn, tencn, madc, magiamdoc, tinhtrang, null);
+            diachi updatediachi = new diachi(madc, tinhtp, quanhuyen, phuongxa, sonha);
+            dcDAO.uodateDiaChi_CN(updatediachi);
+            cnDAO.updateChiNhanh(updatechinhanh);
+            response.sendRedirect("quanlychinhanh");
+        }
     }
 }

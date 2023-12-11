@@ -1,3 +1,4 @@
+<%@ page import="Model.taikhoan" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
 <!-- Coding By CodingNepal - www.codingnepalweb.com -->
@@ -11,6 +12,10 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/menu.css" />
 </head>
 <body>
+<%taikhoan username = (taikhoan) session.getAttribute("user"); %>
+<%if (username == null) {%>
+<jsp:forward page="/login/login.jsp"></jsp:forward>
+<%} else {%>
 <aside class="sidebar"  style="background-color:#E7E7E7; width: 18%; ">
     <div class="logo" style=" margin-top: 60px;">
         <i class="fas fa-user fa-lg" style="font-size: 50px;"></i>
@@ -52,5 +57,6 @@
         </li>
     </ul>
 </aside>
+<%}%>
 </body>
 </html>

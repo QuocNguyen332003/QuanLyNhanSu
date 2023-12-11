@@ -1,4 +1,5 @@
 <%@ page import="DAO.yeucauDAO" %>
+<%@ page import="Model.taikhoan" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
@@ -94,6 +95,10 @@
 </head>
 
 <body>
+<%taikhoan username = (taikhoan) session.getAttribute("user"); %>
+<%if (username == null) {%>
+<jsp:forward page="/login/login.jsp"></jsp:forward>
+<%} else {%>
     <jsp:include page="../header_menu/header.jsp" />
     <div class="container">
         <div class="row">
@@ -382,6 +387,7 @@
             </div>
         </div>
     </div>
+<%}%>
 </body>
 
 </html>

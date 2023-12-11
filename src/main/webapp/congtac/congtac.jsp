@@ -79,6 +79,10 @@
 </head>
 
 <body>
+<%taikhoan username = (taikhoan) session.getAttribute("user"); %>
+<%if (username == null) {%>
+<jsp:forward page="/login/login.jsp"></jsp:forward>
+<%} else {%>
     <jsp:include page="../header_menu/header.jsp" />
     <div class="container">
         <div class="row">
@@ -238,6 +242,7 @@
             </div>
         </div>
     </div>
+<%} %>
 </body>
 
 </html>

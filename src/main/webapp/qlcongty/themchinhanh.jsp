@@ -1,3 +1,4 @@
+<%@ page import="Model.taikhoan" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
@@ -27,6 +28,10 @@
 </head>
 
 <body>
+<%taikhoan username = (taikhoan) session.getAttribute("user"); %>
+<%if (username == null) {%>
+<jsp:forward page="/login/login.jsp"></jsp:forward>
+<%} else {%>
 <form id="myForm">
     <div class="header-menu-plus">
         <a href="#">Cập Nhật Chi Nhánh</a>
@@ -70,6 +75,7 @@
     <br>
     <button type="submit">Lưu</button>
 </form>
+<%}%>
 </body>
 
 </html>
