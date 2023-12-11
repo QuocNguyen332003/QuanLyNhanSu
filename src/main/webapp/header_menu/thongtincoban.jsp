@@ -14,7 +14,7 @@
     </style>
 </head>
 <body>
-<div class="body-infor">
+<div class="body-infor" style="width: 100%; ">
     <div class="section">
         <i class="fas fa-user"></i>
         <h2> ${tencapbac_header}</h2>

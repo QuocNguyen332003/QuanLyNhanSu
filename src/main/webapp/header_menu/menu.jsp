@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/menu.css" />
 </head>
 <body>
-<aside class="sidebar" style="background-color:#AAAAAA ">
+<aside class="sidebar"  style="background-color:#AAAAAA; width: 15%;margin-left: 5%; ">
     <div class="logo" style=" margin-top: 60px;">
         <i class="fas fa-user fa-lg" style="font-size: 50px;"></i>
         <h2 style="font-size:23px ">${tennhanvien_menu.hoten}</h2>
