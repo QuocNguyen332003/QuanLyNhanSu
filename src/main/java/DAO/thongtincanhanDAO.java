@@ -22,6 +22,7 @@ public class thongtincanhanDAO {
     private static final String UPDATE_TTCANHAN = "update thongtincanhan set hoten = ?, ngaysinh = ?, gioitinh = ?, sdt = ?, email = ? where matk = ?;";
     private static final String UPDATE_CCCD = "update cancuoccongdan set cccd = ?, ngaycap = ? where matk = ?;";
     private static final String UPDATE_DIACHI = "update diachi set tinhtp = ?, quanhuyen = ?, phuongxa = ?, sonha = ? where madc = ?;";
+
     private  static  final String INSERT_THONGTINCANHAN =  "INSERT INTO thongtincanhan" + "  (matk, hoten, ngaysinh,gioitinh, diachi,  sdt, email, bangcap) VALUES " + " (?, ?, ?, ?, ?, ?,?,?);";
     private  static  final String INSERT_CCCD =  "INSERT INTO cancuoccongdan" + "  (matk, cccd, ngaycap,madc) VALUES " + " (?, ?, ?, ?);";
 
@@ -211,7 +212,6 @@ public class thongtincanhanDAO {
             preparedStatement.setString(4,dc.getSonha());
             preparedStatement.setString(5,dc.getMadc());
 
-            System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
             JDBCUtils.printSQLException(exception);

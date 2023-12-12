@@ -50,7 +50,6 @@ public class loginDAO {
             preparedStatement.setString(1, matk);
             preparedStatement.setString(2, "Đang hoạt động");
 
-            System.out.println(preparedStatement);
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
