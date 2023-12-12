@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,7 +16,10 @@ import javax.servlet.http.HttpSession;
 
 import DAO.*;
 import Model.*;
-@WebServlet(name = "qlnhanvien", urlPatterns = {"/xemthongtinnhanvien", "/themnhanvien","/sathainhanvien","/chidinhnhanvien","/tuyennhanvien","/themyeucau","/duyetyeucau","/tuchoiyeucau","/themnhanvienexcel"})
+import com.google.gson.Gson;
+
+@WebServlet(name = "qlnhanvien", urlPatterns = {"/xemthongtinnhanvien", "/themnhanvien","/sathainhanvien","/chidinhnhanvien",
+        "/tuyennhanvien","/themyeucau","/duyetyeucau","/tuchoiyeucau","/themnhanvienexcel", "/editnhanvien"})
 public class qlnhanvienController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -62,6 +62,9 @@ public class qlnhanvienController extends HttpServlet {
                     break;
                 case "/tuchoiyeucau":
                     TuChoiYeuCau(request, response);
+                    break;
+                case "/editnhanvien":
+                    CapNhatTrangThai(request, response);
                     break;
                 default:
                     RequestDispatcher dispatcher = request.getRequestDispatcher("/qlnhanvien/quanlynhanvien.jsp");
@@ -136,8 +139,27 @@ public class qlnhanvienController extends HttpServlet {
         String user = getMatk(request,response);
         if (user != null) {
             request.setAttribute("thongtincanhan", null);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/qlnhanvien/chitietnhanvien.jsp");
-            dispatcher.forward(request, response);
+            List<chinhanh> listcn = chinhanhDAO.selectAllchinhanh();
+            List<String> listmacn = new ArrayList<>();
+            for (chinhanh cn:listcn) {
+                listmacn.add(cn.getMacn());
+            }
+            request.setAttribute("listchinhanh", listmacn);
+            String mainComboValue = request.getParameter("mainComboValue");
+            List<String> listpb = phongbanDAO.Selected_PB_BY_CN(mainComboValue);
+
+            String mapbOptionsJson = new Gson().toJson(listpb);
+            if(mainComboValue != null) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(mapbOptionsJson);
+            }
+            if(mainComboValue == null){
+                List<String> listmapb = phongbanDAO.Selected_PB_BY_CN("CN001");
+                request.setAttribute("listphongban", listmapb);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/qlnhanvien/chitietnhanvien.jsp");
+                dispatcher.forward(request, response);
+            }
         }
     }
     public void ThemNhanVienExcel(HttpServletRequest request, HttpServletResponse response)
@@ -187,6 +209,16 @@ public class qlnhanvienController extends HttpServlet {
             String macn = request.getParameter("macn");
             String congviec = request.getParameter("congviec");
             qlnhanvienDAO.ChiDinhNhanVien(matk, mapb, macn, congviec);
+            response.sendRedirect("quanlynhanvien");
+        }
+    }
+    public void CapNhatTrangThai(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException{
+        String user = getMatk(request,response);
+        if (user != null) {
+            String matk = request.getParameter("matk_tt");
+            String trangthai = request.getParameter("tinhtrang_tt");
+            qlnhanvienDAO.UpdateTinhTrang(matk, trangthai);
             response.sendRedirect("quanlynhanvien");
         }
     }

@@ -145,6 +145,9 @@ public class menuController extends HttpServlet {
             cancuoccongdan cccd = thongtincanhanDAO.layCCCD(matk);
             request.setAttribute("cancuoc",cccd);
 
+            diachi dc_cc = thongtincanhanDAO.layDiaChi(cccd.getMadc());
+            request.setAttribute("diachi_cc",dc_cc);
+
             taikhoan tkhoan = thongtincanhanDAO.layTaiKhoan(matk);
             request.setAttribute("taikhoan", tkhoan);
 
@@ -249,7 +252,6 @@ public class menuController extends HttpServlet {
                 List<String> mapbOptions = phongbanDAO.Selected_PB_BY_CN(mainComboValue);
 
                 String mapbOptionsJson = new Gson().toJson(mapbOptions);
-                System.out.println(mapbOptionsJson);
                 if(mainComboValue != null) {
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");

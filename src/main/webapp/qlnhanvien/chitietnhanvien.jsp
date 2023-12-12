@@ -174,12 +174,31 @@
 									<input type="text" class="control" id="chucvu" placeholder="Chức vụ" name="chucvu" value="${chucvu}" readonly>
 								</div>
 								<div class="form-group form-inline">
-									<label for="phongban"><b>Phòng ban:</b></label>
-									<input type="text" class="control" id="phongban" placeholder="Phòng ban" name="phongban" value="${tenpb}" readonly>
+									<label for="chinhanh"><b>Chi nhánh:</b></label>
+									<select class="form-control form-control-sm box_search" id = "chinhanh" name = "chinhanh"  onchange="updatePhongBanList(); Search_textbox();">
+										<c:if test="${thongtincanhan != null}">
+											<option value="${tencn}">${tencn}</option>
+										</c:if>
+										<c:if test="${thongtincanhan == null}">
+											<c:forEach var="item" items="${listchinhanh}">
+												<option value="<c:out value="${item}" />">${item}</option>
+											</c:forEach>
+										</c:if>
+
+									</select>
 								</div>
 								<div class="form-group form-inline">
-									<label for="chinhanh"><b>Chi nhánh:</b></label>
-									<input type="text" class="control" id="chinhanh" placeholder="Chi nhánh" name="chinhanh" value="${tencn}" readonly>
+									<label for="phongban"><b>Phòng ban:</b></label>
+									<select class="form-control form-control-sm box_search" id = "phongban" name = "phongban" onchange = "Search_textbox()" >
+										<c:if test="${thongtincanhan != null}">
+											<option value="${tenpb}">${tenpb}</option>
+										</c:if>
+										<c:if test="${thongtincanhan == null}">
+										<c:forEach var="item" items="${listphongban}">
+											<option value="<c:out value="${item}" />">${item}</option>
+										</c:forEach>
+										</c:if>
+									</select>
 								</div>
 								<div class="form-group form-inline">
 									<label for="capbac"><b>Cấp bậc:</b></label>
@@ -291,6 +310,32 @@
 						let diachi = document.getElementById("dc_tinhtp").value + ", " + document.getElementById("dc_quanhuyen").value + ", " +
 								document.getElementById("dc_phuongxa").value + ", " + document.getElementById("dc_sonha").value;
 						document.getElementById("diachi").value = diachi;
+					}
+					function updatePhongBanList() {
+						var mainComboValue = document.getElementById("chinhanh").value;
+						var mapbSelect = document.getElementById('phongban');
+
+						// Use AJAX to send macnValue to the server and update dependent combobox
+						var xhr = new XMLHttpRequest();
+						xhr.open("GET", "themnhanvien?mainComboValue=" + encodeURIComponent(mainComboValue), true);
+						xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+						xhr.onreadystatechange = function () {
+							if (xhr.readyState == 4 && xhr.status == 200) {
+								var options = JSON.parse(xhr.responseText);
+								// Remove all existing options
+								while (mapbSelect.firstChild) {
+									mapbSelect.removeChild(mapbSelect.firstChild);
+								}
+
+								// Add the new options to mapbSelect
+								options.forEach(function (option) {
+									var newOption = document.createElement('option');
+									newOption.text = option;
+									mapbSelect.add(newOption);
+								});
+							}
+						};
+						xhr.send();
 					}
 				</script>
             </div>

@@ -220,19 +220,19 @@
 						</div>
 						<div class="form-group form-inline">
 							<label for="cc_tinhtp" class = "label_form_control">Tỉnh:</label>
-							<input type="text" class="form-control box_form_control" id="cc_tinhtp" placeholder="Tỉnh" name="cc_tinhtp" value="${diachi.tinhtp}" readonly required>
+							<input type="text" class="form-control box_form_control" id="cc_tinhtp" placeholder="Tỉnh" name="cc_tinhtp" value="${diachi_cc.tinhtp}" readonly required>
 						</div>
 						<div class="form-group form-inline">
 							<label for="cc_quanhuyen" class = "label_form_control">Quận/Huyện:</label>
-							<input type="text" class="form-control box_form_control" id="cc_quanhuyen" placeholder="Quận/Huyện" name="cc_quanhuyen" value="${diachi.quanhuyen}" readonly required>
+							<input type="text" class="form-control box_form_control" id="cc_quanhuyen" placeholder="Quận/Huyện" name="cc_quanhuyen" value="${diachi_cc.quanhuyen}" readonly required>
 						</div>
 						<div class="form-group form-inline">
 							<label for="cc_phuongxa" class = "label_form_control">Phường/Xã:</label>
-							<input type="text" class="form-control box_form_control"id="cc_phuongxa" placeholder="Phường/Xã" name="cc_phuongxa" value="${diachi.phuongxa}" readonly required>
+							<input type="text" class="form-control box_form_control"id="cc_phuongxa" placeholder="Phường/Xã" name="cc_phuongxa" value="${diachi_cc.phuongxa}" readonly required>
 						</div>
 						<div class="form-group form-inline">
 							<label for="cc_sonha" class = "label_form_control">Số nhà:</label>
-							<input type="text" class="form-control box_form_control"id="cc_sonha" placeholder="Số nhà" name="cc_sonha" value="${diachi.sonha}" readonly required>
+							<input type="text" class="form-control box_form_control"id="cc_sonha" placeholder="Số nhà" name="cc_sonha" value="${diachi_cc.sonha}" readonly required>
 						</div>
 						<div class="form_button">
 							<button type="button" id="btn_suacc">Sửa</button>

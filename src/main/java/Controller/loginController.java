@@ -31,8 +31,7 @@ public class loginController extends HttpServlet {
     }
     // Tạo một số ngẫu nhiên gồm 6 chữ số
     Random rand = new Random();
-    private int random = rand.nextInt((999999 - 100000) + 1) + 100000;
-    private String maOtp = Integer.toString(random);
+    private String maOtp = "";
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getServletPath();
@@ -129,6 +128,8 @@ public class loginController extends HttpServlet {
         user = context.getInitParameter("user");
         pass = context.getInitParameter("pass");
 
+        int random = rand.nextInt((999999 - 100000) + 1) + 100000;
+        maOtp = Integer.toString(random);
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String subject = "Mã OTP xác nhận của bạn là:";

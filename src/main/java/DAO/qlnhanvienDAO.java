@@ -136,16 +136,19 @@ public class qlnhanvienDAO {
     public static List<nhanvien> LayNhanVienCN(String macn) {
         return LayDanhSachNhanVien(SELECT_NHANVIEN_CN, macn);
     }
-    public static void SaThaiNhanVien(String matk){
+    public static void UpdateTinhTrang(String matk, String tinhtrang){
         try (Connection connection = JDBCUtils.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TINHTRANG);) {
-            preparedStatement.setString(1, "Nghỉ việc");
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TINHTRANG);) {
+            preparedStatement.setString(1, tinhtrang);
             preparedStatement.setString(2, matk);
             System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
             JDBCUtils.printSQLException(exception);
         }
+    }
+    public static void SaThaiNhanVien(String matk){
+        UpdateTinhTrang(matk, "Nghỉ việc");
     }
     public static void ChiDinhNhanVien(String matk, String mapb, String macn, String congviec){
         try (Connection connection = JDBCUtils.getConnection();

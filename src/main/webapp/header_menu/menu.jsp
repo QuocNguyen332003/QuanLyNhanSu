@@ -38,17 +38,17 @@
             <span class="material-symbols-outlined">person</span>
             <a href="<%=request.getContextPath()%>/khenthuongkyluat">Khen thưởng kỉ luật</a>
         </li>
-        <li>
-            <span class="material-symbols-outlined">group</span>
+        <li style="display:${sessionScope.capbac == 0 ? 'none' : 'flex'}">
+            <span class="material-symbols-outlined" >group</span>
             <a href="<%=request.getContextPath()%>/quanlynhanvien">Quản lý nhân viên </a>
         </li>
-        <li>
-            <span class="material-symbols-outlined" style="display:${sessionScope.capbac == 0 || sessionScope.capbac == 1 ? 'none' : 'inline'}" >ambient_screen</span>
-            <a href="<%=request.getContextPath()%>/quanlyphongban" style="display:${sessionScope.capbac == 0 || sessionScope.capbac == 1 ? 'none' : 'inline'}" >Quản lí phòng ban</a>
+        <li  style="display:${sessionScope.capbac == 0 || sessionScope.capbac == 1 ? 'none' : 'flex'}" >
+            <span class="material-symbols-outlined">ambient_screen</span>
+            <a href="<%=request.getContextPath()%>/quanlyphongban">Quản lí phòng ban</a>
         </li>
-        <li>
-            <span class="material-symbols-outlined" style="display:${sessionScope.capbac == 0 || sessionScope.capbac == 1 || sessionScope.capbac == 2 ? 'none' : 'inline'}" >pacemaker</span>
-            <a href="<%=request.getContextPath()%>/quanlychinhanh" style="display:${sessionScope.capbac == 0 || sessionScope.capbac == 1 || sessionScope.capbac == 2 ? 'none' : 'inline'}">Quản lí chi nhánh</a>
+        <li style="display:${sessionScope.capbac == 0 || sessionScope.capbac == 1 || sessionScope.capbac == 2 ? 'none' : 'flex'}">
+            <span class="material-symbols-outlined">pacemaker</span>
+            <a href="<%=request.getContextPath()%>/quanlychinhanh">Quản lí chi nhánh</a>
         </li>
         <hr>
         <li class="logout-link">

@@ -60,6 +60,12 @@
             box-shadow: 0 0 1rem 0.3rem var(--maincolor);
             z-index: 9;
         }
+        .form_tinhtrang{
+            width: 40rem;
+            height: 25rem;
+            top: 30rem;
+            left:60rem;
+        }
         .form_thongbao li{
             width: 40rem; height: 6rem;
             border: 1px solid var(--maincolor);
@@ -112,7 +118,7 @@
                        <h2> Quản lý nhân viên </h2>
                     </div>
                     <ul class="navbar-nav ml-auto col-2">
-                    	<li class="nav-item" >
+                    	<li class="nav-item" style="display:${sessionScope.capbac <= 1 ? 'none' : 'inline'}">
                             <c:set var="file_excel" value="" />
                             <form action="<%=request.getContextPath()%>/readExcelNhanVien" method="post" enctype="multipart/form-data" id = "form_excel">
                                 <button class="button_icon" id = "choose-file" type="button">
@@ -194,6 +200,7 @@
                                     <th>Công Việc </th>
 				                    <th>SA THẢI</th>
 				                    <th>XEM THÊM</th>
+                                    <th>CẬP NHẬT</th>
                                     <c:if test="${capbac > 1}">
                                         <th>CHỈ ĐỊNH</th>
                                     </c:if>
@@ -211,6 +218,7 @@
                                     <td>${x.congviec}</td>
                                     <td><button onclick="openFormXoa${count}()">Sa thải</button></td>
                                     <td><a href="xemthongtinnhanvien?matk=<c:out value='${x.matk}' />">Xem thêm</a></td>
+                                    <td><button onclick="openFormTinhTrang${count}()">Trạng thái</button></td>
                                     <c:if test="${capbac > 1}">
                                         <td><button onclick="openFormChiDinh${count}()">Chỉ định</button></td>
                                     </c:if>
@@ -261,6 +269,27 @@
                                         </div>
                                     </form>
                                 </div>
+                                <div class = "form_tinhtrang form_tacvu" id = "form_trangthai${count}" >
+                                    <form action="<%=request.getContextPath()%>/editnhanvien">
+                                        <h3 class = "form_title">Thay đổi thông tin </h3>
+                                        <div class="form-group form-inline" style="display: none;">
+                                            <label for="matk_tt${count}" class = "label_form_control"><b>Mã tài khoản:</b></label>
+                                            <input type="text" value="<c:out value='${x.matk}' />" class="form-control" id="matk_tt${count}" placeholder="Công việc" name="matk_tt" required>
+                                        </div>
+                                        <div class="form-group form-inline">
+                                            <label for="tinhtrang_tt${count}" class = "label_form_control"><b>Tình trạng:</b></label>
+                                            <select id="tinhtrang_tt${count}" name="tinhtrang_tt" class="form-control box_form_control form-select">
+                                                <option value="Đang hoạt động">Đang Hoạt Động</option>
+                                                <option value="Nghỉ phép">Nghỉ Phép</option>
+                                                <option value="Nghỉ việc">Nghỉ Việc</option>
+                                            </select>
+                                        </div>
+                                        <div class="form_button">
+                                            <button type="submit">Xác nhận</button>
+                                            <button type="button" onclick="closeFormTinhTrang${count}()">Hủy</button>
+                                        </div>
+                                    </form>
+                                </div>
                                 <script>
                                     function openFormXoa${count}() {
                                         document.getElementById("form_sathai${count}").style.display = "block";
@@ -273,6 +302,12 @@
                                     }
                                     function closeFormChiDinh${count}(){
                                         document.getElementById("form_chidinh${count}").style.display = "none";
+                                    }
+                                    function openFormTinhTrang${count}() {
+                                        document.getElementById("form_trangthai${count}").style.display = "block";
+                                    }
+                                    function closeFormTinhTrang${count}(){
+                                        document.getElementById("form_trangthai${count}").style.display = "none";
                                     }
                                 </script>
                             <c:set var="count" value="${count + 1}"/>
@@ -394,7 +429,6 @@
                             xhr.onreadystatechange = function () {
                                 if (xhr.readyState == 4 && xhr.status == 200) {
                                     var options = JSON.parse(xhr.responseText);
-                                    alert(xhr.responseText);
                                     // Remove all existing options
                                     options.unshift("Tất cả");
                                     while (mapbSelect.firstChild) {

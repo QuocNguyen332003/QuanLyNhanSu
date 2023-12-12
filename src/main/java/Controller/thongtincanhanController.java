@@ -83,8 +83,8 @@ public class thongtincanhanController extends HttpServlet {
             throws SQLException, IOException, ServletException {
         String matk = getMatk(request, response);
         if (matk != null) {
-            thongtincanhan tt = thongtincanhanDAO.layThongTinCaNhan(matk);
-            String madc = tt.getDiachi();
+            cancuoccongdan cd = thongtincanhanDAO.layCCCD(matk);
+            String madc = cd.getMadc();
             String cccd = request.getParameter("cc_cccd");
             LocalDate ngaycap = LocalDate.parse(request.getParameter("cc_ngaycap"));
             cancuoccongdan cancuoc = new cancuoccongdan(matk, cccd, ngaycap,madc);

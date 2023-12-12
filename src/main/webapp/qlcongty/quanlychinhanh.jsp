@@ -36,11 +36,6 @@
 				</div>
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
-						<button class="button_icon">
-							<i class="fa-solid fa-file-excel fa-2x"></i>
-						</button>
-					</li>
-					<li class="nav-item">
 						<a href="<%=request.getContextPath()%>/addChiNhanh">
 							<button class="button_icon">
 								<i class="fa-sharp fa-solid fa-plus fa-2x"></i>
