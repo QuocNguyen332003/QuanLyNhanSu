@@ -16,10 +16,10 @@
 <%if (username == null) {%>
 <jsp:forward page="/login/login.jsp"></jsp:forward>
 <%} else {%>
-<aside class="sidebar"  style="background-color:#E7E7E7; width: 18%; ">
-    <div class="logo" style=" margin-top: 60px;">
-        <i class="fas fa-user fa-lg" style="font-size: 50px;"></i>
-        <h2 style="font-size:23px ">${tennhanvien_menu.hoten}</h2>
+<aside class="sidebar"  style="background-color:#E7E7E7; width: 18%;">
+    <div class="logo">
+        <i class="fas fa-user fa-lg" style="font-size: 100px; color: #727272"></i>
+        <h2 style="font-size:23px;">${tennhanvien_menu.hoten}</h2>
     </div>
     <ul class="links">
         <li>

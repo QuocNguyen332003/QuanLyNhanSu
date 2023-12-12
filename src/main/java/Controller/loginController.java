@@ -35,6 +35,18 @@ public class loginController extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String action = request.getServletPath();
+        switch (action){
+            case  "/login_post":
+                authenticate(request, response);
+                break;
+            case "/forgot_post":
+                NewPass(request, response);
+                break;
+            case "/change_post":
+                ChangePass(request, response);
+                break;
+        }
         doGet(request,response);
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -50,15 +62,6 @@ public class loginController extends HttpServlet {
                     break;
                 case "/change":
                     FromChange(request, response);
-                    break;
-                case  "/login_post":
-                    authenticate(request, response);
-                    break;
-                case "/forgot_post":
-                    NewPass(request, response);
-                    break;
-                case "/change_post":
-                    ChangePass(request, response);
                     break;
                 case "/sendmail":
                     Forgotpass(request, response);
