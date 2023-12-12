@@ -9,6 +9,7 @@ import JDBCUtils.JDBCUtils;
 import Model.taikhoan;
 
 public class loginDAO {
+    private static final String SELECT_TINHTRANG = "select tinhtrang from nhanvien where matk = ? and tinhtrang = ?;";
 
     public taikhoan validate(taikhoan tk) throws ClassNotFoundException {
         taikhoan result = null;
@@ -35,5 +36,30 @@ public class loginDAO {
             JDBCUtils.printSQLException(e);
         }
         return result;
+    }
+
+    public static boolean layTinhTrang(String matk) throws ClassNotFoundException {
+        String result = null;
+
+        Class.forName("com.mysql.jdbc.Driver");
+
+        try (Connection connection = JDBCUtils.getConnection();
+             PreparedStatement preparedStatement = connection
+                     .prepareStatement(SELECT_TINHTRANG)) {
+
+            preparedStatement.setString(1, matk);
+            preparedStatement.setString(2, "Đang hoạt động");
+
+            System.out.println(preparedStatement);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+               return true;
+            }
+
+        } catch (SQLException e) {
+            JDBCUtils.printSQLException(e);
+        }
+        return false;
     }
 }

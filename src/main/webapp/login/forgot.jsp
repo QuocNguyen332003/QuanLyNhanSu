@@ -30,7 +30,7 @@
 			<img src="https://www.evn.com.vn/userfile/VH/User/huyent_tcdl/images/2021/6/hrmscuatapdoan24621(1).jpeg" style="width:700px;height:460px;">
 		</div>
 		<div class="form">
-			<form action="<%=request.getContextPath()%>/sendmail" method="post">
+			<form action="<%=request.getContextPath()%>/sendmail">
             <h1>QUÊN MẬT KHẨU</h1>
             
             <div class="input-box">
@@ -53,7 +53,7 @@
 			</div>
 			</form>
 
-			<form action="<%=request.getContextPath()%>/forgot" method="post">
+			<form action="<%=request.getContextPath()%>/forgot_post">
 				<input type="hidden" name="username" value="<%= request.getAttribute("inputUsername") != null ? request.getAttribute("inputUsername") : "" %>">
 				<input type="hidden" name="email" value="<%= request.getAttribute("inputEmail") != null ? request.getAttribute("inputEmail") : "" %>">
             <div class="input-box">
