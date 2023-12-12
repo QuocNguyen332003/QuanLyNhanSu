@@ -14,51 +14,10 @@
         crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/khenthuongkyluat.css" />
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/base.css" />
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/form.css" />
 	<style>
-		.form-group input{
-			font-size: 1.2rem;
-		}
-		.form_title{
-			width: 100%; height: 3rem;
-			background-color: #4F4F4F;
-			text-align: center;
-			color: white;
-			margin-bottom: 1rem;
-		}
-		.form_button{
-			margin: 1rem;
-			display: flex; flex-direction: row; justify-content: space-around;
-		}
-		.form_tacvu{
-			display: none;
-			position: fixed;
-			background-color: #F4F5F7;
-			border: 3px solid var(--maincolor);
-			box-shadow: 0 0 1rem 0.3rem var(--maincolor);
-			z-index: 9;
-		}
-		.form_xoa{
-			width: 40rem;
-			height: 25rem;
-			top: 30rem;
-			left:60rem;
-		}
-
-		.form_button button{
-			width: 10rem; height: 3rem;
-			background-color: var(--maincolor);
-			color: white;
-		}
-		.box_form{
-			border: 1px solid white;
-		}
-		.text_btn{
-			background-color: white;
-			color: var(--maincolor);
-		}
-		.form_xoa h5{
-			width: 100%;
-			height: 5rem;
+		.align_center{
+			display: flex; flex-direction: column; justify-content: center;
 		}
 	</style>
 </head>
@@ -86,9 +45,9 @@
                                <i class="fa-solid fa-plus fa-2xl"></i>
                             </button>
                         </li>
-                        <li class="nav-item" >
-                            <a class="button_icon" href="<%=request.getContextPath()%>/khenthuongkyluat">
-                               <i class="fa-solid fa-angles-left fa-2xl"></i>
+                        <li class="nav-item align_center">
+                            <a class="button_icon align_center" style="text-decoration: none;" href="<%=request.getContextPath()%>/khenthuongkyluat">
+                               <i class="fa-solid fa-angles-left fa-2xl" style="margin-left: 1rem;"></i>
                             </a>
                         </li>
                     </ul>

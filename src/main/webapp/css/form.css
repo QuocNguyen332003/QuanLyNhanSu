@@ -1,13 +1,3 @@
-.navbar_item_css{
-    width: 101.5rem;
-    display: flex; flex-direction: row; justify-content: space-between;
-}
-.box_button_add{
-    width: 101.5rem; height: 5rem;
-    margin-top: 1rem;
-    display: flex; flex-direction: row; justify-content: center;
-    background-color: var(--maincolor);
-}
 .form-group input{
     font-size: 1.2rem;
 }
@@ -30,19 +20,6 @@
     box-shadow: 0 0 1rem 0.3rem var(--maincolor);
     z-index: 9;
 }
-.form_add {
-    width: 100rem;
-    height: 30rem;
-    top: 20rem;
-    left:30rem;
-}
-.form_xoa{
-    width: 40rem;
-    height: 25rem;
-    top: 30rem;
-    left:60rem;
-}
-
 .form_button button{
     width: 10rem; height: 3rem;
     background-color: var(--maincolor);
@@ -54,8 +31,4 @@
 .text_btn{
     background-color: white;
     color: var(--maincolor);
-}
-.form_xoa h5{
-    width: 100%;
-    height: 5rem;
 }

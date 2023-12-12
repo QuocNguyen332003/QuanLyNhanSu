@@ -13,57 +13,9 @@
         crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/thongtincanhan.css" />
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/base.css" />
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/form.css" />
 	<style>
-		.button_show{
-			width: 1.5rem;
-			height: 1.5rem;
-			background-color: var(--maincolor);
-			border-radius: 5rem;
-			cursor: pointer;
-			transition: background-color 0.2s ease;
-		}
-		.box_button_add{
-			margin: 2rem;
-			width: 101.5rem;
-			height: 3rem;
-			background-color: var(--maincolor);
-		}
-		.button_text{
-			width: 100%; height: 100%;
-			color: white;
-			text-align: center;
-			background-color: transparent;
-		}
-		.form_tacvu{
-			display: none;
-			position: fixed;
-			background-color: #F4F5F7;
-			border: 3px solid var(--maincolor);
-			box-shadow: 0 0 1rem 0.3rem var(--maincolor);
-			z-index: 9;
-		}
-		.form_add {
-			width: 100rem;
-			height: 30rem;
-			top: 20rem;
-			left:30rem;
-		}
-		.form_button{
-			margin: 1rem;
-			display: flex; flex-direction: row; justify-content: space-around;
-		}
-		.form_button button{
-			width: 10rem; height: 3rem;
-			background-color: var(--maincolor);
-			color: white;
-		}
-		.form_title{
-			width: 100%; height: 3rem;
-			background-color: #4F4F4F;
-			text-align: center;
-			color: white;
-			margin-bottom: 1rem;
-		}
+
 	</style>
 </head>
 
@@ -81,7 +33,7 @@
             	<jsp:include page="../header_menu/thongtincoban.jsp" />
                 <nav class="navbar navbar-expand-md navbar-dark navbar_css">
                     <div class = "col-11">
-                       <h2> Quản lý khen thưởng và kỷ luật </h2>
+                       <h2> Thêm Nhân Viên </h2>
                     </div>
                     <ul class="navbar-nav ml-auto col-1">
                     	<li class="nav-item" >

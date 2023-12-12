@@ -19,7 +19,9 @@
       overflow-y: auto; /* Hiển thị thanh cuộn theo chiều dọc khi cần */
       max-height: 400px; /* Giới hạn chiều cao tối đa của thẻ div */
     }
-
+    .align_center{
+      display: flex; flex-direction: column; justify-content: center;
+    }
   </style>
 </head>
 
@@ -38,10 +40,10 @@
       <jsp:include page="../header_menu/thongtincoban.jsp" />
       <nav class="navbar navbar-expand-md navbar-dark navbar_css">
         <div class = "navbar_item_css">
-          <h2> Quản lý công tác </h2>
-          <div class="nav-item">
+          <h2 style="margin-top: 1.5rem;"> Quản lý công tác </h2>
+          <div class="nav-item align_center">
             <a class="button_icon" href="<%=request.getContextPath()%>/congtac">
-              <i class="fa-solid fa-angles-left fa-2xl"></i>
+              <i class="fa-solid fa-angles-left fa-2xl" style="margin-left: 1rem; margin-top: 2.5rem;"></i>
             </a>
           </div>
         </div>

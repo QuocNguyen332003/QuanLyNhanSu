@@ -15,89 +15,7 @@
         crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/quanlynhanvien.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/base.css" />
-    <style>
-        .button_add{
-            width: 16rem;
-        }
-        .form_tacvu{
-            display: none;
-            position: fixed;
-            background-color: #F4F5F7;
-            border: 3px solid var(--maincolor);
-            box-shadow: 0 0 1rem 0.3rem var(--maincolor);
-            z-index: 9;
-        }
-        .form_sathai{
-            width: 40rem;
-            height: 25rem;
-            top: 30rem;
-            left:60rem;
-        }
-        .form_chidinhcongviec{
-            width: 40rem;
-            height: 25rem;
-            top: 30rem;
-            left:60rem;
-        }
-        .form_button button{
-            width: 10rem; height: 3rem;
-            background-color: var(--maincolor);
-            color: white;
-        }
-        .form_xoa h5{
-            width: 100%;
-            height: 5rem;
-        }
-        .form_thongbao{
-            width: 40rem;
-            height: 40rem;
-            display: none;
-            position: fixed;
-            top: 20rem;
-            left:82rem;
-            background-color: #F4F5F7;
-            border: 3px solid var(--maincolor);
-            box-shadow: 0 0 1rem 0.3rem var(--maincolor);
-            z-index: 9;
-        }
-        .form_tinhtrang{
-            width: 40rem;
-            height: 25rem;
-            top: 30rem;
-            left:60rem;
-        }
-        .form_thongbao li{
-            width: 40rem; height: 6rem;
-            border: 1px solid var(--maincolor);
-            display: flex; flex-direction: row; justify-content: space-around;
-        }
-        .box_button_thongbao{
-            position: fixed;
-            top: 55rem;
-            left:95rem;
-        }
-        .box_noidung_thongbao{
-            width: 30rem;
-        }
-        .box_tinhtrang_thongbao{
-            width: 5rem;
-            text-align: center;
-        }
-        .box_check_thongbao{
-            width: 5rem;
-            display: flex; flex-direction: column; justify-content: center;
-        }
-        .box_check_thongbao a{
-            width: 2.5rem; height: 2.5rem;
-            background-color: transparent;
-        }
-        .greencolor{
-            color: green;
-        }
-        .redcolor{
-            color: red;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/form.css" />
 </head>
 
 <body>
@@ -177,12 +95,12 @@
                                 </div>
                                 <c:set var="capbac" value="${capbac}" />
                                 <c:if test="${capbac > 1}">
-                                    <div class="form-group mx-2">
-                                        <a class = "button_add" href="<%=request.getContextPath()%>/themnhanvien">Thêm nhân viên</a>
+                                    <div class="form-group mx-4">
+                                        <a class = "button_add" href="<%=request.getContextPath()%>/themnhanvien" style="text-decoration: none; text-align: center;">Thêm nhân viên</a>
                                     </div>
                                 </c:if>
                                 <c:if test="${capbac == 1}">
-                                    <div class="form-group mx-2">
+                                    <div class="form-group mx-4">
                                         <button type="button" class = "button_add" onclick="openFormRequest()">Yêu cầu thêm nhân viên</button>
                                     </div>
                                 </c:if>
