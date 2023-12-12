@@ -30,7 +30,7 @@
 		<img src="https://www.evn.com.vn/userfile/VH/User/huyent_tcdl/images/2021/6/hrmscuatapdoan24621(1).jpeg" style="width:700px;height:460px;">
 	</div>
 	<div class="form">
-		<form action="<%=request.getContextPath()%>/change" method="post">
+		<form action="<%=request.getContextPath()%>/change_post">
 			<h1>ĐỔI MẬT KHẨU</h1>
 			<div class="input-box">
 				<div class = "box_icon_login"><i class="fa-solid fa-user fa-2xl"></i></div>

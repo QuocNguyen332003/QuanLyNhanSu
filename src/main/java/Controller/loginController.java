@@ -20,7 +20,7 @@ import DAO.*;
 
 import Model.*;
 import DAO.chucvuDAO;
-@WebServlet(name = "login", urlPatterns = { "/login", "/forgot", "/change","/sendmail"})
+@WebServlet(name = "login", urlPatterns = { "/login", "/forgot", "/change","/sendmail","/login_post","/forgot_post","/change_post"})
 public class loginController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private loginDAO loginDao;
@@ -32,6 +32,13 @@ public class loginController extends HttpServlet {
     // Tạo một số ngẫu nhiên gồm 6 chữ số
     Random rand = new Random();
     private String maOtp = "";
+    private int random = rand.nextInt((999999 - 100000) + 1) + 100000;
+    private String maOtp = Integer.toString(random);
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request,response);
+    }
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getServletPath();
@@ -46,28 +53,21 @@ public class loginController extends HttpServlet {
                 case "/change":
                     FromChange(request, response);
                     break;
+                case  "/login_post":
+                    authenticate(request, response);
+                    break;
+                case "/forgot_post":
+                    NewPass(request, response);
+                    break;
+                case "/change_post":
+                    ChangePass(request, response);
+                    break;
+                case "/sendmail":
+                    Forgotpass(request, response);
+                    break;
             }
         }catch (SQLException ex)
         {throw new ServletException(ex);}
-    }
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        String action = request.getServletPath();
-        switch (action){
-            case  "/login":
-                authenticate(request, response);
-                break;
-            case "/forgot":
-                NewPass(request, response);
-                break;
-            case "/change":
-                ChangePass(request, response);
-                break;
-            case "/sendmail":
-                Forgotpass(request, response);
-                break;
-        }
     }
     private void authenticate(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
@@ -81,9 +81,12 @@ public class loginController extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             taikhoan tk = loginDao.validate(loginModel);
-            if (tk != null) {
+            session.setAttribute("user", tk);
+            boolean tinhtrang = loginDAO.layTinhTrang(tk.getMatk());
+            System.out.println(tinhtrang);
+            if (tk != null && tinhtrang==true) {
                 int capbac = chucvuDAO.CapBacQuyenHan(tk.getMatk()); // 0 nhanvien 1 truong phong 2 giam doc 3 admin
-                session.setAttribute("user", tk);
+
                 session.setAttribute("capbac",capbac);
 
                 nhanvien thongtinnv = qlnhanvienDAO.LayThongTinNhanVien(tk.getMatk());
