@@ -402,6 +402,9 @@
 		}
 		function closeFormDC() {
 			document.getElementById("xemdc").style.display = "none";
+			let diachi = document.getElementById("dc_tinhtp").value + ", " + document.getElementById("dc_quanhuyen").value + ", " +
+					document.getElementById("dc_phuongxa").value + ", " + document.getElementById("dc_sonha").value;
+			document.getElementById("diachi").value = diachi;
 		}
 	</script>
 <%}%>
