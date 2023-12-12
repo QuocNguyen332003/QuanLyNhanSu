@@ -32,8 +32,6 @@ public class loginController extends HttpServlet {
     // Tạo một số ngẫu nhiên gồm 6 chữ số
     Random rand = new Random();
     private String maOtp = "";
-    private int random = rand.nextInt((999999 - 100000) + 1) + 100000;
-    private String maOtp = Integer.toString(random);
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
