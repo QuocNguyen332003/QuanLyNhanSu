@@ -84,7 +84,7 @@
 								<th>Mã Chi Nhánh</th>
 								<th>Mã Trưởng Phòng</th>
 								<th>Ngày Tạo</th>
-								<th>Mã Phòng Ban</th>
+								<th>Mã Phòng Ban Cha</th>
 								<th>Cập Nhật Phòng Ban</th>
 								<th>Xoá phòng ban</th>
 							</tr>

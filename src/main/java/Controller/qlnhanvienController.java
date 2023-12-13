@@ -170,8 +170,8 @@ public class qlnhanvienController extends HttpServlet {
             List<DuLieuNhanVien> list_dlnv = (List<DuLieuNhanVien>) session.getAttribute("list_dulieunhanvien");
             for (DuLieuNhanVien nv : list_dlnv) {
                 String matk = forgotDAO.getNewMatk();
-                String madc_cc = diachiDAO.getDiaChi("DC");
-                String madc_dc = diachiDAO.getDiaChi("DN");
+                String madc_cc = diachiDAO.getDiaChiCanCuoc("DC");
+                String madc_dc = diachiDAO.getDiaChi();
 
                 diachi diachi_cc = new diachi(madc_cc, nv.getTinh_cap(), nv.getHuyen_cap(), nv.getXa_cap(), nv.getSonha_cap());
                 diachi diachi_nv = new diachi(madc_dc, nv.getTinh(), nv.getHuyen(), nv.getXa(), nv.getSonha());
@@ -233,13 +233,13 @@ public class qlnhanvienController extends HttpServlet {
 
             String so_cccd = request.getParameter("cc_cccd");
             LocalDate ngaycap = LocalDate.parse(request.getParameter("cc_ngaycap"));
-            String madc_cc = diachiDAO.getDiaChi("DC");
+            String madc_cc = diachiDAO.getDiaChiCanCuoc("DC");
             String tinhtp_cc = request.getParameter("cc_tinhtp");
             String cc_quanhuyen = request.getParameter("cc_quanhuyen");
             String cc_phuongxa = request.getParameter("cc_phuongxa");
             String cc_sonha = request.getParameter("cc_sonha");
 
-            String madc_dc = diachiDAO.getDiaChi("DN");
+            String madc_dc = diachiDAO.getDiaChi();
             String dc_tinhtp = request.getParameter("dc_tinhtp");
             String dc_quanhuyen = request.getParameter("dc_quanhuyen");
             String dc_phuongxa = request.getParameter("dc_phuongxa");

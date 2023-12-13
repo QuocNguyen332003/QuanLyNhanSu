@@ -85,7 +85,7 @@
 
     <label for="mapbtrSelect">Mã Phòng Ban Cha:</label>
     <select id="mapbtrSelect" name="mapbtrSelect" >
-        <option>${phongban.matrphong}</option>
+        <option>${phongban.mapbtr}</option>
         <option></option>
     </select>
     <br>

@@ -135,7 +135,7 @@ public class diachiDAO {
         }
         return id;
     }
-    public static String getDiaChi(String manguon) {
+    public static String getDiaChiCanCuoc(String manguon) {
         int[] id_num = {0, 0, 1};
         String id = null;
         while (true) {
@@ -145,6 +145,27 @@ public class diachiDAO {
                 id_num[1] = id_num[1] + id_num[2] / 10;
                 id_num[0] = id_num[0] + id_num[1] / 10;
 
+                id_num[2] = id_num[2] % 10;
+                id_num[1] = id_num[1] % 10;
+                id_num[0] = id_num[0] % 10;
+            } else {
+                break;
+            }
+        }
+        return id;
+    }
+    public static String getDiaChi() {
+        int[] id_num = {0, 0, 0, 1};
+        String id = null;
+        while (true) {
+            id = "D" + id_num[0] + id_num[1] + id_num[2]+ id_num[3];
+            if (CheckID(id)) {
+                id_num[3] = id_num[3] + 1;
+                id_num[2] = id_num[2] + id_num[3] / 10;
+                id_num[1] = id_num[1] + id_num[2] / 10;
+                id_num[0] = id_num[0] + id_num[1] / 10;
+
+                id_num[3] = id_num[3] % 10;
                 id_num[2] = id_num[2] % 10;
                 id_num[1] = id_num[1] % 10;
                 id_num[0] = id_num[0] % 10;
