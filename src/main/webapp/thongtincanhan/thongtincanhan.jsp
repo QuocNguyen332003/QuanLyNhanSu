@@ -316,7 +316,7 @@
 			cc_sonha.removeAttribute("readonly");
 		}
 		function dongFormCCCD(){
-			cc_cccd.setAttribute("readonly",true);
+			cc_cccd.setAtribute("readonly",true);
 			cc_ngaycap.setAttribute("readonly",true);
 			cc_tinhtp.setAttribute("readonly",true);
 			cc_quanhuyen.setAttribute("readonly",true);
